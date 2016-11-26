@@ -28,7 +28,7 @@ import br.com.util.AppConstant;
 
 @RestController
 @PermitAll
-@RequestMapping(value = UriConstInvestimento.URI_AUTH)
+@RequestMapping(value = UriConstPetShop.URI_AUTH)
 public class AuthenticationController {
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
@@ -73,7 +73,7 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new AuthenticationResponse(token, usuarioAuth));
 	}
 
-	@RequestMapping(value = UriConstInvestimento.URI_REFRESH, method = RequestMethod.GET)
+	@RequestMapping(value = UriConstPetShop.URI_REFRESH, method = RequestMethod.GET)
 	public ResponseEntity<?> authenticationRequest(HttpServletRequest request) {
 		String token = request.getHeader(AppConstant.tokenHeader);
 

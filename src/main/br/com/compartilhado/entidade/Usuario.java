@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -16,6 +19,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.compartilhado.entidade.permissao.UsuarioRole;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -41,13 +46,13 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "ds_senha")
 	private String password;
 
-	@Column(name = "ds_authorities")
-	private String authoritiesBd;
-
 	@Transient
 	private Date lastPasswordReset;
-	@Transient
-	private Collection<? extends GrantedAuthority> authorities;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.ALL })
+	// @JsonIgnore
+	private Collection<UsuarioRole> authorities;
+
 	@Transient
 	private Boolean accountNonExpired = true;
 	@Transient
@@ -85,13 +90,13 @@ public class Usuario implements Serializable, UserDetails {
 		return password;
 	}
 
-	public String getAuthoritiesBd() {
-		return authoritiesBd;
-	}
-
-	public void setAuthoritiesBd(String authoritiesBd) {
-		this.authoritiesBd = authoritiesBd;
-	}
+	// public String getAuthoritiesBd() {
+	// return authoritiesBd;
+	// }
+	//
+	// public void setAuthoritiesBd(String authoritiesBd) {
+	// this.authoritiesBd = authoritiesBd;
+	// }
 
 	@Override
 	public String toString() {
@@ -110,7 +115,7 @@ public class Usuario implements Serializable, UserDetails {
 		return this.authorities;
 	}
 
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+	public void setAuthorities(Collection<UsuarioRole> authorities) {
 		this.authorities = authorities;
 	}
 

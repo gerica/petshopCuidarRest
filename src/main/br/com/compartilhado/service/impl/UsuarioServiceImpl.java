@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.entidade.Usuario;
-import br.com.compartilhado.entidade.permissao.RoleEnum;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.repository.UsuarioRepository;
 import br.com.compartilhado.service.UsuarioService;
@@ -26,7 +25,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		validarEmail(usuario);
 		validarSenha(usuario);
 		verificarDuplicidade(usuario);
-		usuario.setAuthoritiesBd(RoleEnum.Constants.ROLE_CONVIDADO);
+		// usuario.setAuthoritiesBd(RoleEnum.Constants.ROLE_CONVIDADO);
 		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
 		usuario.setEmail(usuario.getEmail().toUpperCase());
 		usuarioRepository.save(usuario);

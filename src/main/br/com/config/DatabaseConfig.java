@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zaxxer.hikari.HikariDataSource;
 
 import br.com.compartilhado.entidade.Usuario;
+import br.com.compartilhado.entidade.permissao.Role;
+import br.com.compartilhado.entidade.permissao.UsuarioRole;
 
 /**
  * Created by sazzad on 9/7/15
@@ -37,7 +39,6 @@ public class DatabaseConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
 	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROPERTY_NAME_HIBERNATE_AUTO = "hibernate.hbm2ddl.auto";
-	public static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "br.com.compartilhado.entidade";
 
 	@Autowired
 	private ApplicationContext appContext;
@@ -51,11 +52,15 @@ public class DatabaseConfig {
 		HikariDataSource dataSource = new HikariDataSource();
 
 		dataSource.setDataSourceClassName(this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_NAME, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_NAME));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_HOST, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_HOST));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PORT, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PORT));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_NAME,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_NAME));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_HOST,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_HOST));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PORT,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PORT));
 		dataSource.addDataSourceProperty("user", this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PASSWORD, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PASSWORD,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 
 		return dataSource;
 
@@ -65,7 +70,10 @@ public class DatabaseConfig {
 	public LocalSessionFactoryBean hibernate5SessionFactoryBean() {
 		LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
 		localSessionFactoryBean.setDataSource(appContext.getBean(HikariDataSource.class));
-		localSessionFactoryBean.setAnnotatedClasses(Usuario.class);
+//		localSessionFactoryBean.setAnnotatedPackages("br.com.compartilhado.entidade");
+		Class<?>[] classes = { Usuario.class, UsuarioRole.class, Role.class };
+		localSessionFactoryBean.setAnnotatedClasses(classes);
+		// localSessionFactoryBean.setAnnotatedClasses(Usuario.class);
 
 		localSessionFactoryBean.setHibernateProperties(hibProperties());
 		return localSessionFactoryBean;
@@ -79,7 +87,7 @@ public class DatabaseConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(new String[] { PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN });
+		factory.setPackagesToScan(new String[] { "br.com.compartilhado.*", "br.com.compartilhado.entidade.*" });
 		factory.setDataSource(getDataSource());
 		factory.setJpaProperties(hibProperties());
 
@@ -98,7 +106,8 @@ public class DatabaseConfig {
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL,
+				this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 		properties.put(PROPERTY_NAME_HIBERNATE_AUTO, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_AUTO));
 		return properties;
 	}

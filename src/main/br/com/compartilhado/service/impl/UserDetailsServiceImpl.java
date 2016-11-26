@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			// usuario.setPassword(usuario.getSenha());
 			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-			usuario.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(usuario.getAuthoritiesBd()));
+//			usuario.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(usuario.getAuthoritiesBd()));
 			return usuario;
 
 		}
