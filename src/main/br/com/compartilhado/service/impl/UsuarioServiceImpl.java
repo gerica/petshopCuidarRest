@@ -3,6 +3,8 @@ package br.com.compartilhado.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,8 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.entidade.Usuario;
+import br.com.compartilhado.entidade.permissao.Role;
+import br.com.compartilhado.entidade.permissao.RoleEnum;
+import br.com.compartilhado.entidade.permissao.UsuarioRole;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.repository.UsuarioRepository;
+import br.com.compartilhado.service.RoleService;
 import br.com.compartilhado.service.UsuarioService;
 
 @Service
@@ -20,12 +26,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Autowired
+	private RoleService roleService;
+
 	@Override
 	public void registar(Usuario usuario) throws PetShopBusinessException {
 		validarEmail(usuario);
 		validarSenha(usuario);
 		verificarDuplicidade(usuario);
-		// usuario.setAuthoritiesBd(RoleEnum.Constants.ROLE_CONVIDADO);
+
+		usuario.setAuthorities(getAuthorizeConvidado(usuario));
 		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
 		usuario.setEmail(usuario.getEmail().toUpperCase());
 		usuarioRepository.save(usuario);
@@ -122,6 +132,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return usuario;
 
+	}
+
+	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
+		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
+		Role role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
+		UsuarioRole userRole = new UsuarioRole();
+		userRole.setRole(role);
+		userRole.setUsuario(usuario);
+		authorities.add(userRole);
+		return authorities;
 	}
 
 }
