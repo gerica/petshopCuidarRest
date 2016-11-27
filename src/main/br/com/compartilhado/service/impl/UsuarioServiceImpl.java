@@ -136,12 +136,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
 		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
-		Role role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
-		UsuarioRole userRole = new UsuarioRole();
-		userRole.setRole(role);
-		userRole.setUsuario(usuario);
-		authorities.add(userRole);
-		return authorities;
+		Role role;
+		try {
+			role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
+			UsuarioRole userRole = new UsuarioRole();
+			userRole.setRole(role);
+			userRole.setUsuario(usuario);
+			authorities.add(userRole);
+			return authorities;
+		} catch (PetShopBusinessException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

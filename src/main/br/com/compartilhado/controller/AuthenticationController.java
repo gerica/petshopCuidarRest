@@ -40,7 +40,7 @@ public class AuthenticationController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?> alterarUsuario() {
+	public ResponseEntity<?> getInfo() {
 		logger.info("AuthenticationController.alterarUsuario()");
 		List<String> msg = new ArrayList<String>();
 		// StringBuilder msg = new StringBuilder("Serviços: autenticar, chamar

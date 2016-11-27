@@ -17,6 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import br.com.compartilhado.entidade.permissao.RoleEnum;
 import br.com.config.filter.AuthenticationTokenFilter;
 
 @Configuration
@@ -51,13 +52,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/**").permitAll().anyRequest()
-				.authenticated();
+		httpSecurity.csrf().disable()//
+				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)//
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
+				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()//
+				.antMatchers("/auth/**").permitAll().anyRequest().authenticated();
 
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+		// disable page caching
+        httpSecurity.headers().cacheControl();
 	}
 
 }

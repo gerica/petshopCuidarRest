@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.entidade.permissao.Role;
+import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.repository.RoleRepository;
 import br.com.compartilhado.service.RoleService;
 
@@ -20,13 +21,13 @@ public class RoleServiceImpl implements RoleService {
 	private RoleRepository roleRepository;
 
 	@Override
-	public List<Role> findAll() {
+	public List<Role> findAll() throws PetShopBusinessException {
 		logger.info("RoleServiceImpl.findAll()");
 		return (List<Role>) roleRepository.findAll();
 	}
 
 	@Override
-	public Role findByNome(String nome) {
+	public Role findByNome(String nome) throws PetShopBusinessException {
 		logger.info("RoleServiceImpl.findByNome() " + nome);
 		return roleRepository.findByNome(nome);
 	}
