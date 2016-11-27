@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +17,6 @@ import br.com.compartilhado.controller.model.AbstractResponse;
 import br.com.compartilhado.controller.model.ErrorResponse;
 import br.com.compartilhado.controller.model.SuccessResponse;
 import br.com.compartilhado.entidade.permissao.Role;
-import br.com.compartilhado.entidade.permissao.RoleEnum;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.RoleService;
 
@@ -31,7 +29,6 @@ public class RoleRestController {
 	private RoleService roleService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	// @RolesAllowed({ RoleEnum.Constants.ROLE_ADMIN })
 	@ResponseBody
 	public ResponseEntity<?> getInfo() {
 		logger.info("RoleRestController.getInfo()");
@@ -45,7 +42,6 @@ public class RoleRestController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_ROLE_RECUPERAR_TODOS)
-	@PreAuthorize("hasAnyRole('" + RoleEnum.Constants.ROLE_ADMIN + "','" + RoleEnum.Constants.ROLE_CONVIDADO + "')")
 	@ResponseBody
 	public ResponseEntity<? extends AbstractResponse> recuperarTodos() {
 		logger.info("RoleRestController.recuperarTodos()");

@@ -113,8 +113,8 @@ public class TokenUtils {
 	}
 
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate()).signWith(SignatureAlgorithm.HS512, this.secret)
-				.compact();
+		return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate())
+				.signWith(SignatureAlgorithm.HS512, this.secret).compact();
 	}
 
 	public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
@@ -139,7 +139,6 @@ public class TokenUtils {
 		Usuario user = (Usuario) userDetails;
 		final String username = this.getUsernameFromToken(token);
 		final Date created = this.getCreatedDateFromToken(token);
-		final Date expiration = this.getExpirationDateFromToken(token);
 		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token))
 				&& !(this.isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset())));
 	}

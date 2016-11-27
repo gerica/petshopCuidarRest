@@ -17,7 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import br.com.compartilhado.entidade.permissao.RoleEnum;
+import br.com.compartilhado.service.SecurityService;
 import br.com.config.filter.AuthenticationTokenFilter;
 
 @Configuration
@@ -28,8 +28,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
 	@Autowired
 	private AuthenticationEntryPoint authenticationEntryPoint;
+
+	@Autowired
+	private SecurityService securityService;
 
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -61,7 +65,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		// disable page caching
-        httpSecurity.headers().cacheControl();
+		httpSecurity.headers().cacheControl();
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return this.securityService;
 	}
 
 }
