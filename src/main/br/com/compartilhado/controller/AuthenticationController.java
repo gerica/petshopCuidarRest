@@ -55,7 +55,7 @@ public class AuthenticationController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	@PermitAll
+	@ResponseBody
 	public ResponseEntity<?> authenticationRequest(@RequestBody Usuario usuario) throws AuthenticationException {
 
 		String token = null;
@@ -74,6 +74,7 @@ public class AuthenticationController {
 	}
 
 	@RequestMapping(value = UriConstPetShop.URI_REFRESH, method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseEntity<?> authenticationRequest(HttpServletRequest request) {
 		String token = request.getHeader(AppConstant.tokenHeader);
 

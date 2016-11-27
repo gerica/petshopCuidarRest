@@ -10,9 +10,10 @@ import br.com.compartilhado.execao.PetShopBusinessException;
 
 public interface RoleService {
 
-	@PreAuthorize("hasAnyRole('" + RoleEnum.Constants.ROLE_ADMIN + "')")
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	List<Role> findAll() throws PetShopBusinessException;
 
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	Role findByNome(String nome) throws PetShopBusinessException;
 
 }
