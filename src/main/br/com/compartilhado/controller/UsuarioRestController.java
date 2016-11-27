@@ -25,23 +25,6 @@ public class UsuarioRestController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_REGISTRAR_USUARIO)
-	@ResponseBody
-	public ResponseEntity<? extends AbstractResponse> registrarUsuario(@RequestBody Usuario usuario) {
-		logger.info("OperacaoRestController.salvarOperacao()");
-
-		try {
-			usuarioService.registar(usuario);
-		} catch (PetShopBusinessException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage());
-			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-		}
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-
-	}
-
 	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR_USUARIO)
 	@ResponseBody
 	public ResponseEntity<?> alterarUsuario(@RequestBody Usuario usuario) {
@@ -55,6 +38,23 @@ public class UsuarioRestController {
 		}
 
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", usuario);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_REGISTRAR_USUARIO)
+	@ResponseBody
+	public ResponseEntity<? extends AbstractResponse> registrarUsuario(@RequestBody Usuario usuario) {
+		logger.info("OperacaoRestController.salvarOperacao()");
+
+		try {
+			usuarioService.registar(usuario);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}

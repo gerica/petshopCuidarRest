@@ -47,6 +47,23 @@ public class DatabaseConfig {
 	private Environment env;
 
 	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setGenerateDdl(true);
+
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setJpaVendorAdapter(vendorAdapter);
+		factory.setPackagesToScan(new String[] { "br.com.compartilhado.*", "br.com.compartilhado.entidade.*" });
+		factory.setDataSource(getDataSource());
+		factory.setJpaProperties(hibProperties());
+
+		factory.afterPropertiesSet();
+
+		return factory;
+	}
+
+	@Bean
 	public HikariDataSource getDataSource() {
 
 		HikariDataSource dataSource = new HikariDataSource();
@@ -77,23 +94,6 @@ public class DatabaseConfig {
 
 		localSessionFactoryBean.setHibernateProperties(hibProperties());
 		return localSessionFactoryBean;
-	}
-
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setGenerateDdl(true);
-
-		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(new String[] { "br.com.compartilhado.*", "br.com.compartilhado.entidade.*" });
-		factory.setDataSource(getDataSource());
-		factory.setJpaProperties(hibProperties());
-
-		factory.afterPropertiesSet();
-
-		return factory;
 	}
 
 	@Bean

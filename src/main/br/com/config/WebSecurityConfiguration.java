@@ -35,12 +35,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityService securityService;
 
-	@Autowired
-	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService)
-				.passwordEncoder(new BCryptPasswordEncoder());
-	}
-
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -52,6 +46,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
 		authenticationTokenFilter.setAuthenticationManager(super.authenticationManagerBean());
 		return authenticationTokenFilter;
+	}
+
+	@Autowired
+	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService)
+				.passwordEncoder(new BCryptPasswordEncoder());
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return this.securityService;
 	}
 
 	@Override
@@ -66,11 +71,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		// disable page caching
 		httpSecurity.headers().cacheControl();
-	}
-
-	@Bean
-	public SecurityService securityService() {
-		return this.securityService;
 	}
 
 }

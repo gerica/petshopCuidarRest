@@ -48,51 +48,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private UsuarioService usuarioService;
 
 	@Override
-	@Transactional
-	public Usuario loadUserByUsername(String username) {
-		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
-				.add(Restrictions.eq("username", username)).uniqueResult();
-	}
-
-	@Transactional
-	@Override
-	public long post(Usuario appUser) {
-		return (long) sessionFactory.getCurrentSession().save(appUser);
-	}
-
-	@Transactional
-	@Override
-	public Usuario get(long id) {
-		return (Usuario) sessionFactory.getCurrentSession().get(Usuario.class, id);
-	}
-
-	@Transactional
-	@Override
-	public Usuario get() {
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		String authToken = httpRequest.getHeader(AppConstant.tokenHeader);
-		String username = this.tokenUtils.getUsernameFromToken(authToken);
-
-//		sessionFactory.getCurrentSession().get(Usuario.class, username);
-
-		return loadUserByUsername(username);
-	}
-
-	@Transactional
-	@Override
-	public Usuario patch(Usuario appUser) {
-		sessionFactory.getCurrentSession().update(appUser);
-		return get(appUser.getId());
-	}
-
-	@Transactional
-	@Override
-	public boolean delete(long id) {
-		sessionFactory.getCurrentSession().delete(get(id));
-		return true;
-	}
-
-	@Override
 	public String authentication(String email, String password)
 			throws AuthenticationException, PetShopBusinessException {
 
@@ -120,6 +75,51 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		} else {
 			return null;
 		}
+	}
+
+	@Transactional
+	@Override
+	public boolean delete(long id) {
+		sessionFactory.getCurrentSession().delete(get(id));
+		return true;
+	}
+
+	@Transactional
+	@Override
+	public Usuario get() {
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String authToken = httpRequest.getHeader(AppConstant.tokenHeader);
+		String username = this.tokenUtils.getUsernameFromToken(authToken);
+
+//		sessionFactory.getCurrentSession().get(Usuario.class, username);
+
+		return loadUserByUsername(username);
+	}
+
+	@Transactional
+	@Override
+	public Usuario get(long id) {
+		return (Usuario) sessionFactory.getCurrentSession().get(Usuario.class, id);
+	}
+
+	@Override
+	@Transactional
+	public Usuario loadUserByUsername(String username) {
+		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
+				.add(Restrictions.eq("username", username)).uniqueResult();
+	}
+
+	@Transactional
+	@Override
+	public Usuario patch(Usuario appUser) {
+		sessionFactory.getCurrentSession().update(appUser);
+		return get(appUser.getId());
+	}
+
+	@Transactional
+	@Override
+	public long post(Usuario appUser) {
+		return (long) sessionFactory.getCurrentSession().save(appUser);
 	}
 
 	private Usuario getAppUserBD(String email, String password) throws PetShopBusinessException {

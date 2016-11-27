@@ -21,12 +21,12 @@ public abstract class AbstractResponse {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 	public Object getObjeto() {
 		return objeto;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public void setObjeto(Object objeto) {

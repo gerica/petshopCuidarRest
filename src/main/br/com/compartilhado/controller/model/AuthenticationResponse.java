@@ -25,12 +25,12 @@ public class AuthenticationResponse {
 		return this.token;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public void setUsuario(Usuario usuario) {

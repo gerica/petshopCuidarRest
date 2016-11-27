@@ -11,16 +11,16 @@ public interface AuthenticationService {
 
 	public String authenticationRequest(String token);
 
-	Usuario loadUserByUsername(String username);
+	boolean delete(long id);
 
-	long post(Usuario usuario);
+	Usuario get();
 
 	Usuario get(long id);
 	
-	Usuario get();
+	Usuario loadUserByUsername(String username);
 
 	Usuario patch(Usuario usuario);
 
-	boolean delete(long id);
+	long post(Usuario usuario);
 
 }

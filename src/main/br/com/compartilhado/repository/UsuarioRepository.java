@@ -6,10 +6,10 @@ import br.com.compartilhado.entidade.Usuario;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
-	Usuario findByUsername(String username);
+	Usuario findByEmail(String email);
 
 	// Usuario findByUsernameAndPassword(String username, String Password);
 
-	Usuario findByEmail(String email);
+	Usuario findByUsername(String username);
 
 }

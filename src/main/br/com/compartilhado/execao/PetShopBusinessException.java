@@ -10,13 +10,13 @@ public class PetShopBusinessException extends Exception {
 		super(msg);
 	}
 
+	public PetShopBusinessException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 	public PetShopBusinessException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public PetShopBusinessException(String message, Throwable cause) {
-		super(message, cause);
 	}
 
 	public PetShopBusinessException(Throwable cause) {
