@@ -45,16 +45,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public List<Usuario> findAllAtivo() throws PetShopBusinessException {
-		return usuarioRepository.findByAtivo(true);
-	}
-
-	@Override
 	public Usuario findByEmail(String email) throws PetShopBusinessException {
 		if (email == null || "".equals(email)) {
 			throw new PetShopBusinessException("O emial não pode ser nulo, nem vazio.");
 		}
 		return usuarioRepository.findByEmail(email.toUpperCase());
+	}
+
+	@Override
+	public List<Usuario> findUsuariosAtivo() throws PetShopBusinessException {
+		return usuarioRepository.findByAccountLocked(false);
 	}
 
 	public String getPasswordEnconding(String password) throws PetShopBusinessException {
@@ -80,7 +80,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public void registar(Usuario usuario) throws PetShopBusinessException {
+	public Usuario registar(Usuario usuario) throws PetShopBusinessException {
 		validarEmail(usuario);
 		verificarDuplicidade(usuario);
 		usuario.setPassword(getPasswordRandom());
@@ -88,8 +88,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuario.setAuthorities(getAuthorizeConvidado(usuario));
 		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
 		usuario.setEmail(usuario.getEmail().toUpperCase());
-		usuario.setAtivo(true);
 		usuarioRepository.save(usuario);
+		return usuario;
 
 	}
 

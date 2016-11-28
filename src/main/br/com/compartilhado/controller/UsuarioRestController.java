@@ -27,23 +27,6 @@ public class UsuarioRestController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URL_INCLUIR_USUARIO)
-	@ResponseBody
-	public ResponseEntity<?> incluirUsuario(@RequestBody Usuario usuario) {
-		logger.info("UsuarioRestController.alterarUsuario()");
-
-		try {
-			usuarioService.registar(usuario);
-		} catch (PetShopBusinessException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage());
-			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-		}
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-
-	}
-
 	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR_USUARIO)
 	@ResponseBody
 	public ResponseEntity<?> alterarUsuario(@RequestBody Usuario usuario) {
@@ -60,15 +43,14 @@ public class UsuarioRestController {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_RECUPERAR_USUARIOS_ATIVO)	
+
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URL_INCLUIR_USUARIO)
 	@ResponseBody
-	public ResponseEntity<?> recuperarUsuariosAtivo() {
-		logger.info("UsuarioRestController.recuperarUsuariosAtivo()");
-		
-		List<Usuario> result = null;
+	public ResponseEntity<?> incluirUsuario(@RequestBody Usuario usuario) {
+		logger.info("UsuarioRestController.alterarUsuario()");
+		Usuario result = null;
 		try {
-			result = usuarioService.findAllAtivo();
+			result = usuarioService.registar(usuario);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -79,5 +61,22 @@ public class UsuarioRestController {
 
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_RECUPERAR_USUARIOS_ATIVO)
+	@ResponseBody
+	public ResponseEntity<?> recuperarUsuariosAtivo() {
+		logger.info("UsuarioRestController.recuperarUsuariosAtivo()");
+
+		List<Usuario> result = null;
+		try {
+			result = usuarioService.findUsuariosAtivo();
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
 
 }

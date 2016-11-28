@@ -42,10 +42,7 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "ds_senha")
 	private String password;
 
-	@Column(name = "in_ativo")
-	private Boolean ativo;
-
-	@Transient
+	@Column(name = "dt_last_password_reset")
 	private Date lastPasswordReset;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.ALL })
@@ -53,31 +50,59 @@ public class Usuario implements Serializable, UserDetails {
 	private Collection<UsuarioRole> authorities;
 
 	@Transient
+	@JsonIgnore
 	private Boolean accountNonExpired = true;
 
+	@Column(name = "in_account_locked")
+	private Boolean accountLocked = false;
+
 	@Transient
-	private Boolean accountNonLocked = true;
-	@Transient
+	@JsonIgnore
 	private Boolean credentialsNonExpired = true;
+
+	@Column(name = "is_enabled")
+	private Boolean enabled = false;
+
 	@Transient
-	private Boolean enabled = true;
+	private String tempPassword;
 
 	public Usuario() {
 
 	}
 
-	@JsonIgnore
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (enabled == null) {
+			if (other.enabled != null)
+				return false;
+		} else if (!enabled.equals(other.enabled))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
+	public Boolean getAccountLocked() {
+		return accountLocked;
+	}
+
 	public Boolean getAccountNonExpired() {
 		return this.accountNonExpired;
-	}
-
-	@JsonIgnore
-	public Boolean getAccountNonLocked() {
-		return this.accountNonLocked;
-	}
-
-	public Boolean getAtivo() {
-		return ativo;
 	}
 
 	// @Override
@@ -85,7 +110,6 @@ public class Usuario implements Serializable, UserDetails {
 		return this.authorities;
 	}
 
-	@JsonIgnore
 	public Boolean getCredentialsNonExpired() {
 		return this.credentialsNonExpired;
 	}
@@ -94,18 +118,9 @@ public class Usuario implements Serializable, UserDetails {
 		return email;
 	}
 
-	@JsonIgnore
 	public Boolean getEnabled() {
 		return this.enabled;
 	}
-
-	// public String getAuthoritiesBd() {
-	// return authoritiesBd;
-	// }
-	//
-	// public void setAuthoritiesBd(String authoritiesBd) {
-	// this.authoritiesBd = authoritiesBd;
-	// }
 
 	public Long getId() {
 		return id;
@@ -119,40 +134,46 @@ public class Usuario implements Serializable, UserDetails {
 		return password;
 	}
 
+	public String getTempPassword() {
+		return tempPassword;
+	}
+
 	public String getUsername() {
 		return username;
 	}
 
-	// @Override
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
 	public boolean isAccountNonExpired() {
 		return this.getAccountNonExpired();
 	}
 
-	// @Override
 	public boolean isAccountNonLocked() {
-		return this.getAccountNonLocked();
+		return !this.getAccountLocked();
 	}
 
-	// @Override
 	public boolean isCredentialsNonExpired() {
 		return this.getCredentialsNonExpired();
 	}
 
-	// @Override
 	public boolean isEnabled() {
 		return this.getEnabled();
 	}
 
+	public void setAccountLocked(Boolean accountLocked) {
+		this.accountLocked = accountLocked;
+	}
+
 	public void setAccountNonExpired(Boolean accountNonExpired) {
 		this.accountNonExpired = accountNonExpired;
-	}
-
-	public void setAccountNonLocked(Boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
-
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
 	}
 
 	public void setAuthorities(Collection<UsuarioRole> authorities) {
@@ -180,9 +201,11 @@ public class Usuario implements Serializable, UserDetails {
 	}
 
 	public void setPassword(String password) {
-		// PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		// this.password = passwordEncoder.encode(password);
 		this.password = password;
+	}
+
+	public void setTempPassword(String tempPassword) {
+		this.tempPassword = tempPassword;
 	}
 
 	public void setUsername(String username) {
@@ -191,7 +214,9 @@ public class Usuario implements Serializable, UserDetails {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", authorities=" + authorities + "]";
+		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", lastPasswordReset=" + lastPasswordReset + ", authorities="
+				+ authorities + ", accountNonExpired=" + accountNonExpired + ", accountLocked=" + accountLocked + ", credentialsNonExpired=" + credentialsNonExpired + ", enabled="
+				+ enabled + ", tempPassword=" + tempPassword + "]";
 	}
 
 }

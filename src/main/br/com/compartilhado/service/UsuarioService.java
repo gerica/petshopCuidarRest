@@ -15,12 +15,12 @@ public interface UsuarioService {
 
 	Usuario findByEmail(String email) throws PetShopBusinessException;
 
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
+	List<Usuario> findUsuariosAtivo() throws PetShopBusinessException;
+
 	String getPasswordEnconding(String password) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
-	void registar(Usuario usuario) throws PetShopBusinessException;
-
-	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
-	List<Usuario> findAllAtivo() throws PetShopBusinessException;
+	Usuario registar(Usuario usuario) throws PetShopBusinessException;
 
 }

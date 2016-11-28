@@ -14,6 +14,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
 	Usuario findByUsername(String username);
 
-	List<Usuario> findByAtivo(boolean ativo);
+	List<Usuario> findByAccountLocked(boolean accountLocked);
 
 }
