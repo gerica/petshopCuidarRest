@@ -28,10 +28,6 @@ public class Usuario implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	public Usuario() {
-
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_usuario")
@@ -46,6 +42,9 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "ds_senha")
 	private String password;
 
+	@Column(name = "in_ativo")
+	private Boolean ativo;
+
 	@Transient
 	private Date lastPasswordReset;
 
@@ -55,6 +54,7 @@ public class Usuario implements Serializable, UserDetails {
 
 	@Transient
 	private Boolean accountNonExpired = true;
+
 	@Transient
 	private Boolean accountNonLocked = true;
 	@Transient
@@ -62,32 +62,41 @@ public class Usuario implements Serializable, UserDetails {
 	@Transient
 	private Boolean enabled = true;
 
-	public Long getId() {
-		return id;
+	public Usuario() {
+
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@JsonIgnore
+	public Boolean getAccountNonExpired() {
+		return this.accountNonExpired;
+	}
+
+	@JsonIgnore
+	public Boolean getAccountNonLocked() {
+		return this.accountNonLocked;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	// @Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.authorities;
+	}
+
+	@JsonIgnore
+	public Boolean getCredentialsNonExpired() {
+		return this.credentialsNonExpired;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
+	@JsonIgnore
+	public Boolean getEnabled() {
+		return this.enabled;
 	}
 
 	// public String getAuthoritiesBd() {
@@ -98,10 +107,76 @@ public class Usuario implements Serializable, UserDetails {
 	// this.authoritiesBd = authoritiesBd;
 	// }
 
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", authorities=" + authorities + "]";
+	public Long getId() {
+		return id;
+	}
+
+	public Date getLastPasswordReset() {
+		return lastPasswordReset;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	// @Override
+	public boolean isAccountNonExpired() {
+		return this.getAccountNonExpired();
+	}
+
+	// @Override
+	public boolean isAccountNonLocked() {
+		return this.getAccountNonLocked();
+	}
+
+	// @Override
+	public boolean isCredentialsNonExpired() {
+		return this.getCredentialsNonExpired();
+	}
+
+	// @Override
+	public boolean isEnabled() {
+		return this.getEnabled();
+	}
+
+	public void setAccountNonExpired(Boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+	public void setAccountNonLocked(Boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public void setAuthorities(Collection<UsuarioRole> authorities) {
+		this.authorities = authorities;
+	}
+
+	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setLastPasswordReset(Date lastPasswordReset) {
+		this.lastPasswordReset = lastPasswordReset;
 	}
 
 	public void setPassword(String password) {
@@ -110,77 +185,13 @@ public class Usuario implements Serializable, UserDetails {
 		this.password = password;
 	}
 
-	// @Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.authorities;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public void setAuthorities(Collection<UsuarioRole> authorities) {
-		this.authorities = authorities;
-	}
-
-	@JsonIgnore
-	public Boolean getAccountNonExpired() {
-		return this.accountNonExpired;
-	}
-
-	public void setAccountNonExpired(Boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
-
-	// @Override
-	public boolean isAccountNonExpired() {
-		return this.getAccountNonExpired();
-	}
-
-	@JsonIgnore
-	public Boolean getAccountNonLocked() {
-		return this.accountNonLocked;
-	}
-
-	public void setAccountNonLocked(Boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
-
-	// @Override
-	public boolean isAccountNonLocked() {
-		return this.getAccountNonLocked();
-	}
-
-	@JsonIgnore
-	public Boolean getCredentialsNonExpired() {
-		return this.credentialsNonExpired;
-	}
-
-	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
-	}
-
-	// @Override
-	public boolean isCredentialsNonExpired() {
-		return this.getCredentialsNonExpired();
-	}
-
-	@JsonIgnore
-	public Boolean getEnabled() {
-		return this.enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	// @Override
-	public boolean isEnabled() {
-		return this.getEnabled();
-	}
-
-	public Date getLastPasswordReset() {
-		return lastPasswordReset;
-	}
-
-	public void setLastPasswordReset(Date lastPasswordReset) {
-		this.lastPasswordReset = lastPasswordReset;
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", authorities=" + authorities + "]";
 	}
 
 }

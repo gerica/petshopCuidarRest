@@ -38,20 +38,18 @@ public class AuthenticationController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = UriConstPetShop.URI_REFRESH, method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?> getInfo() {
-		logger.info("AuthenticationController.alterarUsuario()");
-		List<String> msg = new ArrayList<String>();
-		// StringBuilder msg = new StringBuilder("Serviços: autenticar, chamar
-		// essa url com post.");
-		msg.add("Serviços");
-		msg.add("Autenticar, chamar essa url com post. Informando email e password.");
-		msg.add("Refreh, após o usuário logado, chamar a url '/refresh' ");
+	public ResponseEntity<?> authenticationRequest(HttpServletRequest request) {
+		String token = request.getHeader(AppConstant.tokenHeader);
 
-		SuccessResponse success = new SuccessResponse("Rest de autencicação", msg);
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+		String refreshedToken = authenticationService.authenticationRequest(token);
+		if (refreshedToken != null) {
 
+			return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
+		} else {
+			return ResponseEntity.badRequest().body(null);
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -73,18 +71,20 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new AuthenticationResponse(token, usuarioAuth));
 	}
 
-	@RequestMapping(value = UriConstPetShop.URI_REFRESH, method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?> authenticationRequest(HttpServletRequest request) {
-		String token = request.getHeader(AppConstant.tokenHeader);
+	public ResponseEntity<?> getInfo() {
+		logger.info("AuthenticationController.alterarUsuario()");
+		List<String> msg = new ArrayList<String>();
+		// StringBuilder msg = new StringBuilder("Serviços: autenticar, chamar
+		// essa url com post.");
+		msg.add("Serviços");
+		msg.add("Autenticar, chamar essa url com post. Informando email e password.");
+		msg.add("Refreh, após o usuário logado, chamar a url '/refresh' ");
 
-		String refreshedToken = authenticationService.authenticationRequest(token);
-		if (refreshedToken != null) {
+		SuccessResponse success = new SuccessResponse("Rest de autencicação", msg);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
-			return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
-		} else {
-			return ResponseEntity.badRequest().body(null);
-		}
 	}
 
 }

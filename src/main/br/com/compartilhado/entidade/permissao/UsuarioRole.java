@@ -39,33 +39,33 @@ public class UsuarioRole implements Serializable, GrantedAuthority {
 	@JoinColumn(name = "id_role", nullable = false)
 	private Role role;
 
+	@Override
+	public String getAuthority() {
+		return role.getNome();
+	}
+
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public Role getRole() {
 		return role;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void setRole(Role role) {
 		this.role = role;
 	}
 
-	@Override
-	public String getAuthority() {
-		return role.getNome();
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

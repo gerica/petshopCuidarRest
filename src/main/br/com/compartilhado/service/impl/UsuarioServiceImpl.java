@@ -5,9 +5,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,19 +32,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private RoleService roleService;
 
 	@Override
-	public void registar(Usuario usuario) throws PetShopBusinessException {
-		validarEmail(usuario);
-		validarSenha(usuario);
-		verificarDuplicidade(usuario);
-
-		usuario.setAuthorities(getAuthorizeConvidado(usuario));
-		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
-		usuario.setEmail(usuario.getEmail().toUpperCase());
-		usuarioRepository.save(usuario);
-
-	}
-
-	@Override
 	public Usuario alterar(Usuario userParam) throws PetShopBusinessException {
 		validarEmail(userParam);
 		validarSenha(userParam);
@@ -56,14 +45,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public List<Usuario> findAllAtivo() throws PetShopBusinessException {
+		return usuarioRepository.findByAtivo(true);
+	}
+
+	@Override
 	public Usuario findByEmail(String email) throws PetShopBusinessException {
 		if (email == null || "".equals(email)) {
 			throw new PetShopBusinessException("O emial não pode ser nulo, nem vazio.");
 		}
 		return usuarioRepository.findByEmail(email.toUpperCase());
 	}
-
-	// PRIVATE
 
 	public String getPasswordEnconding(String password) throws PetShopBusinessException {
 
@@ -87,50 +79,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return hexString.toString();
 	}
 
-	private void validarEmail(Usuario usuario) throws PetShopBusinessException {
-		String email = usuario.getEmail();
+	@Override
+	public void registar(Usuario usuario) throws PetShopBusinessException {
+		validarEmail(usuario);
+		verificarDuplicidade(usuario);
+		usuario.setPassword(getPasswordRandom());
 
-		if ((email == null) || (email.trim().length() == 0)) {
-			throw new PetShopBusinessException("O email é obrigatório para registrar um usuário.");
-		}
-
-		String emailPattern = "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
-		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(email);
-		if (!matcher.matches()) {
-			throw new PetShopBusinessException(
-					"O email informado não está no formato correto. Utilize um email correto.");
-		}
-
-	}
-
-	private Usuario verificarDuplicidade(Usuario usuario) throws PetShopBusinessException {
-		Usuario userDb = findByEmail(usuario.getEmail());
-		if (userDb != null) {
-			throw new PetShopBusinessException(
-					"O email informado já existe cadastrado. Por favor informe outro email.");
-		}
-		return userDb;
-
-	}
-
-	private void validarSenha(Usuario usuario) throws PetShopBusinessException {
-		if (usuario.getPassword() == null || usuario.getPassword().length() <= 4) {
-			throw new PetShopBusinessException("Informe uma senha com no mínimo 5 caracteres.");
-		}
-
-	}
-
-	private Usuario verificarTrocaEmail(Usuario userParam) throws PetShopBusinessException {
-		Usuario usuario = findByEmail(userParam.getEmail());
-		if (usuario == null) {
-			throw new PetShopBusinessException(
-					"Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
-		}
-		if (!usuario.getEmail().equals(userParam.getEmail())) {
-			throw new PetShopBusinessException("Não é possível alterar o email.");
-		}
-		return usuario;
+		usuario.setAuthorities(getAuthorizeConvidado(usuario));
+		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
+		usuario.setEmail(usuario.getEmail().toUpperCase());
+		usuario.setAtivo(true);
+		usuarioRepository.save(usuario);
 
 	}
 
@@ -148,6 +107,54 @@ public class UsuarioServiceImpl implements UsuarioService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private String getPasswordRandom() {
+		return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+	}
+
+	private void validarEmail(Usuario usuario) throws PetShopBusinessException {
+		String email = usuario.getEmail();
+
+		if ((email == null) || (email.trim().length() == 0)) {
+			throw new PetShopBusinessException("O email é obrigatório para registrar um usuário.");
+		}
+
+		String emailPattern = "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
+		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(email);
+		if (!matcher.matches()) {
+			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
+		}
+
+	}
+
+	private void validarSenha(Usuario usuario) throws PetShopBusinessException {
+		if (usuario.getPassword() == null || usuario.getPassword().length() <= 4) {
+			throw new PetShopBusinessException("Informe uma senha com no mínimo 5 caracteres.");
+		}
+
+	}
+
+	private Usuario verificarDuplicidade(Usuario usuario) throws PetShopBusinessException {
+		Usuario userDb = findByEmail(usuario.getEmail());
+		if (userDb != null) {
+			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
+		}
+		return userDb;
+
+	}
+
+	private Usuario verificarTrocaEmail(Usuario userParam) throws PetShopBusinessException {
+		Usuario usuario = findByEmail(userParam.getEmail());
+		if (usuario == null) {
+			throw new PetShopBusinessException("Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
+		}
+		if (!usuario.getEmail().equals(userParam.getEmail())) {
+			throw new PetShopBusinessException("Não é possível alterar o email.");
+		}
+		return usuario;
+
 	}
 
 }
