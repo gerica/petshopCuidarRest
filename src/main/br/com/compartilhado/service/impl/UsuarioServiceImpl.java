@@ -5,9 +5,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public List<Usuario> findAllAtivo() throws PetShopBusinessException {
+		return usuarioRepository.findByAtivo(true);
+	}
+
+	@Override
 	public Usuario findByEmail(String email) throws PetShopBusinessException {
 		if (email == null || "".equals(email)) {
 			throw new PetShopBusinessException("O emial não pode ser nulo, nem vazio.");
@@ -75,12 +82,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public void registar(Usuario usuario) throws PetShopBusinessException {
 		validarEmail(usuario);
-		validarSenha(usuario);
 		verificarDuplicidade(usuario);
+		usuario.setPassword(getPasswordRandom());
 
 		usuario.setAuthorities(getAuthorizeConvidado(usuario));
 		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
 		usuario.setEmail(usuario.getEmail().toUpperCase());
+		usuario.setAtivo(true);
 		usuarioRepository.save(usuario);
 
 	}
@@ -101,6 +109,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 	}
 
+	private String getPasswordRandom() {
+		return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+	}
+
 	private void validarEmail(Usuario usuario) throws PetShopBusinessException {
 		String email = usuario.getEmail();
 
@@ -112,8 +124,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			throw new PetShopBusinessException(
-					"O email informado não está no formato correto. Utilize um email correto.");
+			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
 		}
 
 	}
@@ -128,8 +139,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private Usuario verificarDuplicidade(Usuario usuario) throws PetShopBusinessException {
 		Usuario userDb = findByEmail(usuario.getEmail());
 		if (userDb != null) {
-			throw new PetShopBusinessException(
-					"O email informado já existe cadastrado. Por favor informe outro email.");
+			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
 		}
 		return userDb;
 
@@ -138,8 +148,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private Usuario verificarTrocaEmail(Usuario userParam) throws PetShopBusinessException {
 		Usuario usuario = findByEmail(userParam.getEmail());
 		if (usuario == null) {
-			throw new PetShopBusinessException(
-					"Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
+			throw new PetShopBusinessException("Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
 		}
 		if (!usuario.getEmail().equals(userParam.getEmail())) {
 			throw new PetShopBusinessException("Não é possível alterar o email.");

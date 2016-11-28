@@ -42,6 +42,9 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "ds_senha")
 	private String password;
 
+	@Column(name = "in_ativo")
+	private Boolean ativo;
+
 	@Transient
 	private Date lastPasswordReset;
 
@@ -58,6 +61,7 @@ public class Usuario implements Serializable, UserDetails {
 	private Boolean credentialsNonExpired = true;
 	@Transient
 	private Boolean enabled = true;
+
 	public Usuario() {
 
 	}
@@ -70,6 +74,10 @@ public class Usuario implements Serializable, UserDetails {
 	@JsonIgnore
 	public Boolean getAccountNonLocked() {
 		return this.accountNonLocked;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
 	}
 
 	// @Override
@@ -91,10 +99,6 @@ public class Usuario implements Serializable, UserDetails {
 		return this.enabled;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	// public String getAuthoritiesBd() {
 	// return authoritiesBd;
 	// }
@@ -102,6 +106,10 @@ public class Usuario implements Serializable, UserDetails {
 	// public void setAuthoritiesBd(String authoritiesBd) {
 	// this.authoritiesBd = authoritiesBd;
 	// }
+
+	public Long getId() {
+		return id;
+	}
 
 	public Date getLastPasswordReset() {
 		return lastPasswordReset;
@@ -143,6 +151,10 @@ public class Usuario implements Serializable, UserDetails {
 		this.accountNonLocked = accountNonLocked;
 	}
 
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
 	public void setAuthorities(Collection<UsuarioRole> authorities) {
 		this.authorities = authorities;
 	}
@@ -179,8 +191,7 @@ public class Usuario implements Serializable, UserDetails {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", authorities=" + authorities + "]";
+		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", authorities=" + authorities + "]";
 	}
 
 }

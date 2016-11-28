@@ -159,19 +159,18 @@
 			<version>${apache.commons.lang.version}</version>
 		</dependency>
 
-		<!-- PostgreSQL JDBC Driver -->
-		<!-- <dependency> -->
-		<!-- <groupId>postgresql</groupId> -->
-		<!-- <artifactId>postgresql</artifactId> -->
-		<!-- <version>${postgres.version}</version> -->
-		<!-- </dependency> -->
-
-		<!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
-			<groupId>postgresql</groupId>
+			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4-1200-jdbc41</version>
+			<version>9.4.1212</version>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>postgresql</groupId> -->
+<!-- 			<artifactId>postgresql</artifactId> -->
+<!-- 			<version>9.4-1200-jdbc41</version> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>joda-time</groupId>

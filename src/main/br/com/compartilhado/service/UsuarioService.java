@@ -1,5 +1,7 @@
 package br.com.compartilhado.service;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.compartilhado.entidade.Usuario;
@@ -17,5 +19,8 @@ public interface UsuarioService {
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	void registar(Usuario usuario) throws PetShopBusinessException;
+
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
+	List<Usuario> findAllAtivo() throws PetShopBusinessException;
 
 }
