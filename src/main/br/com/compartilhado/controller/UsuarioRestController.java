@@ -27,7 +27,7 @@ public class UsuarioRestController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URL_INCLUIR_USUARIO)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_INCLUIR)
 	@ResponseBody
 	public ResponseEntity<?> incluirUsuario(@RequestBody Usuario usuario) {
 		logger.info("UsuarioRestController.alterarUsuario()");
@@ -44,7 +44,7 @@ public class UsuarioRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR_USUARIO)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR)
 	@ResponseBody
 	public ResponseEntity<?> alterarUsuario(@RequestBody Usuario usuario) {
 		logger.info("UsuarioRestController.alterarUsuario()");
