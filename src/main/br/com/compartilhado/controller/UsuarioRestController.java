@@ -46,6 +46,40 @@ public class UsuarioRestController {
 
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ATIVAR_USUARIO)
+	@ResponseBody
+	public ResponseEntity<?> ativarUsuario(@RequestBody Usuario usuario) {
+		logger.info("UsuarioRestController.ativarUsuario()");
+
+		try {
+			usuarioService.ativarUsuario(usuario);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_RESET_PASSWORD)
+	@ResponseBody
+	public ResponseEntity<?> resetPassword(@RequestBody Usuario usuario) {
+		logger.info("UsuarioRestController.resetPassword()");
+
+		try {
+			usuarioService.resetPassword(usuario);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> getInfo() {
@@ -90,7 +124,8 @@ public class UsuarioRestController {
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
-		String message = "Operação realizada com sucesso. Sua senha temporária é: " + result.getTempPassword() + ". Utilize essa senha para realizar o login pela primeira vez.";
+		String message = "Operação realizada com sucesso. Sua senha temporária é: " + result.getTempPassword()
+				+ ". Utilize essa senha para realizar o login pela primeira vez.";
 		SuccessResponse success = new SuccessResponse(message, result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
@@ -131,12 +166,12 @@ public class UsuarioRestController {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_RECUPERAR_USUARIOS_INATIVO)
 	@ResponseBody
 	public ResponseEntity<?> recuperarUsuariosInativo() {
 		logger.info("UsuarioRestController.recuperarUsuariosInativo()");
-		
+
 		List<Usuario> result = null;
 		try {
 			result = usuarioService.findUsuariosInativo();
@@ -144,10 +179,10 @@ public class UsuarioRestController {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-		
+
 	}
 
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.compartilhado.controller.model.AuthenticationResponse;
 import br.com.compartilhado.controller.model.ErrorResponse;
 import br.com.compartilhado.controller.model.SuccessResponse;
+import br.com.compartilhado.controller.wrapper.UsuarioLockWrapper;
 import br.com.compartilhado.entidade.Usuario;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.AuthenticationService;
@@ -66,7 +67,9 @@ public class AuthenticationController {
 			usuarioAuth = usuarioService.findByEmail(usuario.getEmail());
 
 		} catch (LockedException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage(), "locked");
+
+			UsuarioLockWrapper lockWrapper = new UsuarioLockWrapper(true, usuario.getEmail());
+			ErrorResponse error = new ErrorResponse(e.getMessage(), lockWrapper);
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());

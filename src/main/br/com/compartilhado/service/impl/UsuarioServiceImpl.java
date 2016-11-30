@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +46,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuario.setPassword(getPasswordEnconding(userParam.getPassword()));
 		usuarioRepository.save(usuario);
 		return usuario;
+
+	}
+
+	@Override
+	public void ativarUsuario(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.ativarUsuario()");
+
+		Usuario userBD = findByEmail(usuario.getEmail());
+		if (userBD == null) {
+			throw new PetShopBusinessException("Usuário não cadastrado com esse email: " + usuario.getEmail());
+		}
+		userBD.setEnabled(true);
+		usuarioRepository.save(userBD);
 
 	}
 
@@ -127,17 +139,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public void primeiroLogin(Usuario usuario) throws PetShopBusinessException {
 		logger.info("UsuarioServiceImpl.primeiroLogin()");
 
-		String passwordEncode = getPasswordEnconding(usuario.getTempPassword());
-		Usuario userBd = usuarioRepository.findByPassword(passwordEncode);
-
+		String passwordEnconding = getPasswordEnconding(usuario.getTempPassword());
+		Usuario userBd = usuarioRepository.findByEmailAndPassword(usuario.getEmail().toUpperCase(), passwordEnconding);
 		if (userBd == null) {
 			throw new PetShopBusinessException("A 'senha antiga' informada está incorreta.");
 		}
 		validarSenha(userBd);
-
 		userBd.setAccountLocked(false);
 		userBd.setPassword(getPasswordEnconding(usuario.getPassword()));
 		usuarioRepository.save(userBd);
+
+	}
+
+	@Override
+	public void resetPassword(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.resetPassword()");
+
+		Usuario userBD = findByEmail(usuario.getEmail());
+		if (userBD == null) {
+			throw new PetShopBusinessException("Usuário não cadastrado com esse email: " + usuario.getEmail());
+		}
+		userBD.setAccountLocked(true);
+		userBD.setPassword(getPasswordEnconding(getPasswordRandom()));
+		usuarioRepository.save(userBD);
 
 	}
 
@@ -205,7 +229,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	private String getPasswordRandom() {
 		logger.info("UsuarioServiceImpl.getPasswordRandom()");
-		return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+		// return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+		return "cuidar"; // será a senha padrão
 	}
 
 	private void validarEmail(Usuario usuario) throws PetShopBusinessException {
@@ -220,7 +245,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
+			throw new PetShopBusinessException(
+					"O email informado não está no formato correto. Utilize um email correto.");
 		}
 
 	}
@@ -238,7 +264,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		logger.info("UsuarioServiceImpl.verificarDuplicidade()");
 		Usuario userDb = findByEmail(usuario.getEmail());
 		if (userDb != null) {
-			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
+			throw new PetShopBusinessException(
+					"O email informado já existe cadastrado. Por favor informe outro email.");
 		}
 		return userDb;
 
@@ -248,7 +275,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		logger.info("UsuarioServiceImpl.verificarTrocaEmail()");
 		Usuario usuario = findByEmail(userParam.getEmail());
 		if (usuario == null) {
-			throw new PetShopBusinessException("Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
+			throw new PetShopBusinessException(
+					"Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
 		}
 		if (!usuario.getEmail().equals(userParam.getEmail())) {
 			throw new PetShopBusinessException("Não é possível alterar o email.");

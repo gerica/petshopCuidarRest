@@ -13,6 +13,8 @@ public abstract class UriConstPetShop {
 	public static final String URI_RECUPERAR_USUARIOS_INATIVO = "recuperarUsuariosInativo";
 	public static final String URI_PRIMEIRO_LOGIN = "primeiroLogin";
 	public static final String URI_INATIVAR_USUARIO = "inativarUsuario";
+	public static final String URI_ATIVAR_USUARIO = "ativarUsuario";
+	public static final String URI_RESET_PASSWORD= "resetPassword";
 
 	// Funcionalidades de ROLE
 	public static final String URI_ROLE = "role";
