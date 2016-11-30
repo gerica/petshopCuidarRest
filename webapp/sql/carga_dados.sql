@@ -1,7 +1,7 @@
--- adicionar um usuaŕio
+-- adicionar um usuaŕio//
 INSERT INTO public.tb_usuario(
-            id_usuario, ds_authorities, ds_email, ds_senha, ds_nome)
-    VALUES (1, 'ROLE_ADMIN', 'ROGERIO@CARDOSO.COM.BR', 'FB8A7914134C70876287EB47A868C4570AFC4BD807E250267A43A0A52F0211EB', 'ROGERIO CARDOSO');
+            id_usuario,is_account_locked, ds_email, is_enabled,dt_last_password,_reset, ds_senha, ds_nome)
+    VALUES (1, false, 'ROGERIO@CARDOSO.COM.BR',true,to_date('29/11/2016','dd/MM/yyyy') 'FB8A7914134C70876287EB47A868C4570AFC4BD807E250267A43A0A52F0211EB', 'ROGERIO CARDOSO');
 
 
 -- Adicionar role

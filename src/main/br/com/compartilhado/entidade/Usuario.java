@@ -53,15 +53,15 @@ public class Usuario implements Serializable, UserDetails {
 	@JsonIgnore
 	private Boolean accountNonExpired = true;
 
-	@Column(name = "in_account_locked")
-	private Boolean accountLocked = false;
+	@Column(name = "is_account_locked")
+	private Boolean accountLocked = true;
 
 	@Transient
 	@JsonIgnore
 	private Boolean credentialsNonExpired = true;
 
 	@Column(name = "is_enabled")
-	private Boolean enabled = false;
+	private Boolean enabled = true;
 
 	@Transient
 	private String tempPassword;
@@ -106,7 +106,7 @@ public class Usuario implements Serializable, UserDetails {
 	}
 
 	// @Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	public Collection<UsuarioRole> getAuthorities() {
 		return this.authorities;
 	}
 

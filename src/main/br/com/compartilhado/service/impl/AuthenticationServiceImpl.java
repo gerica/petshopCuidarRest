@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -49,14 +50,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public String authentication(String email, String password)
-			throws AuthenticationException, PetShopBusinessException {
+			throws AuthenticationException, PetShopBusinessException, LockedException {
 
 		Usuario userBD = getAppUserBD(email, password);
 
+		//
 		// Perform the authentication
-		Authentication authentication = this.authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(userBD.getUsername(), userBD.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		try {
+			Authentication authentication = this.authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(userBD.getUsername(), userBD.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		} catch (LockedException e) {
+			throw new LockedException("Usuario: " + userBD.getUsername() + ", está com a conta bloqueada");
+		}
 
 		// Reload password post-authentication so we can generate token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(userBD.getUsername());
@@ -91,7 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		String authToken = httpRequest.getHeader(AppConstant.tokenHeader);
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
 
-//		sessionFactory.getCurrentSession().get(Usuario.class, username);
+		// sessionFactory.getCurrentSession().get(Usuario.class, username);
 
 		return loadUserByUsername(username);
 	}

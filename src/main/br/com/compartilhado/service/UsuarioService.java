@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.compartilhado.entidade.Usuario;
+import br.com.compartilhado.entidade.permissao.Role;
 import br.com.compartilhado.entidade.permissao.RoleEnum;
 import br.com.compartilhado.execao.PetShopBusinessException;
 
@@ -21,6 +22,6 @@ public interface UsuarioService {
 	String getPasswordEnconding(String password) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
-	Usuario registar(Usuario usuario) throws PetShopBusinessException;
+	Usuario incluirUsuario(Usuario usuario, List<Role> roles) throws PetShopBusinessException;
 
 }
