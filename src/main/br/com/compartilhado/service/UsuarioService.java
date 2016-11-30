@@ -19,9 +19,17 @@ public interface UsuarioService {
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	List<Usuario> findUsuariosAtivo() throws PetShopBusinessException;
 
-	String getPasswordEnconding(String password) throws PetShopBusinessException;
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
+	List<Usuario> findUsuariosInativo()throws PetShopBusinessException;
+
+	Usuario getUsuarioByEmailPassword(String email, String password) throws PetShopBusinessException;
+
+	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
+	void inativarUsuario(Usuario usuario) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	Usuario incluirUsuario(Usuario usuario, List<Role> roles) throws PetShopBusinessException;
+
+	void primeiroLogin(Usuario usuario) throws PetShopBusinessException;
 
 }

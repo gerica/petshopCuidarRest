@@ -11,6 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -26,6 +28,7 @@ import br.com.compartilhado.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+	private static final Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -35,6 +38,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario alterar(Usuario userParam) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.alterar()");
 		validarEmail(userParam);
 		validarSenha(userParam);
 		Usuario usuario = verificarTrocaEmail(userParam);
@@ -48,6 +52,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario findByEmail(String email) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.findByEmail()");
+
 		if (email == null || "".equals(email)) {
 			throw new PetShopBusinessException("O emial não pode ser nulo, nem vazio.");
 		}
@@ -56,10 +62,126 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public List<Usuario> findUsuariosAtivo() throws PetShopBusinessException {
-		return usuarioRepository.findByAccountLocked(false);
+		logger.info("UsuarioServiceImpl.findUsuariosAtivo()");
+		return usuarioRepository.findByEnabled(true);
 	}
 
-	public String getPasswordEnconding(String password) throws PetShopBusinessException {
+	@Override
+	public List<Usuario> findUsuariosInativo() throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.findUsuariosInativo()");
+		return usuarioRepository.findByEnabled(false);
+	}
+
+	@Override
+	public Usuario getUsuarioByEmailPassword(String email, String password) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.getUsuarioByEmailPassword()");
+
+		Usuario userBD = findByEmail(email);
+		if (userBD == null) {
+			throw new PetShopBusinessException("Usuário não cadastrado com esse email: " + email);
+		}
+		String passwordEncode = getPasswordEnconding(password);
+		if (!passwordEncode.equals(userBD.getPassword())) {
+			throw new PetShopBusinessException("Senha incorreta.");
+		}
+		return userBD;
+
+	}
+
+	@Override
+	public void inativarUsuario(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.inativarUsuario()");
+
+		Usuario userBD = findByEmail(usuario.getEmail());
+		if (userBD == null) {
+			throw new PetShopBusinessException("Usuário não cadastrado com esse email: " + usuario.getEmail());
+		}
+		userBD.setEnabled(false);
+		usuarioRepository.save(userBD);
+	}
+
+	@Override
+	public Usuario incluirUsuario(Usuario usuario, List<Role> roles) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.incluirUsuario()");
+
+		validarEmail(usuario);
+		verificarDuplicidade(usuario);
+		usuario.setUsername(usuario.getUsername().toUpperCase());
+		usuario.setPassword(getPasswordRandom());
+		usuario.setTempPassword(usuario.getPassword());
+
+		if (CollectionUtils.isEmpty(roles)) {
+			usuario.setAuthorities(getAuthorizeConvidado(usuario));
+		} else {
+			usuario.setAuthorities(getAuthorize(usuario, roles));
+		}
+		usuario.setLastPasswordReset(new Date());
+		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
+		usuario.setEmail(usuario.getEmail().toUpperCase());
+		usuarioRepository.save(usuario);
+		return usuario;
+
+	}
+
+	@Override
+	public void primeiroLogin(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.primeiroLogin()");
+
+		String passwordEncode = getPasswordEnconding(usuario.getTempPassword());
+		Usuario userBd = usuarioRepository.findByPassword(passwordEncode);
+
+		if (userBd == null) {
+			throw new PetShopBusinessException("A 'senha antiga' informada está incorreta.");
+		}
+		validarSenha(userBd);
+
+		userBd.setAccountLocked(false);
+		userBd.setPassword(getPasswordEnconding(usuario.getPassword()));
+		usuarioRepository.save(userBd);
+
+	}
+
+	private Collection<UsuarioRole> getAuthorize(Usuario usuario, List<Role> roles) {
+		logger.info("UsuarioServiceImpl.getAuthorize()");
+
+		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
+		Role role;
+		UsuarioRole userRole;
+		try {
+			for (Role r : roles) {
+				role = roleService.findByNome(r.getNome());
+				userRole = new UsuarioRole();
+				userRole.setRole(role);
+				userRole.setUsuario(usuario);
+				authorities.add(userRole);
+			}
+		} catch (PetShopBusinessException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return authorities;
+	}
+
+	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
+		logger.info("UsuarioServiceImpl.getAuthorizeConvidado()");
+
+		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
+		Role role;
+		try {
+			role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
+			UsuarioRole userRole = new UsuarioRole();
+			userRole.setRole(role);
+			userRole.setUsuario(usuario);
+			authorities.add(userRole);
+			return authorities;
+		} catch (PetShopBusinessException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getPasswordEnconding(String password) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.getPasswordEnconding()");
 
 		MessageDigest algorithm = null;
 		byte messageDigest[] = null;
@@ -81,67 +203,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return hexString.toString();
 	}
 
-	@Override
-	public Usuario incluirUsuario(Usuario usuario, List<Role> roles) throws PetShopBusinessException {
-		validarEmail(usuario);
-		verificarDuplicidade(usuario);
-		usuario.setUsername(usuario.getUsername().toUpperCase());
-		usuario.setPassword(getPasswordRandom());
-		usuario.setTempPassword(usuario.getPassword());
-
-		if (CollectionUtils.isEmpty(roles)) {
-			usuario.setAuthorities(getAuthorizeConvidado(usuario));
-		} else {
-			usuario.setAuthorities(getAuthorize(usuario, roles));
-		}
-		usuario.setLastPasswordReset(new Date());
-		usuario.setPassword(getPasswordEnconding(usuario.getPassword()));
-		usuario.setEmail(usuario.getEmail().toUpperCase());
-		usuarioRepository.save(usuario);
-		return usuario;
-
-	}
-
-	private Collection<UsuarioRole> getAuthorize(Usuario usuario, List<Role> roles) {
-		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
-		Role role;
-		UsuarioRole userRole;
-		try {
-			for (Role r : roles) {
-				role = roleService.findByNome(r.getNome());
-				userRole = new UsuarioRole();
-				userRole.setRole(role);
-				userRole.setUsuario(usuario);
-				authorities.add(userRole);
-			}
-		} catch (PetShopBusinessException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return authorities;
-	}
-
-	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
-		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
-		Role role;
-		try {
-			role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
-			UsuarioRole userRole = new UsuarioRole();
-			userRole.setRole(role);
-			userRole.setUsuario(usuario);
-			authorities.add(userRole);
-			return authorities;
-		} catch (PetShopBusinessException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	private String getPasswordRandom() {
+		logger.info("UsuarioServiceImpl.getPasswordRandom()");
 		return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
 	}
 
 	private void validarEmail(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.validarEmail()");
 		String email = usuario.getEmail();
 
 		if ((email == null) || (email.trim().length() == 0)) {
@@ -152,13 +220,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			throw new PetShopBusinessException(
-					"O email informado não está no formato correto. Utilize um email correto.");
+			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
 		}
 
 	}
 
 	private void validarSenha(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.validarSenha()");
+
 		if (usuario.getPassword() == null || usuario.getPassword().length() <= 4) {
 			throw new PetShopBusinessException("Informe uma senha com no mínimo 5 caracteres.");
 		}
@@ -166,20 +235,20 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	private Usuario verificarDuplicidade(Usuario usuario) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.verificarDuplicidade()");
 		Usuario userDb = findByEmail(usuario.getEmail());
 		if (userDb != null) {
-			throw new PetShopBusinessException(
-					"O email informado já existe cadastrado. Por favor informe outro email.");
+			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
 		}
 		return userDb;
 
 	}
 
 	private Usuario verificarTrocaEmail(Usuario userParam) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.verificarTrocaEmail()");
 		Usuario usuario = findByEmail(userParam.getEmail());
 		if (usuario == null) {
-			throw new PetShopBusinessException(
-					"Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
+			throw new PetShopBusinessException("Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
 		}
 		if (!usuario.getEmail().equals(userParam.getEmail())) {
 			throw new PetShopBusinessException("Não é possível alterar o email.");

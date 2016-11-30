@@ -71,7 +71,6 @@ public class AuthenticationController {
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-//			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 
 		// Return the token
