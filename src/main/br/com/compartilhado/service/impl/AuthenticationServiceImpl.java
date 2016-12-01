@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.compartilhado.execao.PetShopBusinessException;
-import br.com.compartilhado.repository.UsuarioRepository;
 import br.com.compartilhado.service.AuthenticationService;
 import br.com.compartilhado.service.UsuarioService;
 import br.com.util.AppConstant;
@@ -36,9 +36,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private UsuarioRepository appUserRepository;
-
-	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Autowired(required = true)
@@ -48,15 +45,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private UsuarioService usuarioService;
 
 	@Override
-	public String authentication(String email, String password)
-			throws AuthenticationException, PetShopBusinessException {
+	public String authentication(String email, String password) throws AuthenticationException, PetShopBusinessException, LockedException {
 
-		Usuario userBD = getAppUserBD(email, password);
+		Usuario userBD = usuarioService.getUsuarioByEmailPassword(email, password);
 
+		//
 		// Perform the authentication
-		Authentication authentication = this.authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(userBD.getUsername(), userBD.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		try {
+			Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userBD.getUsername(), userBD.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		} catch (LockedException e) {
+			throw new LockedException("Usuario: " + userBD.getUsername() + ", está com a conta bloqueada");
+		}
 
 		// Reload password post-authentication so we can generate token
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(userBD.getUsername());
@@ -91,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		String authToken = httpRequest.getHeader(AppConstant.tokenHeader);
 		String username = this.tokenUtils.getUsernameFromToken(authToken);
 
-//		sessionFactory.getCurrentSession().get(Usuario.class, username);
+		// sessionFactory.getCurrentSession().get(Usuario.class, username);
 
 		return loadUserByUsername(username);
 	}
@@ -105,8 +106,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	@Transactional
 	public Usuario loadUserByUsername(String username) {
-		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class)
-				.add(Restrictions.eq("username", username)).uniqueResult();
+		return (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
 
 	@Transactional
@@ -120,18 +120,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public long post(Usuario appUser) {
 		return (long) sessionFactory.getCurrentSession().save(appUser);
-	}
-
-	private Usuario getAppUserBD(String email, String password) throws PetShopBusinessException {
-		Usuario userBD = appUserRepository.findByEmail(email.toUpperCase());
-		if (userBD == null) {
-			throw new PetShopBusinessException("Usuário não cadastrado com esse email: " + email);
-		}
-		String passwordEncode = usuarioService.getPasswordEnconding(password);
-		if (!passwordEncode.equals(userBD.getPassword())) {
-			throw new PetShopBusinessException("Senha incorreta.");
-		}
-		return userBD;
 	}
 
 }

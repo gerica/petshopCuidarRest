@@ -9,6 +9,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,8 @@ import br.com.util.TokenUtils;
 
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {
 
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationTokenFilter.class);
+
 	@Autowired
 	private TokenUtils tokenUtils;
 
@@ -30,8 +34,11 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 	private UserDetailsService userDetailsService;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		tokenUtils = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext()).getBean(TokenUtils.class);
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		logger.info("AuthenticationTokenFilter.doFilter()");
+		tokenUtils = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext())
+				.getBean(TokenUtils.class);
 		userDetailsService = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext())
 				.getBean(UserDetailsService.class);
 
@@ -39,7 +46,8 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		resp.setHeader("Access-Control-Allow-Origin", "*");
 		resp.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
 		resp.setHeader("Access-Control-Max-Age", "3600");
-		resp.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, " + AppConstant.tokenHeader);
+		resp.setHeader("Access-Control-Allow-Headers",
+				"Origin, X-Requested-With, Content-Type, Accept, " + AppConstant.tokenHeader);
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String authToken = httpRequest.getHeader(AppConstant.tokenHeader);
@@ -48,11 +56,13 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 			if (this.tokenUtils.validateToken(authToken, userDetails)) {
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-						userDetails.getAuthorities());
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
+		} else {
+			logger.info(username);
 		}
 
 		chain.doFilter(request, response);

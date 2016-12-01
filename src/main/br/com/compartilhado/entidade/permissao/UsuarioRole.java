@@ -31,7 +31,7 @@ public class UsuarioRole implements Serializable, GrantedAuthority {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
-	@JoinColumn(name = "id_usuario", nullable = false)
+	@JoinColumn(name = "id_usuario", nullable = true)
 	private Usuario usuario;
 
 	@ManyToOne(fetch = FetchType.EAGER)
