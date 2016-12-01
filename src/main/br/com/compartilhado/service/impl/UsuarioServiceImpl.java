@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private UsuarioRoleService usuarioRole;
 
@@ -44,18 +45,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 		logger.info("UsuarioServiceImpl.alterar()");
 		validarEmail(userParam);
 		Usuario usuario = verificarTrocaEmail(userParam);
-		Collection<UsuarioRole> usuarioRoles = usuario.getAuthorities();
 
+		deleteRoleMudou(usuario.getAuthorities(), roles);
 		if (CollectionUtils.isEmpty(roles)) {
 			usuario.setAuthorities(getAuthorizeConvidado(usuario));
 		} else {
 			usuario.setAuthorities(getAuthorize(usuario, roles));
 		}
-		usuarioRole.deleteAll(usuarioRoles);
-		
+
 		usuario.setUsername(userParam.getUsername());
 		usuario.setEmail(userParam.getEmail());
-		
+
 		usuarioRepository.save(usuario);
 
 	}
@@ -176,6 +176,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	}
 
+	private void deleteRoleMudou(Collection<UsuarioRole> usuarioRoles, List<Role> roles)
+			throws PetShopBusinessException {
+		if (!CollectionUtils.isEmpty(usuarioRoles)) {
+			Collection<UsuarioRole> listaApagar = new ArrayList<UsuarioRole>();
+			outerloop: for (Iterator iterator = usuarioRoles.iterator(); iterator.hasNext();) {
+				UsuarioRole usuarioRole = (UsuarioRole) iterator.next();
+
+				for (Role role : roles) {
+					if (usuarioRole.getRole().equals(role)) {
+						continue outerloop;
+					}
+				}
+				listaApagar.add(usuarioRole);
+				iterator.remove();
+			}
+
+			if (!CollectionUtils.isEmpty(listaApagar)) {
+				usuarioRole.deleteAll(listaApagar);
+			}
+		}
+
+	}
+
 	private Collection<UsuarioRole> getAuthorize(Usuario usuario, List<Role> roles) {
 		logger.info("UsuarioServiceImpl.getAuthorize()");
 
@@ -183,11 +206,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Role role;
 		UsuarioRole userRole;
 		try {
-			outerloop:
-			for (Role r : roles) {
+			outerloop: for (Role r : roles) {
 				for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
 					if (usuarioRole.getRole().equals(r)) {
-						authorities.add(usuarioRole);
+						authorities.remove(usuarioRole);
 						continue outerloop;
 					}
 				}
@@ -263,7 +285,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
+			throw new PetShopBusinessException(
+					"O email informado não está no formato correto. Utilize um email correto.");
 		}
 
 	}
@@ -281,7 +304,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		logger.info("UsuarioServiceImpl.verificarDuplicidade()");
 		Usuario userDb = findByEmail(usuario.getEmail());
 		if (userDb != null) {
-			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
+			throw new PetShopBusinessException(
+					"O email informado já existe cadastrado. Por favor informe outro email.");
 		}
 		return userDb;
 

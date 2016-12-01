@@ -23,11 +23,11 @@ public class UsuarioRoleServiceImpl implements UsuarioRoleService {
 	@Override
 	public void deleteAll(Collection<UsuarioRole> usuarioRoles) throws PetShopBusinessException {
 		logger.info("UsuarioRoleServiceImpl.deleteAll()");
-		
-		if (CollectionUtils.isEmpty(usuarioRoles)) {
-			// for (UsuarioRole usuarioRole : usuarioRoles) {
-			usuarioRoleRepository.delete(usuarioRoles);
-			// }
+
+		if (!CollectionUtils.isEmpty(usuarioRoles)) {
+			for (UsuarioRole ur : usuarioRoles) {
+				usuarioRoleRepository.deleteById(ur.getId());
+			}
 
 		}
 

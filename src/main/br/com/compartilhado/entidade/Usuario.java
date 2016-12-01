@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,7 +44,7 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "dt_last_password_reset")
 	private Date lastPasswordReset;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.REMOVE })
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.ALL })
 	// @JsonIgnore
 	private Collection<UsuarioRole> authorities;
 
@@ -105,7 +104,7 @@ public class Usuario implements Serializable, UserDetails {
 		return this.accountNonExpired;
 	}
 
-	// @Override
+	@Override
 	public Collection<UsuarioRole> getAuthorities() {
 		return this.authorities;
 	}
@@ -214,9 +213,10 @@ public class Usuario implements Serializable, UserDetails {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", lastPasswordReset=" + lastPasswordReset + ", authorities="
-				+ authorities + ", accountNonExpired=" + accountNonExpired + ", accountLocked=" + accountLocked + ", credentialsNonExpired=" + credentialsNonExpired + ", enabled="
-				+ enabled + ", tempPassword=" + tempPassword + "]";
+		return "Usuario [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", lastPasswordReset=" + lastPasswordReset + ", authorities=" + authorities + ", accountNonExpired="
+				+ accountNonExpired + ", accountLocked=" + accountLocked + ", credentialsNonExpired="
+				+ credentialsNonExpired + ", enabled=" + enabled + ", tempPassword=" + tempPassword + "]";
 	}
 
 }
