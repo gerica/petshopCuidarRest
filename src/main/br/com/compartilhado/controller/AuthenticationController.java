@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compartilhado.controller.model.AuthenticationResponse;
+import br.com.compartilhado.controller.model.ErrorResponse;
 import br.com.compartilhado.controller.model.SuccessResponse;
+import br.com.compartilhado.controller.wrapper.UsuarioLockWrapper;
 import br.com.compartilhado.entidade.Usuario;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.AuthenticationService;
@@ -63,8 +66,14 @@ public class AuthenticationController {
 			token = authenticationService.authentication(usuario.getEmail(), usuario.getPassword());
 			usuarioAuth = usuarioService.findByEmail(usuario.getEmail());
 
+		} catch (LockedException e) {
+
+			UsuarioLockWrapper lockWrapper = new UsuarioLockWrapper(true, usuario.getEmail());
+			ErrorResponse error = new ErrorResponse(e.getMessage(), lockWrapper);
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		} catch (PetShopBusinessException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
 		// Return the token

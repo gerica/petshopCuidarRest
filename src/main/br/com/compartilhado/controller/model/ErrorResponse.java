@@ -6,4 +6,8 @@ public class ErrorResponse extends AbstractResponse {
 		super(message);
 	}
 
+	public ErrorResponse(String message, Object obj) {
+		super(message, obj);
+	}
+
 }
