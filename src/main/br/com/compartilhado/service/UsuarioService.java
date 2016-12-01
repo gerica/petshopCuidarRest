@@ -12,7 +12,7 @@ import br.com.compartilhado.execao.PetShopBusinessException;
 public interface UsuarioService {
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
-	Usuario alterar(Usuario usuario) throws PetShopBusinessException;
+	void alterar(Usuario usuario, List<Role> roles) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_ADMIN + "'})")
 	void ativarUsuario(Usuario usuario)throws PetShopBusinessException;

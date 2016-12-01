@@ -31,17 +31,17 @@ public class UsuarioRestController {
 
 	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR_USUARIO)
 	@ResponseBody
-	public ResponseEntity<?> alterarUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<?> alterarUsuario(@RequestBody UsuarioRoleWrapper usuarioRoleWrapper) {
 		logger.info("UsuarioRestController.alterarUsuario()");
 
-		try {
-			usuario = usuarioService.alterar(usuario);
+		try { 
+			usuarioService.alterar(usuarioRoleWrapper.getUsuario(), usuarioRoleWrapper.getRoles());
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", usuario);
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}

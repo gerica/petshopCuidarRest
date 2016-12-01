@@ -23,6 +23,7 @@ import br.com.compartilhado.entidade.permissao.UsuarioRole;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.repository.UsuarioRepository;
 import br.com.compartilhado.service.RoleService;
+import br.com.compartilhado.service.UsuarioRoleService;
 import br.com.compartilhado.service.UsuarioService;
 
 @Service
@@ -34,18 +35,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private UsuarioRoleService usuarioRole;
 
 	@Override
-	public Usuario alterar(Usuario userParam) throws PetShopBusinessException {
+	public void alterar(Usuario userParam, List<Role> roles) throws PetShopBusinessException {
 		logger.info("UsuarioServiceImpl.alterar()");
 		validarEmail(userParam);
-		validarSenha(userParam);
 		Usuario usuario = verificarTrocaEmail(userParam);
+		Collection<UsuarioRole> usuarioRoles = usuario.getAuthorities();
 
+		if (CollectionUtils.isEmpty(roles)) {
+			usuario.setAuthorities(getAuthorizeConvidado(usuario));
+		} else {
+			usuario.setAuthorities(getAuthorize(usuario, roles));
+		}
+		usuarioRole.deleteAll(usuarioRoles);
+		
 		usuario.setUsername(userParam.getUsername());
-		usuario.setPassword(getPasswordEnconding(userParam.getPassword()));
+		usuario.setEmail(userParam.getEmail());
+		
 		usuarioRepository.save(usuario);
-		return usuario;
 
 	}
 
@@ -172,7 +183,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Role role;
 		UsuarioRole userRole;
 		try {
+			outerloop:
 			for (Role r : roles) {
+				for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
+					if (usuarioRole.getRole().equals(r)) {
+						authorities.add(usuarioRole);
+						continue outerloop;
+					}
+				}
 				role = roleService.findByNome(r.getNome());
 				userRole = new UsuarioRole();
 				userRole.setRole(role);
@@ -192,7 +210,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
 		Role role;
 		try {
-			role = roleService.findByNome(RoleEnum.ROLE_CONVIDADO.name());
+			role = roleService.findByNome(RoleEnum.Constants.ROLE_CONVIDADO);
 			UsuarioRole userRole = new UsuarioRole();
 			userRole.setRole(role);
 			userRole.setUsuario(usuario);
@@ -245,8 +263,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			throw new PetShopBusinessException(
-					"O email informado não está no formato correto. Utilize um email correto.");
+			throw new PetShopBusinessException("O email informado não está no formato correto. Utilize um email correto.");
 		}
 
 	}
@@ -264,8 +281,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		logger.info("UsuarioServiceImpl.verificarDuplicidade()");
 		Usuario userDb = findByEmail(usuario.getEmail());
 		if (userDb != null) {
-			throw new PetShopBusinessException(
-					"O email informado já existe cadastrado. Por favor informe outro email.");
+			throw new PetShopBusinessException("O email informado já existe cadastrado. Por favor informe outro email.");
 		}
 		return userDb;
 
@@ -273,13 +289,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	private Usuario verificarTrocaEmail(Usuario userParam) throws PetShopBusinessException {
 		logger.info("UsuarioServiceImpl.verificarTrocaEmail()");
-		Usuario usuario = findByEmail(userParam.getEmail());
-		if (usuario == null) {
-			throw new PetShopBusinessException(
-					"Não foi possível recuperar o usuário com esse email. Contacte o administrador.");
-		}
-		if (!usuario.getEmail().equals(userParam.getEmail())) {
-			throw new PetShopBusinessException("Não é possível alterar o email.");
+		Usuario usuario = null;
+		try {
+			usuario = findByEmail(userParam.getEmail());
+
+		} catch (PetShopBusinessException e) {
+			throw new PetShopBusinessException("O e-mail informado já existe cadastrado. Informe outro e-mail.");
 		}
 		return usuario;
 

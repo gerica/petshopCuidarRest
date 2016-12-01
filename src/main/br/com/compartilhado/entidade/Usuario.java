@@ -45,7 +45,7 @@ public class Usuario implements Serializable, UserDetails {
 	@Column(name = "dt_last_password_reset")
 	private Date lastPasswordReset;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.ALL })
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = { CascadeType.REMOVE })
 	// @JsonIgnore
 	private Collection<UsuarioRole> authorities;
 
