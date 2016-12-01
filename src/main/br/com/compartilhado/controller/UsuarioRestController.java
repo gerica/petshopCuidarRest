@@ -29,12 +29,12 @@ public class UsuarioRestController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR_USUARIO)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR)
 	@ResponseBody
 	public ResponseEntity<?> alterarUsuario(@RequestBody UsuarioRoleWrapper usuarioRoleWrapper) {
 		logger.info("UsuarioRestController.alterarUsuario()");
 
-		try { 
+		try {
 			usuarioService.alterar(usuarioRoleWrapper.getUsuario(), usuarioRoleWrapper.getRoles());
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
@@ -46,7 +46,7 @@ public class UsuarioRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ATIVAR_USUARIO)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR)
 	@ResponseBody
 	public ResponseEntity<?> ativarUsuario(@RequestBody Usuario usuario) {
 		logger.info("UsuarioRestController.ativarUsuario()");
@@ -86,8 +86,8 @@ public class UsuarioRestController {
 		logger.info("UsuarioRestController.getInfo()");
 		List<String> msg = new ArrayList<String>();
 		msg.add("Serviços");
-		msg.add("Incluir usuário, método POST, URL: " + UriConstPetShop.URL_INCLUIR_USUARIO);
-		msg.add("Alterar usuário, método POST, URL: " + UriConstPetShop.URI_ALTERAR_USUARIO);
+		msg.add("Incluir usuário, método POST, URL: " + UriConstPetShop.URI_INCLUIR);
+		msg.add("Alterar usuário, método POST, URL: " + UriConstPetShop.URI_ALTERAR);
 		msg.add("Recupar todos os usuários ativos, método GET, URL: " + UriConstPetShop.URI_RECUPERAR_USUARIOS_ATIVO);
 
 		SuccessResponse success = new SuccessResponse("Rest de ROLE", msg);
@@ -112,7 +112,7 @@ public class UsuarioRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URL_INCLUIR_USUARIO)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_INCLUIR)
 	@ResponseBody
 	public ResponseEntity<?> incluirUsuario(@RequestBody UsuarioRoleWrapper usuarioRoleWrapper) {
 		logger.info("UsuarioRestController.incluirUsuario()");
