@@ -3,6 +3,7 @@ package br.com.modulo.cliente.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.compartilhado.execao.PetShopBusinessException;
@@ -10,6 +11,7 @@ import br.com.modulo.cliente.entidade.Pessoa;
 import br.com.modulo.cliente.repository.PessoaRepository;
 import br.com.modulo.cliente.service.PessoaService;
 
+@Service
 public class PessoaServiceImpl implements PessoaService {
 
 	@Autowired

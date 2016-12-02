@@ -54,7 +54,8 @@ public class DatabaseConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(new String[] { "br.com.compartilhado.*", "br.com.compartilhado.entidade.*" });
+		factory.setPackagesToScan(new String[] { "br.com.compartilhado.*", "br.com.compartilhado.entidade.*",
+				"br.com.modulo.cliente.entidade.*" });
 		factory.setDataSource(getDataSource());
 		factory.setJpaProperties(hibProperties());
 
@@ -87,7 +88,7 @@ public class DatabaseConfig {
 	public LocalSessionFactoryBean hibernate5SessionFactoryBean() {
 		LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
 		localSessionFactoryBean.setDataSource(appContext.getBean(HikariDataSource.class));
-//		localSessionFactoryBean.setAnnotatedPackages("br.com.compartilhado.entidade");
+		// localSessionFactoryBean.setAnnotatedPackages("br.com.compartilhado.entidade");
 		Class<?>[] classes = { Usuario.class, UsuarioRole.class, Role.class };
 		localSessionFactoryBean.setAnnotatedClasses(classes);
 		// localSessionFactoryBean.setAnnotatedClasses(Usuario.class);
