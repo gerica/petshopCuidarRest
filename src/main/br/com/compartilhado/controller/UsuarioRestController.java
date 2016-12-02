@@ -46,7 +46,7 @@ public class UsuarioRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ATIVAR_USUARIO)
 	@ResponseBody
 	public ResponseEntity<?> ativarUsuario(@RequestBody Usuario usuario) {
 		logger.info("UsuarioRestController.ativarUsuario()");
@@ -124,8 +124,7 @@ public class UsuarioRestController {
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
-		String message = "Operação realizada com sucesso. Sua senha temporária é: " + result.getTempPassword()
-				+ ". Utilize essa senha para realizar o login pela primeira vez.";
+		String message = "Operação realizada com sucesso. Sua senha temporária é: " + result.getTempPassword() + ". Utilize essa senha para realizar o login pela primeira vez.";
 		SuccessResponse success = new SuccessResponse(message, result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 

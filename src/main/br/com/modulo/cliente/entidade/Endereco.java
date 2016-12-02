@@ -14,10 +14,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.compartilhado.entidade.Usuario;
-
 @Entity
-@Table(name = "tb_endereco", schema="cliente")
+@Table(name = "tb_endereco", schema = "cliente")
 public class Endereco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,11 +44,11 @@ public class Endereco implements Serializable {
 	@JsonIgnore
 	@JoinColumn(name = "id_cidade", nullable = false)
 	private Cidade cidade;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
-	@JoinColumn(name = "id_usuario", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "id_pessoa", nullable = false)
+	private Pessoa pessoa;
 
 	public String getBairro() {
 		return bairro;
@@ -78,6 +76,10 @@ public class Endereco implements Serializable {
 
 	public Integer getNumero() {
 		return numero;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
 	public void setBairro(String bairro) {
@@ -108,12 +110,8 @@ public class Endereco implements Serializable {
 		this.numero = numero;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 }
