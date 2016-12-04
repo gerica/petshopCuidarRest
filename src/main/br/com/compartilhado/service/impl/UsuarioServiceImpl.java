@@ -207,10 +207,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 		UsuarioRole userRole;
 		try {
 			outerloop: for (Role r : roles) {
-				for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
-					if (usuarioRole.getRole().equals(r)) {
-						authorities.remove(usuarioRole);
-						continue outerloop;
+				if (!CollectionUtils.isEmpty(usuario.getAuthorities())) {
+					for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
+						if (usuarioRole.getRole().equals(r)) {
+							authorities.remove(usuarioRole);
+							continue outerloop;
+						}
 					}
 				}
 				role = roleService.findByNome(r.getNome());
