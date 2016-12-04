@@ -25,13 +25,14 @@ public class Cidade implements Serializable {
 	@Column(name = "id_cidade")
 	private Long id;
 
+	@Column(name = "ds_descricao")
+	private String descricao;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
 	@JoinColumn(name = "id_estado", nullable = false)
 	private Estado estado;
 
-	@Column(name = "ds_descricao")
-	private String descricao;
 
 	public Long getId() {
 		return id;

@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_estado", schema="cliente")
+@Table(name = "tb_estado", schema = "cliente")
 public class Estado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,6 +22,9 @@ public class Estado implements Serializable {
 
 	@Column(name = "ds_descricao")
 	private String descricao;
+
+	@Column(name = "ds_sigla")
+	private String sigla;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -53,6 +56,10 @@ public class Estado implements Serializable {
 		return id;
 	}
 
+	public String getSigla() {
+		return sigla;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -68,5 +75,9 @@ public class Estado implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
 	}
 }

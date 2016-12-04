@@ -1,5 +1,7 @@
 package br.com.modulo.cliente.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class CidadeServiceImpl implements CidadeService {
 	private CidadeRepository cidadeRepository;
 
 	@Override
-	public Cidade findByEstado(Long idEstado) throws PetShopBusinessException {
+	public List<Cidade> findByEstado(Long idEstado) throws PetShopBusinessException {
 		Estado e = new Estado();
 		e.setId(idEstado);
 		return cidadeRepository.findByEstado(e);

@@ -1,5 +1,7 @@
 package br.com.modulo.cliente.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import br.com.modulo.cliente.service.CidadeService;
 import br.com.modulo.cliente.service.EstadoService;
 
 @RestController
-@RequestMapping(value = UriConstPetShop.URI_PESSOA_UTIL)
+@RequestMapping(value = UriConstPetShop.URI_UTIL)
 public class ClienteRestUtilController {
 	private static final Logger logger = LoggerFactory.getLogger(ClienteRestUtilController.class);
 
@@ -54,15 +56,15 @@ public class ClienteRestUtilController {
 	public ResponseEntity<?> recuperarCidadePorEstado(@PathVariable(value = "idEstado") Long idEstado) {
 		logger.info("ClienteRestUtilController.recuperarUltimaCotacao()");
 
-		Cidade cidade = null;
+		List<Cidade> result = null;
 		try {
-			cidade = cidadeService.findByEstado(idEstado);
+			result = cidadeService.findByEstado(idEstado);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", cidade);
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
