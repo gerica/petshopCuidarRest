@@ -25,8 +25,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @PropertySource({ "application.properties" })
 @EnableJpaRepositories(basePackages = "br.com.*")
-// , entityManagerFactoryRef = "sessionFactory", transactionManagerRef =
-// "hibernateTransactionManager"
 @EnableTransactionManagement
 public class DatabaseConfig {
 

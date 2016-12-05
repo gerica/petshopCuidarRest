@@ -1,6 +1,7 @@
 package br.com.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,7 @@ import br.com.config.filter.AuthenticationTokenFilter;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	@Qualifier("userDetailsService")
 	private UserDetailsService userDetailsService;
 
 	@Autowired
@@ -50,8 +52,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService)
-				.passwordEncoder(new BCryptPasswordEncoder());
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
 	@Bean
