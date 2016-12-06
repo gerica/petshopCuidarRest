@@ -3,6 +3,8 @@ package br.com.compartilhado.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.RoleService;
 
 @RestController
+@PermitAll
 @RequestMapping(value = UriConstPetShop.URI_ROLE)
 public class RoleRestController {
 	private static final Logger logger = LoggerFactory.getLogger(RoleRestController.class);
@@ -30,6 +33,7 @@ public class RoleRestController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
+	@PermitAll
 	public ResponseEntity<?> getInfo() {
 		logger.info("RoleRestController.getInfo()");
 		List<String> msg = new ArrayList<String>();

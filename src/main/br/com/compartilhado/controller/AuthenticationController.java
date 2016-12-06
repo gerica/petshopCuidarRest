@@ -55,6 +55,12 @@ public class AuthenticationController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param usuario
+	 * @return
+	 * @throws AuthenticationException
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> authenticationRequest(@RequestBody Usuario usuario) throws AuthenticationException {
@@ -80,6 +86,10 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new AuthenticationResponse(token, usuarioAuth));
 	}
 
+	/**
+	 * Apresenta as informações desse rest
+	 * @return informações
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> getInfo() {
