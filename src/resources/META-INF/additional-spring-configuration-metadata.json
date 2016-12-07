@@ -1,0 +1,62 @@
+{"properties": [
+  {
+    "name": "hibernate.hbm2ddl.auto",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.hbm2ddl.auto'"
+  },
+  {
+    "name": "db.driver",
+    "type": "java.lang.String",
+    "description": "A description for 'db.driver'"
+  },
+  {
+    "name": "serverName",
+    "type": "java.lang.String",
+    "description": "A description for 'serverName'"
+  },
+  {
+    "name": "portNumber",
+    "type": "java.lang.String",
+    "description": "A description for 'portNumber'"
+  },
+  {
+    "name": "databaseName",
+    "type": "java.lang.String",
+    "description": "A description for 'databaseName'"
+  },
+  {
+    "name": "userbd",
+    "type": "java.lang.String",
+    "description": "A description for 'userbd'"
+  },
+  {
+    "name": "password",
+    "type": "java.lang.String",
+    "description": "A description for 'password'"
+  },
+  {
+    "name": "hibernate.dialect",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.dialect'"
+  },
+  {
+    "name": "hibernate.ejb.naming_strategy",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.ejb.naming_strategy'"
+  },
+  {
+    "name": "hibernate.show_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.show_sql'"
+  },
+  {
+    "name": "hibernate.format_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.format_sql'"
+  },
+  {
+    "name": "http.mappers.json-pretty-print",
+    "type": "java.lang.String",
+    "description": "A description for 'http.mappers.json-pretty-print'"
+  }
+]}

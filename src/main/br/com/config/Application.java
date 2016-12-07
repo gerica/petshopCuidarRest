@@ -11,7 +11,8 @@ public class Application {
 	public static void main(String[] args) {
 
 		HashMap<String, Object> props = new HashMap<>();
-		props.put("server.port", 8180);
+		props.put("server.port", 8180); 
+		props.put("server.contextPath", "/petshopCuidarRest"); 
 
 		new SpringApplicationBuilder().sources(Application.class).properties(props).run(args);
 
