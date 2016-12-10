@@ -66,7 +66,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)//
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
 				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()//
-				.antMatchers("/auth/**").permitAll().anyRequest().authenticated();
+				.antMatchers("/auth/**").permitAll()//
+				.antMatchers("/usuario/primeiroLogin/**").permitAll()//
+				.anyRequest().authenticated();
 
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

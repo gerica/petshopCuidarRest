@@ -4,6 +4,7 @@ public abstract class UriConstPetShop {
 	// Funcionalidades GENERICAS
 	public static final String URI_INCLUIR = "incluir";
 	public static final String URI_ALTERAR = "alterar";
+	public static final String URI_GRAVAR = "gravar";
 
 	// Functionalidades para os AUTENTICAR
 	public static final String URI_AUTH = "auth";
@@ -24,11 +25,11 @@ public abstract class UriConstPetShop {
 	public static final String URI_ROLE_RECUPERAR_TODOS = "recuperarTodos";
 
 	// Funcionalidades de PESSOA
-	public static final String URI_PESSOA = "pessoa/";	
+	public static final String URI_PESSOA = "pessoa/";
 	public static final String URI_PESSOA_RECUPERAR_TODOS = "recuperarTodos";
 
 	public static final String URI_UTIL = "utils/";
-	
+
 	// Funcionalidades de ESTADO
 	public static final String URI_ESTADO = "estado";
 	public static final String URI_CIDADE_POR_ESTADO = "cidade/{idEstado}";

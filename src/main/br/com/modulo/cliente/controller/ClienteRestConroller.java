@@ -42,35 +42,19 @@ public class ClienteRestConroller {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_INCLUIR)
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_GRAVAR)
 	@ResponseBody
-	public ResponseEntity<?> incluir(@RequestBody Pessoa pessoa) {
-		logger.info("ClienteRestConroller.incluir()");
-
+	public ResponseEntity<?> gravar(@RequestBody Pessoa pessoa) {
+		logger.info("ClienteRestConroller.gravar()");
+		Pessoa pessoaDB = null;
 		try {
-			pessoaService.incluir(pessoa);
+			pessoaDB = pessoaService.gravar(pessoa);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
 
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_ALTERAR)
-	@ResponseBody
-	public ResponseEntity<?> alterar(@RequestBody Pessoa pessoa) {
-		logger.info("ClienteRestConroller.alterar()");
-
-		try {
-			pessoaService.alterar(pessoa);
-		} catch (PetShopBusinessException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage());
-			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-		}
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", pessoaDB);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 	}
 

@@ -88,6 +88,38 @@ public class Pessoa implements Serializable {
 		return true;
 	}
 
+	public List<Documento> getDocumentos() {
+		return documentos;
+	}
+
+	public Date getDtNascimento() {
+		return dtNascimento;
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public String getTipoPessoa() {
+		return tipoPessoa;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -100,10 +132,43 @@ public class Pessoa implements Serializable {
 		return result;
 	}
 
+	public void setDocumentos(List<Documento> documentos) {
+		this.documentos = documentos;
+	}
+
+	public void setDtNascimento(Date dtNascimento) {
+		this.dtNascimento = dtNascimento;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+
+	public void setTipoPessoa(String tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
+
 	@Override
 	public String toString() {
-		return "Pessoa [id=" + id + ", nome=" + nome + ", dtNascimento=" + dtNascimento + ", sexo=" + sexo + ", tipoPessoa=" + tipoPessoa + ", enderecos=" + enderecos
-				+ ", documentos=" + documentos + ", telefones=" + telefones + "]";
+		return "Pessoa [id=" + id + ", nome=" + nome + ", dtNascimento=" + dtNascimento + ", sexo=" + sexo
+				+ ", tipoPessoa=" + tipoPessoa + ", enderecos=" + enderecos + ", documentos=" + documentos
+				+ ", telefones=" + telefones + "]";
 	}
 
 }
