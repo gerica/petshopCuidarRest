@@ -9,4 +9,6 @@ public interface PessoaService {
 
 	Iterable<Pessoa> findAll() throws PetShopBusinessException;
 
+	Pessoa findById(Long idPessoa) throws PetShopBusinessException;
+
 }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import br.com.compartilhado.controller.UriConstPetShop;
 import br.com.compartilhado.controller.model.ErrorResponse;
 import br.com.compartilhado.controller.model.SuccessResponse;
 import br.com.compartilhado.execao.PetShopBusinessException;
+import br.com.modulo.cliente.entidade.Cidade;
 import br.com.modulo.cliente.entidade.Pessoa;
 import br.com.modulo.cliente.service.PessoaService;
 
@@ -66,6 +68,24 @@ public class ClienteRestConroller {
 		Iterable<Pessoa> result = null;
 		try {
 			result = pessoaService.findAll();
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_PESSOA_RECUPERAR_POR_ID)
+	@ResponseBody
+	public ResponseEntity<?> recuperarPorId(@PathVariable(value = "idPessoa") Long idPessoa) {
+		logger.info("ClienteRestConroller.recuperarPorId()");
+
+		Pessoa result = null;
+		try {
+			result = pessoaService.findById(idPessoa);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);

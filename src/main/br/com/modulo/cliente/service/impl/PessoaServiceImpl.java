@@ -32,4 +32,9 @@ public class PessoaServiceImpl implements PessoaService {
 
 	}
 
+	@Override
+	public Pessoa findById(Long idPessoa) throws PetShopBusinessException {
+		return pessoaRepository.findOne(idPessoa);
+	}
+
 }
