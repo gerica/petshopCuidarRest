@@ -37,6 +37,7 @@ public class ClienteRestConroller {
 	private static final String URI_PESSOA_RECUPERAR_POR_ID = "recuperarPorId/{idPessoa}";
 	private static final String URI_GRAVAR_ENDERECO = "gravarEndereco";
 	private static final String URI_RECUPERAR_ENDERECO_POR_PESSOA_ID = "recuperarEnderecoPorPessoaId/{idPessoa}";
+	private static final String URI_EXCLUIR_ENDERECO = "excluirEndereco/{idPessoa}";
 
 	@Autowired
 	private PessoaService pessoaService;
