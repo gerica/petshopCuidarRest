@@ -19,18 +19,30 @@ import br.com.compartilhado.controller.UriConstPetShop;
 import br.com.compartilhado.controller.model.ErrorResponse;
 import br.com.compartilhado.controller.model.SuccessResponse;
 import br.com.compartilhado.execao.PetShopBusinessException;
-import br.com.modulo.cliente.entidade.Cidade;
+import br.com.modulo.cliente.controller.wrapper.ClienteWrapper;
+import br.com.modulo.cliente.entidade.Endereco;
 import br.com.modulo.cliente.entidade.Pessoa;
+import br.com.modulo.cliente.service.EnderecoService;
 import br.com.modulo.cliente.service.PessoaService;
 
 @RestController
-@RequestMapping(value = UriConstPetShop.URI_PESSOA)
+@RequestMapping(value = ClienteRestConroller.URI_PESSOA)
 public class ClienteRestConroller {
 
 	private static final Logger logger = LoggerFactory.getLogger(ClienteRestConroller.class);
 
+	// Funcionalidades de PESSOA
+	public static final String URI_PESSOA = "pessoa/";
+	private static final String URI_PESSOA_RECUPERAR_TODOS = "recuperarTodos";
+	private static final String URI_PESSOA_RECUPERAR_POR_ID = "recuperarPorId/{idPessoa}";
+	private static final String URI_GRAVAR_ENDERECO = "gravarEndereco";
+	private static final String URI_RECUPERAR_ENDERECO_POR_PESSOA_ID = "recuperarEnderecoPorPessoaId/{idPessoa}";
+
 	@Autowired
 	private PessoaService pessoaService;
+
+	@Autowired
+	private EnderecoService enderecoService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
@@ -60,14 +72,32 @@ public class ClienteRestConroller {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_PESSOA_RECUPERAR_TODOS)
+	@RequestMapping(method = RequestMethod.POST, value = ClienteRestConroller.URI_GRAVAR_ENDERECO)
 	@ResponseBody
-	public ResponseEntity<?> recuperarTodos() {
-		logger.info("ClienteRestConroller.recuperarTodos()");
+	public ResponseEntity<?> gravarEndereco(@RequestBody ClienteWrapper clienteWrapper) {
+		logger.info("UsuarioRestController.gravarEndereco()");
 
-		Iterable<Pessoa> result = null;
 		try {
-			result = pessoaService.findAll();
+//			clienteWrapper.getEndereco().setCidade(clienteWrapper.getCidade());
+			enderecoService.gravar(clienteWrapper.getEndereco(), clienteWrapper.getIdPessoa());
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_PESSOA_RECUPERAR_POR_ID)
+	@ResponseBody
+	public ResponseEntity<?> recuperarPorId(@PathVariable(value = "idPessoa") Long idPessoa) {
+		logger.info("ClienteRestConroller.recuperarPorId()");
+
+		Pessoa result = null;
+		try {
+			result = pessoaService.findById(idPessoa);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -78,14 +108,32 @@ public class ClienteRestConroller {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = UriConstPetShop.URI_PESSOA_RECUPERAR_POR_ID)
+	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_RECUPERAR_ENDERECO_POR_PESSOA_ID)
 	@ResponseBody
-	public ResponseEntity<?> recuperarPorId(@PathVariable(value = "idPessoa") Long idPessoa) {
-		logger.info("ClienteRestConroller.recuperarPorId()");
+	public ResponseEntity<?> recuperarEnderecoPorPessoaId(@PathVariable(value = "idPessoa") Long idPessoa) {
+		logger.info("ClienteRestConroller.recuperarEnderecoPorPessoaId()");
 
-		Pessoa result = null;
+		List<Endereco> result = null;
 		try {
-			result = pessoaService.findById(idPessoa);
+			result = enderecoService.findByIdPessoa(idPessoa);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_PESSOA_RECUPERAR_TODOS)
+	@ResponseBody
+	public ResponseEntity<?> recuperarTodos() {
+		logger.info("ClienteRestConroller.recuperarTodos()");
+
+		Iterable<Pessoa> result = null;
+		try {
+			result = pessoaService.findAll();
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);

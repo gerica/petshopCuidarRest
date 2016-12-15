@@ -11,7 +11,6 @@ public abstract class UriConstPetShop {
 	public static final String URI_REFRESH = "refresh";
 
 	// Functionalidades para USUÁRIOS
-
 	public static final String URI_USUARIO = "usuario/";
 	public static final String URI_RECUPERAR_USUARIOS_ATIVO = "recuperarUsuariosAtivo";
 	public static final String URI_RECUPERAR_USUARIOS_INATIVO = "recuperarUsuariosInativo";
@@ -23,11 +22,6 @@ public abstract class UriConstPetShop {
 	// Funcionalidades de ROLE
 	public static final String URI_ROLE = "role";
 	public static final String URI_ROLE_RECUPERAR_TODOS = "recuperarTodos";
-
-	// Funcionalidades de PESSOA
-	public static final String URI_PESSOA = "pessoa/";
-	public static final String URI_PESSOA_RECUPERAR_TODOS = "recuperarTodos";
-	public static final String URI_PESSOA_RECUPERAR_POR_ID = "recuperarPorId/{idPessoa}";
 
 	public static final String URI_UTIL = "utils/";
 

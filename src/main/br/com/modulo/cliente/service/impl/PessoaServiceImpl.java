@@ -9,6 +9,7 @@ import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.cliente.entidade.Pessoa;
 import br.com.modulo.cliente.repository.PessoaRepository;
 import br.com.modulo.cliente.service.PessoaService;
+import br.com.util.UtilsEmpty;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -26,6 +27,7 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	public Pessoa gravar(Pessoa pessoa) throws PetShopBusinessException {
+		validar(pessoa);
 		Pessoa pessaoDb = this.pessoaRepository.save(pessoa);
 		logger.info("PessoaServiceImpl.gravar(), sucesso:" + pessaoDb);
 		return pessaoDb;
@@ -35,6 +37,31 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public Pessoa findById(Long idPessoa) throws PetShopBusinessException {
 		return pessoaRepository.findOne(idPessoa);
+	}
+
+	private void validar(Pessoa pessoa) throws PetShopBusinessException {
+		StringBuilder sb = new StringBuilder();
+		if (UtilsEmpty.isEmpty(pessoa)) {
+			sb.append("Informe os dados da pessoa para poder gravar.");
+		} else {
+			if (UtilsEmpty.isEmpty(pessoa.getNome())) {
+				sb.append("Informe o nome da pessoa para poder gravar.");
+			}
+			if (UtilsEmpty.isEmpty(pessoa.getTipoPessoa())) {
+				sb.append("Informe o tipo de pesoa para poder gravar.");
+			}
+			if (UtilsEmpty.isEmpty(pessoa.getDtNascimento())) {
+				sb.append("Informe a data de nascimento da pessoa para poder gravar.");
+			}
+			if (UtilsEmpty.isEmpty(pessoa.getSexo())) {
+				sb.append("Informe o sexo da pessoa para poder gravar.");
+			}
+
+		}
+
+		if (sb.length() > 0) {
+			throw new PetShopBusinessException(sb.toString());
+		}
 	}
 
 }

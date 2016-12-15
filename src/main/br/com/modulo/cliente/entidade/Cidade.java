@@ -12,10 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "tb_cidade", schema="cliente")
+@Table(name = "tb_cidade", schema = "cliente")
 public class Cidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -27,12 +25,11 @@ public class Cidade implements Serializable {
 
 	@Column(name = "ds_descricao")
 	private String descricao;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonIgnore
+	// @JsonIgnore
 	@JoinColumn(name = "id_estado", nullable = false)
 	private Estado estado;
-
 
 	public Long getId() {
 		return id;
