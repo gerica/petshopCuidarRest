@@ -26,17 +26,23 @@ public class EnderecoServiceImpl implements EnderecoService {
 	private EnderecoRepository enderecoRepository;
 
 	@Override
-	public void gravar(Endereco endereco, Long idPessoa) throws PetShopBusinessException {
-		Pessoa pessoa = pessoaService.findById(idPessoa);
-		endereco.setPessoa(pessoa);
-		enderecoRepository.save(endereco);
-		logger.info("EnderecoServiceImpl.gravar()");
+	public void excluir(Long idEndereco) throws PetShopBusinessException {
+		enderecoRepository.delete(idEndereco);
 
 	}
 
 	@Override
 	public List<Endereco> findByIdPessoa(Long idPessoa) throws PetShopBusinessException {
 		return enderecoRepository.findByPessoa(idPessoa);
+	}
+
+	@Override
+	public void gravar(Endereco endereco, Long idPessoa) throws PetShopBusinessException {
+		Pessoa pessoa = pessoaService.findById(idPessoa);
+		endereco.setPessoa(pessoa);
+		enderecoRepository.save(endereco);
+		logger.info("EnderecoServiceImpl.gravar()");
+
 	}
 
 }

@@ -11,4 +11,6 @@ public interface EnderecoService {
 
 	List<Endereco> findByIdPessoa(Long idPessoa) throws PetShopBusinessException;
 
+	void excluir(Long idEndereco) throws PetShopBusinessException;
+
 }

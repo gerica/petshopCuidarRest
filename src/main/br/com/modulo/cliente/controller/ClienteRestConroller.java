@@ -37,13 +37,29 @@ public class ClienteRestConroller {
 	private static final String URI_PESSOA_RECUPERAR_POR_ID = "recuperarPorId/{idPessoa}";
 	private static final String URI_GRAVAR_ENDERECO = "gravarEndereco";
 	private static final String URI_RECUPERAR_ENDERECO_POR_PESSOA_ID = "recuperarEnderecoPorPessoaId/{idPessoa}";
-	private static final String URI_EXCLUIR_ENDERECO = "excluirEndereco/{idPessoa}";
+	private static final String URI_EXCLUIR_ENDERECO = "excluirEndereco";
 
 	@Autowired
 	private PessoaService pessoaService;
 
 	@Autowired
 	private EnderecoService enderecoService;
+
+	@RequestMapping(method = RequestMethod.POST, value = URI_EXCLUIR_ENDERECO)
+	@ResponseBody
+	public ResponseEntity<?> excluirEndereco(@RequestBody Long idEndereco) {
+		logger.info("ClienteRestConroller.excluirEndereco()");
+
+		try {
+			enderecoService.excluir(idEndereco);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
@@ -79,7 +95,7 @@ public class ClienteRestConroller {
 		logger.info("UsuarioRestController.gravarEndereco()");
 
 		try {
-//			clienteWrapper.getEndereco().setCidade(clienteWrapper.getCidade());
+			// clienteWrapper.getEndereco().setCidade(clienteWrapper.getCidade());
 			enderecoService.gravar(clienteWrapper.getEndereco(), clienteWrapper.getIdPessoa());
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
@@ -87,24 +103,6 @@ public class ClienteRestConroller {
 		}
 
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_PESSOA_RECUPERAR_POR_ID)
-	@ResponseBody
-	public ResponseEntity<?> recuperarPorId(@PathVariable(value = "idPessoa") Long idPessoa) {
-		logger.info("ClienteRestConroller.recuperarPorId()");
-
-		Pessoa result = null;
-		try {
-			result = pessoaService.findById(idPessoa);
-		} catch (PetShopBusinessException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage());
-			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-		}
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
@@ -117,6 +115,24 @@ public class ClienteRestConroller {
 		List<Endereco> result = null;
 		try {
 			result = enderecoService.findByIdPessoa(idPessoa);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_PESSOA_RECUPERAR_POR_ID)
+	@ResponseBody
+	public ResponseEntity<?> recuperarPorId(@PathVariable(value = "idPessoa") Long idPessoa) {
+		logger.info("ClienteRestConroller.recuperarPorId()");
+
+		Pessoa result = null;
+		try {
+			result = pessoaService.findById(idPessoa);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
