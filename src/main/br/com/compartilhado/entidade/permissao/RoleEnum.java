@@ -10,9 +10,6 @@ public enum RoleEnum {
 	ROLE_VENDA(2, Constants.ROLE_VENDA),//
 	;
 
-	private RoleEnum(Integer id, String descricao) {
-	}
-
 	public static class Constants {
 		public static final String ROLE_ADMIN = "ADMIN";
 		public static final String ROLE_CONVIDADO = "CONVIDADO";
@@ -20,6 +17,9 @@ public enum RoleEnum {
 		public static final String ROLE_ESTOQUE = "ESTOQUE";
 		public static final String ROLE_RELACIONAMENTO = "RELACIONAMENTO";
 		public static final String ROLE_VENDA = "VENDA";
+	}
+
+	private RoleEnum(Integer id, String descricao) {
 	}
 
 }

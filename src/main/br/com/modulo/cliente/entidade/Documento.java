@@ -14,8 +14,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.compartilhado.entidade.Usuario;
-
 @Entity
 @Table(name = "tb_documento", schema = "cliente")
 public class Documento implements Serializable {
@@ -28,7 +26,6 @@ public class Documento implements Serializable {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonIgnore
 	@JoinColumn(name = "id_tipo_documento", nullable = false)
 	private TipoDocumento tipoDocumento;
 
@@ -42,11 +39,11 @@ public class Documento implements Serializable {
 	@JsonIgnore
 	@JoinColumn(name = "id_estado", nullable = true)
 	private Estado estado;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
-	@JoinColumn(name = "id_usuario", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "id_pessoa", nullable = false)
+	private Pessoa pessoa;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -75,6 +72,10 @@ public class Documento implements Serializable {
 		return true;
 	}
 
+	public String getComplemento() {
+		return complemento;
+	}
+
 	public Estado getEstado() {
 		return estado;
 	}
@@ -85,6 +86,10 @@ public class Documento implements Serializable {
 
 	public String getNumero() {
 		return numero;
+	}
+
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
 	public TipoDocumento getTipoDocumento() {
@@ -101,6 +106,10 @@ public class Documento implements Serializable {
 		return result;
 	}
 
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
@@ -113,24 +122,12 @@ public class Documento implements Serializable {
 		this.numero = numero;
 	}
 
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
 	public void setTipoDocumento(TipoDocumento tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
-	}
-
-	public String getComplemento() {
-		return complemento;
-	}
-
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 }

@@ -14,8 +14,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.compartilhado.entidade.Usuario;
-
 @Entity
 @Table(name = "tb_telefone", schema = "cliente")
 public class Telefone implements Serializable {
@@ -38,8 +36,8 @@ public class Telefone implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonIgnore
-	@JoinColumn(name = "id_usuario", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "id_pessoa", nullable = false)
+	private Pessoa pessoa;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -85,6 +83,10 @@ public class Telefone implements Serializable {
 		return numero;
 	}
 
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
 	public String getTipoTelefone() {
 		return tipoTelefone;
 	}
@@ -112,16 +114,12 @@ public class Telefone implements Serializable {
 		this.numero = numero;
 	}
 
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
 	public void setTipoTelefone(String tipoTelefone) {
 		this.tipoTelefone = tipoTelefone;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 }

@@ -10,20 +10,20 @@ public class UsuarioRoleWrapper {
 	private Usuario usuario;
 	private List<Role> roles;
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public List<Role> getRoles() {
 		return roles;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

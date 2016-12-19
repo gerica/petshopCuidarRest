@@ -73,6 +73,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	}
 
+	private void deleteRoleMudou(Collection<UsuarioRole> usuarioRoles, List<Role> roles)
+			throws PetShopBusinessException {
+		if (!CollectionUtils.isEmpty(usuarioRoles)) {
+			Collection<UsuarioRole> listaApagar = new ArrayList<UsuarioRole>();
+			outerloop: for (Iterator iterator = usuarioRoles.iterator(); iterator.hasNext();) {
+				UsuarioRole usuarioRole = (UsuarioRole) iterator.next();
+
+				for (Role role : roles) {
+					if (usuarioRole.getRole().equals(role)) {
+						continue outerloop;
+					}
+				}
+				listaApagar.add(usuarioRole);
+				iterator.remove();
+			}
+
+			if (!CollectionUtils.isEmpty(listaApagar)) {
+				usuarioRole.deleteAll(listaApagar);
+			}
+		}
+
+	}
+
 	@Override
 	public Usuario findByEmail(String email) throws PetShopBusinessException {
 		logger.info("UsuarioServiceImpl.findByEmail()");
@@ -93,6 +116,82 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public List<Usuario> findUsuariosInativo() throws PetShopBusinessException {
 		logger.info("UsuarioServiceImpl.findUsuariosInativo()");
 		return usuarioRepository.findByEnabled(false);
+	}
+
+	private Collection<UsuarioRole> getAuthorize(Usuario usuario, List<Role> roles) {
+		logger.info("UsuarioServiceImpl.getAuthorize()");
+
+		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
+		Role role;
+		UsuarioRole userRole;
+		try {
+			outerloop: for (Role r : roles) {
+				if (!CollectionUtils.isEmpty(usuario.getAuthorities())) {
+					for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
+						if (usuarioRole.getRole().equals(r)) {
+							authorities.remove(usuarioRole);
+							continue outerloop;
+						}
+					}
+				}
+				role = roleService.findByNome(r.getNome());
+				userRole = new UsuarioRole();
+				userRole.setRole(role);
+				userRole.setUsuario(usuario);
+				authorities.add(userRole);
+			}
+		} catch (PetShopBusinessException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return authorities;
+	}
+
+	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
+		logger.info("UsuarioServiceImpl.getAuthorizeConvidado()");
+
+		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
+		Role role;
+		try {
+			role = roleService.findByNome(RoleEnum.Constants.ROLE_CONVIDADO);
+			UsuarioRole userRole = new UsuarioRole();
+			userRole.setRole(role);
+			userRole.setUsuario(usuario);
+			authorities.add(userRole);
+			return authorities;
+		} catch (PetShopBusinessException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private String getPasswordEnconding(String password) throws PetShopBusinessException {
+		logger.info("UsuarioServiceImpl.getPasswordEnconding()");
+
+		MessageDigest algorithm = null;
+		byte messageDigest[] = null;
+		try {
+			algorithm = MessageDigest.getInstance("SHA-256");
+			messageDigest = algorithm.digest(password.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new PetShopBusinessException(e.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new PetShopBusinessException(e.getMessage());
+		}
+
+		StringBuilder hexString = new StringBuilder();
+		for (byte b : messageDigest) {
+			hexString.append(String.format("%02X", 0xFF & b));
+		}
+		return hexString.toString();
+	}
+
+	private String getPasswordRandom() {
+		logger.info("UsuarioServiceImpl.getPasswordRandom()");
+		// return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+		return "cuidar"; // será a senha padrão
 	}
 
 	@Override
@@ -174,103 +273,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 		userBD.setPassword(getPasswordEnconding(getPasswordRandom()));
 		usuarioRepository.save(userBD);
 
-	}
-
-	private void deleteRoleMudou(Collection<UsuarioRole> usuarioRoles, List<Role> roles)
-			throws PetShopBusinessException {
-		if (!CollectionUtils.isEmpty(usuarioRoles)) {
-			Collection<UsuarioRole> listaApagar = new ArrayList<UsuarioRole>();
-			outerloop: for (Iterator iterator = usuarioRoles.iterator(); iterator.hasNext();) {
-				UsuarioRole usuarioRole = (UsuarioRole) iterator.next();
-
-				for (Role role : roles) {
-					if (usuarioRole.getRole().equals(role)) {
-						continue outerloop;
-					}
-				}
-				listaApagar.add(usuarioRole);
-				iterator.remove();
-			}
-
-			if (!CollectionUtils.isEmpty(listaApagar)) {
-				usuarioRole.deleteAll(listaApagar);
-			}
-		}
-
-	}
-
-	private Collection<UsuarioRole> getAuthorize(Usuario usuario, List<Role> roles) {
-		logger.info("UsuarioServiceImpl.getAuthorize()");
-
-		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
-		Role role;
-		UsuarioRole userRole;
-		try {
-			outerloop: for (Role r : roles) {
-				for (UsuarioRole usuarioRole : usuario.getAuthorities()) {
-					if (usuarioRole.getRole().equals(r)) {
-						authorities.remove(usuarioRole);
-						continue outerloop;
-					}
-				}
-				role = roleService.findByNome(r.getNome());
-				userRole = new UsuarioRole();
-				userRole.setRole(role);
-				userRole.setUsuario(usuario);
-				authorities.add(userRole);
-			}
-		} catch (PetShopBusinessException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return authorities;
-	}
-
-	private Collection<UsuarioRole> getAuthorizeConvidado(Usuario usuario) {
-		logger.info("UsuarioServiceImpl.getAuthorizeConvidado()");
-
-		Collection<UsuarioRole> authorities = new ArrayList<UsuarioRole>();
-		Role role;
-		try {
-			role = roleService.findByNome(RoleEnum.Constants.ROLE_CONVIDADO);
-			UsuarioRole userRole = new UsuarioRole();
-			userRole.setRole(role);
-			userRole.setUsuario(usuario);
-			authorities.add(userRole);
-			return authorities;
-		} catch (PetShopBusinessException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private String getPasswordEnconding(String password) throws PetShopBusinessException {
-		logger.info("UsuarioServiceImpl.getPasswordEnconding()");
-
-		MessageDigest algorithm = null;
-		byte messageDigest[] = null;
-		try {
-			algorithm = MessageDigest.getInstance("SHA-256");
-			messageDigest = algorithm.digest(password.getBytes("UTF-8"));
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			throw new PetShopBusinessException(e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new PetShopBusinessException(e.getMessage());
-		}
-
-		StringBuilder hexString = new StringBuilder();
-		for (byte b : messageDigest) {
-			hexString.append(String.format("%02X", 0xFF & b));
-		}
-		return hexString.toString();
-	}
-
-	private String getPasswordRandom() {
-		logger.info("UsuarioServiceImpl.getPasswordRandom()");
-		// return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-		return "cuidar"; // será a senha padrão
 	}
 
 	private void validarEmail(Usuario usuario) throws PetShopBusinessException {

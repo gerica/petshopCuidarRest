@@ -61,9 +61,10 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
-		} else {
-			logger.info(username);
 		}
+		// else {
+		// logger.info(username);
+		// }
 
 		chain.doFilter(request, response);
 	}

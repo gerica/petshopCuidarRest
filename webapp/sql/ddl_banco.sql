@@ -9,6 +9,14 @@ CREATE DATABASE "petshopCuidar_desenv"
        LC_COLLATE = 'pt_BR.UTF-8'
        LC_CTYPE = 'pt_BR.UTF-8'
        CONNECTION LIMIT = -1;
+       
+-- Schema: cliente
+
+-- DROP SCHEMA cliente;
+
+CREATE SCHEMA cliente
+  AUTHORIZATION rogerio;
+       
 
  -- Sequence: public.hibernate_sequence
 -- DROP SEQUENCE public.hibernate_sequence;

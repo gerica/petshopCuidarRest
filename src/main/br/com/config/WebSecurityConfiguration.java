@@ -1,6 +1,7 @@
 package br.com.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,7 @@ import br.com.config.filter.AuthenticationTokenFilter;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	@Qualifier("userDetailsService")
 	private UserDetailsService userDetailsService;
 
 	@Autowired
@@ -48,29 +50,30 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return authenticationTokenFilter;
 	}
 
-	@Autowired
-	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService)
-				.passwordEncoder(new BCryptPasswordEncoder());
-	}
-
-	@Bean
-	public SecurityService securityService() {
-		return this.securityService;
-	}
-
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()//
 				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)//
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//
 				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()//
-				.antMatchers("/auth/**").permitAll().anyRequest().authenticated();
+				.antMatchers("/auth/**").permitAll()//
+				.antMatchers("/usuario/primeiroLogin/**").permitAll()//
+				.anyRequest().authenticated();
 
 		// Custom JWT based authentication
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		// disable page caching
 		httpSecurity.headers().cacheControl();
+	}
+
+	@Autowired
+	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return this.securityService;
 	}
 
 }
