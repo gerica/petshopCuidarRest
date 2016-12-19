@@ -15,24 +15,6 @@ public class ValidadorUtil {
 		return soma > 9 ? 0 : soma;
 	}
 
-	public static boolean isValidCPF(String cpf) {
-		if (cpf == null) {
-			return false;
-		}
-		if (cpf.length() == 14) {
-			cpf = cpf.replace(".", "");
-			cpf = cpf.replace("-", "");
-		}
-
-		if (cpf.length() != 11) {
-			return false;
-		}
-
-		Integer digito1 = calcularDigito(cpf.substring(0, 9), pesoCPF);
-		Integer digito2 = calcularDigito(cpf.substring(0, 9) + digito1, pesoCPF);
-		return cpf.equals(cpf.substring(0, 9) + digito1.toString() + digito2.toString());
-	}
-
 	public static boolean isValidCNPJ(String cnpj) {
 		if (cnpj == null) {
 			return false;
@@ -50,6 +32,24 @@ public class ValidadorUtil {
 		Integer digito1 = calcularDigito(cnpj.substring(0, 12), pesoCNPJ);
 		Integer digito2 = calcularDigito(cnpj.substring(0, 12) + digito1, pesoCNPJ);
 		return cnpj.equals(cnpj.substring(0, 12) + digito1.toString() + digito2.toString());
+	}
+
+	public static boolean isValidCPF(String cpf) {
+		if (cpf == null) {
+			return false;
+		}
+		if (cpf.length() == 14) {
+			cpf = cpf.replace(".", "");
+			cpf = cpf.replace("-", "");
+		}
+
+		if (cpf.length() != 11) {
+			return false;
+		}
+
+		Integer digito1 = calcularDigito(cpf.substring(0, 9), pesoCPF);
+		Integer digito2 = calcularDigito(cpf.substring(0, 9) + digito1, pesoCPF);
+		return cpf.equals(cpf.substring(0, 9) + digito1.toString() + digito2.toString());
 	}
 
 	public static void main(String[] args) {

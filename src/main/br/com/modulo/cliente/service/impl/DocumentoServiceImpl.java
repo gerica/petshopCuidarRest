@@ -49,18 +49,6 @@ public class DocumentoServiceImpl implements DocumentoService {
 
 	}
 
-	private void validarDuplicidade(Documento documento, Long idPessoa) throws PetShopBusinessException {
-		List<Documento> result = documentoRepository.findByTipoDocumentoAndIdPessoa(idPessoa,
-				documento.getTipoDocumento().getId());
-		if (result.size() > 0 && documento.getId() == null) {
-			throw new PetShopBusinessException(
-					"O cliente somente pode ter cadastrado um documento por tipo. O tipo de documento informado "
-							+ documento.getTipoDocumento().getDescricao() + " já está cadastrado para esse cliente.");
-
-		}
-
-	}
-
 	private void validarCPFOuCNPJ(Documento documento) throws PetShopBusinessException {
 		if (documento.getTipoDocumento().getDescricao().equals("CPF")) {
 			if (!ValidadorUtil.isValidCPF(documento.getNumero())) {
@@ -72,6 +60,18 @@ public class DocumentoServiceImpl implements DocumentoService {
 				throw new PetShopBusinessException(
 						"O númedo do CNPJ informado está incorreto, por favor digite novo CNPJ.");
 			}
+		}
+
+	}
+
+	private void validarDuplicidade(Documento documento, Long idPessoa) throws PetShopBusinessException {
+		List<Documento> result = documentoRepository.findByTipoDocumentoAndIdPessoa(idPessoa,
+				documento.getTipoDocumento().getId());
+		if (result.size() > 0 && documento.getId() == null) {
+			throw new PetShopBusinessException(
+					"O cliente somente pode ter cadastrado um documento por tipo. O tipo de documento informado "
+							+ documento.getTipoDocumento().getDescricao() + " já está cadastrado para esse cliente.");
+
 		}
 
 	}

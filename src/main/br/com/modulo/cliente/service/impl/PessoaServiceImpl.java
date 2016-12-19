@@ -1,5 +1,7 @@
 package br.com.modulo.cliente.service.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public Pessoa findById(Long idPessoa) throws PetShopBusinessException {
 		return pessoaRepository.findOne(idPessoa);
+	}
+
+	@Override
+	public List<Pessoa> findByName(String nomePessoa) throws PetShopBusinessException {
+		logger.info("PessoaServiceImpl.findByName()");
+		return pessoaRepository.findByNomeContainingIgnoreCase(nomePessoa);
 	}
 
 	@Override

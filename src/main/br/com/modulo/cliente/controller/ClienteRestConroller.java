@@ -48,6 +48,7 @@ public class ClienteRestConroller {
 	private static final String URI_GRAVAR_DOCUMENTO = "gravarDocumento";
 	private static final String URI_EXCLUIR_DOCUMENTO= "excluirDocumento";
 	private static final String URI_RECUPERAR_DOCUMENTO_POR_PESSOA_ID = "recuperarDocumentoPorPessoaId/{idPessoa}";
+	private static final String URI_RECUPERAR_PESSOA_POR_NOME = "recuperarPorNome/{nomePessoa}";
 
 	@Autowired
 	private PessoaService pessoaService;
@@ -241,6 +242,24 @@ public class ClienteRestConroller {
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_RECUPERAR_PESSOA_POR_NOME)
+	@ResponseBody
+	public ResponseEntity<?> recuperarPorNome(@PathVariable(value = "nomePessoa") String nomePessoa) {
+		logger.info("ClienteRestConroller.recuperarPorNome()");
+		
+		List<Pessoa> result = null;
+		try {
+			result = pessoaService.findByName(nomePessoa);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+		
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_RECUPERAR_TELEFONE_POR_PESSOA_ID)
