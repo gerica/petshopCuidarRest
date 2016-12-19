@@ -38,6 +38,11 @@ public class DatabaseConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	private static final String PROPERTY_NAME_HIBERNATE_AUTO = "hibernate.hbm2ddl.auto";
 
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
 	@Autowired
 	private ApplicationContext appContext;
 
@@ -62,10 +67,8 @@ public class DatabaseConfig {
 	}
 
 	@Bean
-	public JpaTransactionManager transactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-		return transactionManager;
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		return new PersistenceExceptionTranslationPostProcessor();
 	}
 
 	@Bean
@@ -84,6 +87,14 @@ public class DatabaseConfig {
 
 	}
 
+	// @Bean
+	// // (name = "hibernateTransactionManager")
+	// public HibernateTransactionManager transactionManager() {
+	// HibernateTransactionManager manager = new HibernateTransactionManager();
+	// manager.setSessionFactory(hibernate5SessionFactoryBean().getObject());
+	// return manager;
+	// }
+
 	@Bean(name = "sessionFactory")
 	public LocalSessionFactoryBean hibernate5SessionFactoryBean() {
 		LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
@@ -98,30 +109,19 @@ public class DatabaseConfig {
 		return localSessionFactoryBean;
 	}
 
-	// @Bean
-	// // (name = "hibernateTransactionManager")
-	// public HibernateTransactionManager transactionManager() {
-	// HibernateTransactionManager manager = new HibernateTransactionManager();
-	// manager.setSessionFactory(hibernate5SessionFactoryBean().getObject());
-	// return manager;
-	// }
-
-	@Bean
-	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-		return new PersistenceExceptionTranslationPostProcessor();
-	}
-
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-		return new PropertySourcesPlaceholderConfigurer();
-	}
-
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
 		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 		properties.put(PROPERTY_NAME_HIBERNATE_AUTO, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_AUTO));
 		return properties;
+	}
+
+	@Bean
+	public JpaTransactionManager transactionManager() {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+		return transactionManager;
 	}
 
 }

@@ -14,10 +14,10 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
 	Usuario findByEmailAndPassword(String email, String password);
 
+	List<Usuario> findByEnabled(boolean enabled);
+
 	Usuario findByPassword(String passwordEncode);
 
 	Usuario findByUsername(String username);
-
-	List<Usuario> findByEnabled(boolean enabled);
 
 }

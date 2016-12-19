@@ -43,3 +43,7 @@ INSERT INTO cliente.tb_estado VALUES(25, 'Sergipe', 'SE');
 INSERT INTO cliente.tb_estado VALUES(26, 'São Paulo', 'SP');
 INSERT INTO cliente.tb_estado VALUES(27, 'Tocantins', 'TO');
 
+-- adicionar um tipo de documento
+INSERT INTO cliente.tb_tipo_documento values(1,'CPF');
+INSERT INTO cliente.tb_tipo_documento values(2,'RG');
+INSERT INTO cliente.tb_tipo_documento values(3,'CNPJ');

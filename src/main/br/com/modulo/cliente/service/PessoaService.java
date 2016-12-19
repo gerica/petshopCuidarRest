@@ -5,10 +5,10 @@ import br.com.modulo.cliente.entidade.Pessoa;
 
 public interface PessoaService {
 
-	Pessoa gravar(Pessoa pessoa) throws PetShopBusinessException;
-
 	Iterable<Pessoa> findAll() throws PetShopBusinessException;
 
 	Pessoa findById(Long idPessoa) throws PetShopBusinessException;
+
+	Pessoa gravar(Pessoa pessoa) throws PetShopBusinessException;
 
 }

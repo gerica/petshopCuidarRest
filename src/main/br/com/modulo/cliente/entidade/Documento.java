@@ -26,7 +26,6 @@ public class Documento implements Serializable {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonIgnore
 	@JoinColumn(name = "id_tipo_documento", nullable = false)
 	private TipoDocumento tipoDocumento;
 

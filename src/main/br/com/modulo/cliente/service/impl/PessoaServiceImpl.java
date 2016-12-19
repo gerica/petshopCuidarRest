@@ -26,17 +26,17 @@ public class PessoaServiceImpl implements PessoaService {
 	}
 
 	@Override
+	public Pessoa findById(Long idPessoa) throws PetShopBusinessException {
+		return pessoaRepository.findOne(idPessoa);
+	}
+
+	@Override
 	public Pessoa gravar(Pessoa pessoa) throws PetShopBusinessException {
 		validar(pessoa);
 		Pessoa pessaoDb = this.pessoaRepository.save(pessoa);
 		logger.info("PessoaServiceImpl.gravar(), sucesso:" + pessaoDb);
 		return pessaoDb;
 
-	}
-
-	@Override
-	public Pessoa findById(Long idPessoa) throws PetShopBusinessException {
-		return pessoaRepository.findOne(idPessoa);
 	}
 
 	private void validar(Pessoa pessoa) throws PetShopBusinessException {

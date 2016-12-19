@@ -63,23 +63,6 @@ public class UsuarioRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_RESET_PASSWORD)
-	@ResponseBody
-	public ResponseEntity<?> resetPassword(@RequestBody Usuario usuario) {
-		logger.info("UsuarioRestController.resetPassword()");
-
-		try {
-			usuarioService.resetPassword(usuario);
-		} catch (PetShopBusinessException e) {
-			ErrorResponse error = new ErrorResponse(e.getMessage());
-			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
-		}
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
-		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-
-	}
-
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> getInfo() {
@@ -180,6 +163,23 @@ public class UsuarioRestController {
 		}
 
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = UriConstPetShop.URI_RESET_PASSWORD)
+	@ResponseBody
+	public ResponseEntity<?> resetPassword(@RequestBody Usuario usuario) {
+		logger.info("UsuarioRestController.resetPassword()");
+
+		try {
+			usuarioService.resetPassword(usuario);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso");
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}

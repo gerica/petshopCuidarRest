@@ -23,10 +23,4 @@ public abstract class UriConstPetShop {
 	public static final String URI_ROLE = "role";
 	public static final String URI_ROLE_RECUPERAR_TODOS = "recuperarTodos";
 
-	public static final String URI_UTIL = "utils/";
-
-	// Funcionalidades de ESTADO
-	public static final String URI_ESTADO = "estado";
-	public static final String URI_CIDADE_POR_ESTADO = "cidade/{idEstado}";
-
 }
