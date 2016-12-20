@@ -28,7 +28,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 
 	@Override
 	public void excluir(Long idDocumento) throws PetShopBusinessException {
-		System.out.println("DocumentoServiceImpl.excluir()");
+		logger.info("DocumentoServiceImpl.excluir()");
 		documentoRepository.delete(idDocumento);
 	}
 
