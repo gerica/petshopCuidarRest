@@ -12,6 +12,7 @@ import br.com.modulo.cliente.entidade.Pessoa;
 import br.com.modulo.cliente.repository.PessoaRepository;
 import br.com.modulo.cliente.service.PessoaService;
 import br.com.util.UtilsEmpty;
+import ch.qos.logback.core.joran.conditional.IfAction;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -61,7 +62,8 @@ public class PessoaServiceImpl implements PessoaService {
 			if (UtilsEmpty.isEmpty(pessoa.getDtNascimento())) {
 				sb.append("Informe a data de nascimento da pessoa para poder gravar.");
 			}
-			if (UtilsEmpty.isEmpty(pessoa.getSexo())) {
+			if ((!UtilsEmpty.isEmpty(pessoa.getTipoPessoa()) && pessoa.getTipoPessoa().equals("FÍSICA"))
+					&& UtilsEmpty.isEmpty(pessoa.getSexo())) {
 				sb.append("Informe o sexo da pessoa para poder gravar.");
 			}
 
