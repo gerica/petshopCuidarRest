@@ -155,7 +155,7 @@ public class ClienteRestConroller {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = ClienteRestConroller.URI_GRAVAR_ENDERECO)
+	@RequestMapping(method = RequestMethod.POST, value = URI_GRAVAR_ENDERECO)
 	@ResponseBody
 	public ResponseEntity<?> gravarEndereco(@RequestBody ClienteWrapper clienteWrapper) {
 		logger.info("UsuarioRestController.gravarEndereco()");
@@ -173,7 +173,7 @@ public class ClienteRestConroller {
 		
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = ClienteRestConroller.URI_GRAVAR_TELEFONE)
+	@RequestMapping(method = RequestMethod.POST, value = URI_GRAVAR_TELEFONE)
 	@ResponseBody
 	public ResponseEntity<?> gravarTelefone(@RequestBody ClienteWrapper clienteWrapper) {
 		logger.info("UsuarioRestController.gravarTelefone()");
@@ -190,7 +190,7 @@ public class ClienteRestConroller {
 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = ClienteRestConroller.URI_RECUPERAR_DOCUMENTO_POR_PESSOA_ID)
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_DOCUMENTO_POR_PESSOA_ID)
 	@ResponseBody
 	public ResponseEntity<?> recuperarDocumentoPorPessoaId(@PathVariable(value = "idPessoa") Long idPessoa) {
 		logger.info("ClienteRestConroller.recuperarDocumentoPorPessoaId()");

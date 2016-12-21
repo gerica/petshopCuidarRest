@@ -57,7 +57,10 @@ public class DatabaseConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(new String[] { "br.com.compartilhado", "br.com.compartilhado.entidade", "br.com.modulo.cliente.entidade" });
+		factory.setPackagesToScan(new String[] { "br.com.compartilhado", //
+				"br.com.compartilhado.entidade", //
+				"br.com.modulo.cliente.entidade", //
+				"br.com.modulo.pet.entidade" });
 		factory.setDataSource(getDataSource());
 		factory.setJpaProperties(hibProperties());
 
@@ -77,11 +80,15 @@ public class DatabaseConfig {
 		HikariDataSource dataSource = new HikariDataSource();
 
 		dataSource.setDataSourceClassName(this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_NAME, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_NAME));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_HOST, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_HOST));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PORT, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PORT));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_NAME,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_NAME));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_HOST,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_HOST));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PORT,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PORT));
 		dataSource.addDataSourceProperty("user", this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PASSWORD, this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+		dataSource.addDataSourceProperty(PROPERTY_NAME_DATABASE_PASSWORD,
+				this.env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 
 		return dataSource;
 
@@ -99,7 +106,8 @@ public class DatabaseConfig {
 	public LocalSessionFactoryBean hibernate5SessionFactoryBean() {
 		LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
 		localSessionFactoryBean.setDataSource(appContext.getBean(HikariDataSource.class));
-		localSessionFactoryBean.setPackagesToScan(new String[] { "br.com.compartilhado", "br.com.compartilhado.entidade", "br.com.modulo.cliente.entidade" });
+		localSessionFactoryBean.setPackagesToScan(new String[] { "br.com.compartilhado",
+				"br.com.compartilhado.entidade", "br.com.modulo.cliente.entidade" });
 		// Class<?>[] classes = { Usuario.class, UsuarioRole.class, Role.class,
 		// Pessoa.class };
 		// localSessionFactoryBean.setAnnotatedClasses(classes);
@@ -112,7 +120,8 @@ public class DatabaseConfig {
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL,
+				this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 		properties.put(PROPERTY_NAME_HIBERNATE_AUTO, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_AUTO));
 		return properties;
 	}
