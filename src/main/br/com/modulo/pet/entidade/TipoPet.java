@@ -37,12 +37,12 @@ public class TipoPet implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public void setDsNome(String dsNome) {
 		this.dsNome = dsNome;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

@@ -37,14 +37,14 @@ public class PetRestUtilController {
 	@Autowired
 	private RacaService racaService;
 
-	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODOS_TIPO_PET)
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_RACA_POR_TIPO)
 	@ResponseBody
-	public ResponseEntity<?> recuperarTodosTipoPet() {
-		logger.info("PetRestUtilController.recuperarTodosTipoPet()");
+	public ResponseEntity<?> recuperarRacaTipo(@PathVariable(value = "idTipoPet") Long idTipoPet) {
+		logger.info("PetRestUtilController.recuperarRacaTipo()");
 
-		List<TipoPet> result = null;
+		List<Raca> result = null;
 		try {
-			result = tipoPetService.findAll();
+			result = racaService.findRacaByTipo(idTipoPet);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -55,14 +55,14 @@ public class PetRestUtilController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_RACA_POR_TIPO)
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODOS_TIPO_PET)
 	@ResponseBody
-	public ResponseEntity<?> recuperarRacaTipo(@PathVariable(value = "idTipoPet") Long idTipoPet) {
-		logger.info("PetRestUtilController.recuperarRacaTipo()");
+	public ResponseEntity<?> recuperarTodosTipoPet() {
+		logger.info("PetRestUtilController.recuperarTodosTipoPet()");
 
-		List<Raca> result = null;
+		List<TipoPet> result = null;
 		try {
-			result = racaService.findRacaByTipo(idTipoPet);
+			result = tipoPetService.findAll();
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
