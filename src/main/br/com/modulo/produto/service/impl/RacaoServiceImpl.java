@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
-import br.com.modulo.pet.service.impl.PetServiceImpl;
 import br.com.modulo.produto.entidade.Racao;
 import br.com.modulo.produto.repository.RacaoRepository;
 import br.com.modulo.produto.service.RacaoService;
@@ -16,14 +15,14 @@ import br.com.modulo.produto.service.RacaoService;
 @Service
 public class RacaoServiceImpl implements RacaoService {
 
-	private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RacaoServiceImpl.class);
 
 	@Autowired
 	private RacaoRepository racaoRepository;
 
 	@Override
 	public void excluir(Long idRacao) throws PetShopBusinessException {
-		logger.info("PetServiceImpl.excluir()");
+		logger.info("RacaoServiceImpl.excluir()");
 		racaoRepository.delete(idRacao);
 
 	}
@@ -37,7 +36,7 @@ public class RacaoServiceImpl implements RacaoService {
 	@Override
 	public void gravar(Racao racao) throws PetShopBusinessException {
 		racaoRepository.save(racao);
-		logger.info("PetServiceImpl.incluir()");
+		logger.info("RacaoServiceImpl.incluir()");
 	}
 
 }
