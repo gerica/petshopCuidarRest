@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,6 +32,7 @@ public class Pessoa implements Serializable {
 	@Column(name = "ds_nome")
 	private String nome;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_nascimento")
 	private Date dtNascimento;
 

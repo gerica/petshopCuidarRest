@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -24,9 +26,11 @@ public abstract class Lote implements Serializable {
 	@Column(name = "nr_numero")
 	private Long numero;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_lote")
 	private Date dataLote;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_validade")
 	private Date dataValidade;
 
