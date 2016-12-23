@@ -1,4 +1,4 @@
-package br.com.modulo.produto.entidade;
+package br.com.modulo.produto.entidade.enums;
 
 public enum LinhaRacaoEnum {
 
