@@ -258,3 +258,12 @@ WITH (
 );
 ALTER TABLE pet.tb_pet
   OWNER TO rogerio;
+
+  
+  -- Schema: produto
+
+-- DROP SCHEMA produto;
+
+CREATE SCHEMA produto
+  AUTHORIZATION postgres;
+	

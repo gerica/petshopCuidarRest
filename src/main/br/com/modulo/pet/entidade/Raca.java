@@ -40,16 +40,16 @@ public class Raca implements Serializable {
 		return this.dsNome;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public TipoPet getTipoPet() {
 		return tipoPet;
 	}
 
 	public void setDsNome(String dsNome) {
 		this.dsNome = dsNome;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public void setId(Long id) {
