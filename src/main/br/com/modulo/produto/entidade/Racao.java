@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import br.com.modulo.pet.entidade.FaixaIdadeEnum;
 import br.com.modulo.pet.entidade.PorteRacaEnum;
 import br.com.modulo.pet.entidade.TipoPet;
+import br.com.modulo.produto.entidade.enums.LinhaRacaoEnum;
 
 @Entity
 @Table(name = "tb_racao", schema = "produto")

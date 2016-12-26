@@ -1,4 +1,4 @@
-package br.com.modulo.pet.entidade;
+package br.com.modulo.produto.entidade.enums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +10,19 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FaixaIdadeEnum {
+public enum LinhaRacaoEnum {
 
-	FILHOTE("Filhote"), //
-	ADULTO("Adulto"), //
-	SENIOR("Sênior");
+	SUPER_PREMIUM("Super Premium"), //
+	PREMIUM("Premium"), //
+	PRESCRITA("Prescrita"), //
+	STANDARD("Standard");
 
-	private static Map<Object, FaixaIdadeEnum> FORMAT_MAP = Stream.of(FaixaIdadeEnum.values())
+	private static Map<Object, LinhaRacaoEnum> FORMAT_MAP = Stream.of(LinhaRacaoEnum.values())
 			.collect(Collectors.toMap(s -> s.descricao, Function.identity()));
 
 	@JsonCreator // This is the factory method and must be static
-	public static FaixaIdadeEnum fromString(String string) {
-		FaixaIdadeEnum valor = FORMAT_MAP.get(string);
+	public static LinhaRacaoEnum fromString(String string) {
+		LinhaRacaoEnum valor = FORMAT_MAP.get(string);
 		if (valor == null) {
 			throw new IllegalArgumentException(string + " has no corresponding value");
 		}
@@ -30,7 +31,7 @@ public enum FaixaIdadeEnum {
 
 	public static List<String> getListaValores() {
 		List<String> result = new ArrayList<String>();
-		for (FaixaIdadeEnum cat : FaixaIdadeEnum.values()) {
+		for (LinhaRacaoEnum cat : LinhaRacaoEnum.values()) {
 			result.add(cat.getDescricao());
 		}
 		return result;
@@ -38,7 +39,7 @@ public enum FaixaIdadeEnum {
 
 	private String descricao;
 
-	private FaixaIdadeEnum(String descricao) {
+	private LinhaRacaoEnum(String descricao) {
 		this.descricao = descricao;
 	}
 

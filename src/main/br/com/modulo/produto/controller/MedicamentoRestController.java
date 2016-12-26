@@ -1,7 +1,6 @@
 package br.com.modulo.produto.controller;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,34 +19,35 @@ import br.com.compartilhado.controller.model.SuccessResponse;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.pet.entidade.FaixaIdadeEnum;
 import br.com.modulo.pet.entidade.PorteRacaEnum;
-import br.com.modulo.produto.entidade.Racao;
-import br.com.modulo.produto.entidade.enums.LinhaRacaoEnum;
-import br.com.modulo.produto.service.RacaoService;
+import br.com.modulo.produto.controller.wrapper.MedicamentoWrapper;
+import br.com.modulo.produto.entidade.Medicamento;
+import br.com.modulo.produto.entidade.enums.MedicamentoCategoriaEnum;
+import br.com.modulo.produto.service.MedicamentoService;
 
 @RestController
-@RequestMapping(value = RacaoRestController.URI_RACAO)
-public class RacaoRestController {
+@RequestMapping(value = MedicamentoRestController.URI_MEDICAMENTO)
+public class MedicamentoRestController {
 
-	private static final Logger logger = LoggerFactory.getLogger(RacaoRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MedicamentoRestController.class);
 
-	public static final String URI_RACAO = "racao/";
+	public static final String URI_MEDICAMENTO = "medicamento/";
 	private static final String URI_GRAVAR = "gravar";
 	private static final String URI_EXCLUIR = "excluir";
 	private static final String URI_RECUPERAR_TODAS = "recuperarTodas";
-	private static final String URI_RECUPERAR_TODAS_LINHA = "recuperarTodasLinha";
 	private static final String URI_RECUPERAR_TODAS_PORTE = "recuperarTodasPorte";
 	private static final String URI_RECUPERAR_TODAS_FAIXA_IDADE = "recuperarTodasFaixaIdade";
+	private static final String URI_RECUPERAR_TODAS_CATEGORUA = "recuperarTodasCategoria";
 
 	@Autowired
-	private RacaoService racaoService;
+	private MedicamentoService medicamentoService;
 
 	@RequestMapping(method = RequestMethod.POST, value = URI_EXCLUIR)
 	@ResponseBody
-	public ResponseEntity<?> excluir(@RequestBody Long idRacao) {
-		logger.info("RacaoRestController.excluir()");
+	public ResponseEntity<?> excluir(@RequestBody Long idMedicamento) {
+		logger.info("MedicamentoRestController.excluir()");
 
 		try {
-			racaoService.excluir(idRacao);
+			medicamentoService.excluir(idMedicamento);
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -59,7 +59,7 @@ public class RacaoRestController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> getInfo() {
-		logger.info("RacaoRestController.getInfo()");
+		logger.info("MedicamentoRestController.getInfo()");
 
 		List<String> msg = new ArrayList<String>();
 		msg.add("Serviços");
@@ -70,11 +70,11 @@ public class RacaoRestController {
 
 	@RequestMapping(method = RequestMethod.POST, value = URI_GRAVAR)
 	@ResponseBody
-	public ResponseEntity<?> gravar(@RequestBody Racao racao) {
-		logger.info("RacaoRestController.gravar()");
+	public ResponseEntity<?> gravar(@RequestBody MedicamentoWrapper wrapper) {
+		logger.info("MedicamentoRestController.gravar()");
 
 		try {
-			racaoService.gravar(racao);
+			medicamentoService.gravar(wrapper.getMedicamento(), wrapper.getTiposPet());
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -87,11 +87,11 @@ public class RacaoRestController {
 	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS)
 	@ResponseBody
 	public ResponseEntity<?> recuperarTodas() {
-		logger.info("RacaoRestController.recuperarTodas()");
+		logger.info("MedicamentoRestController.recuperarTodas()");
 
-		List<Racao> result = null;
+		List<Medicamento> result = null;
 		try {
-			result = racaoService.findAll();
+			result = medicamentoService.findAll();
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -102,22 +102,26 @@ public class RacaoRestController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS_FAIXA_IDADE)
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS_CATEGORUA)
 	@ResponseBody
-	public ResponseEntity<?> recuperarTodasFaixaIdade() {
-		logger.info("RacaoRestController.recuperarTodasFaixaIdade()");
+	public ResponseEntity<?> recuperarTodasCategoria() {
+		logger.info("MedicamentoRestController.recuperarTodasCategoria()");
 
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", FaixaIdadeEnum.getListaValores());
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso",
+				MedicamentoCategoriaEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS_LINHA)
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS_FAIXA_IDADE)
 	@ResponseBody
-	public ResponseEntity<?> recuperarTodasLinha() {
-		logger.info("RacaoRestController.recuperarTodasLinha()");
+	public ResponseEntity<?> recuperarTodasFaixaIdade() {
+		logger.info("MedicamentoRestController.recuperarTodasFaixaIdade()");
 
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", LinhaRacaoEnum.getListaValores());
+		// EnumSet<FaixaIdadeEnum> result = EnumSet.allOf(FaixaIdadeEnum.class);
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso",
+				FaixaIdadeEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
@@ -125,9 +129,9 @@ public class RacaoRestController {
 	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_TODAS_PORTE)
 	@ResponseBody
 	public ResponseEntity<?> recuperarTodasPorte() {
-		logger.info("RacaoRestController.recuperarTodasPorte()");
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", PorteRacaEnum.getListaValores());
+		logger.info("MedicamentoRestController.recuperarTodasPorte()");
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso",
+				PorteRacaEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
