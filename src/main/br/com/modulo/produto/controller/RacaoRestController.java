@@ -107,9 +107,7 @@ public class RacaoRestController {
 	public ResponseEntity<?> recuperarTodasFaixaIdade() {
 		logger.info("RacaoRestController.recuperarTodasFaixaIdade()");
 
-		EnumSet<FaixaIdadeEnum> result = EnumSet.allOf(FaixaIdadeEnum.class);
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", FaixaIdadeEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
@@ -119,9 +117,7 @@ public class RacaoRestController {
 	public ResponseEntity<?> recuperarTodasLinha() {
 		logger.info("RacaoRestController.recuperarTodasLinha()");
 
-		EnumSet<LinhaRacaoEnum> result = EnumSet.allOf(LinhaRacaoEnum.class);
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", LinhaRacaoEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
@@ -131,9 +127,7 @@ public class RacaoRestController {
 	public ResponseEntity<?> recuperarTodasPorte() {
 		logger.info("RacaoRestController.recuperarTodasPorte()");
 
-		EnumSet<PorteRacaEnum> result = EnumSet.allOf(PorteRacaEnum.class);
-
-		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", PorteRacaEnum.getListaValores());
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}

@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import br.com.compartilhado.entidade.permissao.RoleEnum;
 import br.com.compartilhado.execao.PetShopBusinessException;
+import br.com.modulo.pet.entidade.TipoPet;
 import br.com.modulo.produto.entidade.Medicamento;
 
 public interface MedicamentoService {
@@ -29,6 +30,6 @@ public interface MedicamentoService {
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
 			"'})")
-	void gravar(Medicamento medicamento) throws PetShopBusinessException;
+	void gravar(Medicamento medicamento, List<TipoPet> tiposPet) throws PetShopBusinessException;
 
 }

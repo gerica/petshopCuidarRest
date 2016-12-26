@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.modulo.pet.entidade.TipoPet;
 
 @Entity
@@ -18,18 +20,19 @@ import br.com.modulo.pet.entidade.TipoPet;
 public class MedicamentoTipoPet implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_produto")
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_pet")
 	private TipoPet tipoPet;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_medicamento")
+	@JsonIgnore
 	private Medicamento medicamento;
 
 	public Long getId() {
@@ -55,6 +58,5 @@ public class MedicamentoTipoPet implements Serializable {
 	public void setTipoPet(TipoPet tipoPet) {
 		this.tipoPet = tipoPet;
 	}
-
 
 }

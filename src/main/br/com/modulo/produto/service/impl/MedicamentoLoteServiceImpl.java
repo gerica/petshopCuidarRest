@@ -20,35 +20,35 @@ public class MedicamentoLoteServiceImpl implements MedicamentoLoteService {
 	private static final Logger logger = LoggerFactory.getLogger(MedicamentoLoteServiceImpl.class);
 
 	@Autowired
-	private MedicamentoLoteRepository MedicamentoLoteRepository;
+	private MedicamentoLoteRepository medicamentoLoteRepository;
 
 	@Autowired
-	private MedicamentoRepository MedicamentoRepository;
+	private MedicamentoRepository medicamentoRepository;
 
 	@Override
 	public void excluir(Long idMedicamentoLote) throws PetShopBusinessException {
 		logger.info("MedicamentoLoteServiceImpl.excluir()");
-		MedicamentoLoteRepository.delete(idMedicamentoLote);
+		medicamentoLoteRepository.delete(idMedicamentoLote);
 
 	}
 
 	@Override
 	public List<MedicamentoLote> findAll() throws PetShopBusinessException {
 		logger.info("MedicamentoLoteServiceImpl.findAll()");
-		return (List<MedicamentoLote>) MedicamentoLoteRepository.findAll();
+		return (List<MedicamentoLote>) medicamentoLoteRepository.findAll();
 	}
 
 	@Override
 	public List<MedicamentoLote> findByIdMedicamento(Long idMedicamento) throws PetShopBusinessException {
 		logger.info("MedicamentoLoteServiceImpl.findByIdMedicamento()");
-		return MedicamentoLoteRepository.findByIdMedicamento(idMedicamento);
+		return medicamentoLoteRepository.findByIdMedicamento(idMedicamento);
 	}
 
 	@Override
 	public void gravar(MedicamentoLote lote, Long idMedicamento) throws PetShopBusinessException {
-		Medicamento Medicamento = MedicamentoRepository.findOne(idMedicamento);
-		lote.setMedicamento(Medicamento);
-		MedicamentoLoteRepository.save(lote);
+		Medicamento medicamento = medicamentoRepository.findOne(idMedicamento);
+		lote.setMedicamento(medicamento);
+		medicamentoLoteRepository.save(lote);
 		logger.info("MedicamentoLoteServiceImpl.incluir()");
 	}
 
