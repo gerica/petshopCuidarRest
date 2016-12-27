@@ -25,6 +25,10 @@ public class MedicamentoWrapper {
 		return medicamento;
 	}
 
+	public List<TipoPet> getTiposPet() {
+		return tiposPet;
+	}
+
 	public void setIdMedicamento(Long idMedicamento) {
 		this.idMedicamento = idMedicamento;
 	}
@@ -35,10 +39,6 @@ public class MedicamentoWrapper {
 
 	public void setMedicamento(Medicamento medicamento) {
 		this.medicamento = medicamento;
-	}
-
-	public List<TipoPet> getTiposPet() {
-		return tiposPet;
 	}
 
 	public void setTiposPet(List<TipoPet> tiposPet) {

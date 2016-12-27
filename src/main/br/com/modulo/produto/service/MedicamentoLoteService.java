@@ -29,6 +29,7 @@ public interface MedicamentoLoteService {
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
 			"'})")
+
 	List<MedicamentoLote> findByIdMedicamento(Long idMedicamento) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" //
@@ -37,4 +38,5 @@ public interface MedicamentoLoteService {
 			+ RoleEnum.Constants.ROLE_ADMIN + //
 			"'})")
 	void gravar(MedicamentoLote lote, Long idMedicamento) throws PetShopBusinessException;
+
 }

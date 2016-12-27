@@ -37,4 +37,5 @@ public interface RacaoLoteService {
 			+ RoleEnum.Constants.ROLE_ADMIN + //
 			"'})")
 	void gravar(RacaoLote lote, Long idRacao) throws PetShopBusinessException;
+
 }

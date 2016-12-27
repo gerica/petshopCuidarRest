@@ -7,11 +7,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.modulo.pet.entidade.FaixaIdadeEnum;
 import br.com.modulo.pet.entidade.PorteRacaEnum;
 import br.com.modulo.pet.entidade.TipoPet;
 import br.com.modulo.produto.entidade.enums.LinhaRacaoEnum;
+import br.com.modulo.produto.entidade.enums.TipoProdutoEnum;
 
 @Entity
 @Table(name = "tb_racao", schema = "produto")
@@ -35,6 +37,9 @@ public class Racao extends Produto {
 	@Enumerated(EnumType.STRING)
 	private FaixaIdadeEnum faixaIdade;
 
+	@Transient
+	private TipoProdutoEnum tipoProduto = TipoProdutoEnum.RACAO;
+
 	public FaixaIdadeEnum getFaixaIdade() {
 		return faixaIdade;
 	}
@@ -49,6 +54,10 @@ public class Racao extends Produto {
 
 	public TipoPet getTipoPet() {
 		return tipoPet;
+	}
+
+	public TipoProdutoEnum getTipoProduto() {
+		return tipoProduto;
 	}
 
 	public void setFaixaIdade(FaixaIdadeEnum faixaIdade) {

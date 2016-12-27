@@ -32,6 +32,7 @@ public class PetRestController {
 	private static final String URI_GRAVAR = "gravar";
 	private static final String URI_EXCLUIR = "excluir";
 	private static final String URI_RECUPERAR_POR_PESSOA_ID = "recuperarPorPessoaId/{idPessoa}";
+	private static final String URI_RECUPERAR_PET_POR_NOME = "recuperarPetPorNome/{nomePet}";
 
 	@Autowired
 	private PetService petService;
@@ -79,6 +80,24 @@ public class PetRestController {
 
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_PET_POR_NOME)
+	@ResponseBody
+	public ResponseEntity<?> recuperarPorNome(@PathVariable(value = "nomePet") String nomePet) {
+		logger.info("PetRestConroller.recuperarPorNome()");
+		
+		List<Pet> result = null;
+		try {
+			result = petService.findByName(nomePet);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+		
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_POR_PESSOA_ID)
 	@ResponseBody
 	public ResponseEntity<?> recuperarPorPessoaId(@PathVariable(value = "idPessoa") Long idPessoa) {

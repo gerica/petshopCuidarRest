@@ -42,9 +42,9 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public List<Pet> findPetByDsNome(String valor) {
-		logger.info("PetServiceImpl.findPetByDsNome()");
-		return (List<Pet>) petRepository.findByDsNomeContainingIgnoreCase(valor);
+	public List<Pet> findByName(String nomePet) throws PetShopBusinessException {
+		logger.info("PessoaServiceImpl.findByName()");
+		return petRepository.findByNomeContainingIgnoreCase(nomePet);
 	}
 
 	@Override

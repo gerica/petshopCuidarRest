@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import br.com.modulo.produto.entidade.enums.TipoProdutoEnum;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Produto implements Serializable {
@@ -37,6 +39,8 @@ public abstract class Produto implements Serializable {
 	public String getNome() {
 		return nome;
 	}
+
+	public abstract TipoProdutoEnum getTipoProduto();
 
 	public void setId(Long id) {
 		this.id = id;

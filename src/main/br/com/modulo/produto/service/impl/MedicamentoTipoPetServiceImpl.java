@@ -22,6 +22,14 @@ public class MedicamentoTipoPetServiceImpl implements MedicamentoTipoPetService 
 	@Autowired
 	private MedicamentoTipoPetRepository repository;
 
+	private void apagarTodosPorMedicamento(Medicamento medicamento) {
+		List<MedicamentoTipoPet> result = repository.findByMedicamento(medicamento);
+		if (!UtilsEmpty.isEmpty(result)) {
+			repository.delete(result);
+		}
+
+	}
+
 	@Override
 	public void gravar(Medicamento medicamento, List<TipoPet> listaTipoPet) throws PetShopBusinessException {
 
@@ -34,14 +42,6 @@ public class MedicamentoTipoPetServiceImpl implements MedicamentoTipoPetService 
 			repository.save(medTipoPet);
 		}
 		logger.info("MedicamentoTipoPetServiceImpl.gravar()");
-
-	}
-
-	private void apagarTodosPorMedicamento(Medicamento medicamento) {
-		List<MedicamentoTipoPet> result = repository.findByMedicamento(medicamento);
-		if (!UtilsEmpty.isEmpty(result)) {
-			repository.delete(result);
-		}
 
 	}
 
