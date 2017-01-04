@@ -12,17 +12,17 @@ import br.com.modulo.produto.entidade.Produto;
 import br.com.modulo.produto.service.ProdutoService;
 import br.com.modulo.venda.controller.wrapper.ItemVenda;
 import br.com.modulo.venda.entidade.Orcamento;
-import br.com.modulo.venda.entidade.ProdutoCliente;
-import br.com.modulo.venda.repository.ProdutoClienteRepository;
-import br.com.modulo.venda.service.ProdutoClienteService;
+import br.com.modulo.venda.entidade.ProdutoClienteOrcamento;
+import br.com.modulo.venda.repository.ProdutoClienteOrcamentoRepository;
+import br.com.modulo.venda.service.ProdutoClienteOrcamentoService;
 
 @Service
-public class ProdutoClienteServiceImpl implements ProdutoClienteService {
+public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamentoService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProdutoClienteServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProdutoClienteOrcamentoServiceImpl.class);
 
 	@Autowired
-	private ProdutoClienteRepository repository;
+	private ProdutoClienteOrcamentoRepository repository;
 
 	@Autowired
 	private ProdutoService produtoService;
@@ -33,7 +33,7 @@ public class ProdutoClienteServiceImpl implements ProdutoClienteService {
 		apagar(orcamento);
 
 		for (ItemVenda itemVenda : itens) {
-			ProdutoCliente produtoCliente = new ProdutoCliente();
+			ProdutoClienteOrcamento produtoCliente = new ProdutoClienteOrcamento();
 			Produto produto = produtoService.findById(itemVenda.getIdProduto());
 			produtoCliente.setProduto(produto);
 			produtoCliente.setQuantidade(itemVenda.getQuantidadeVenda());

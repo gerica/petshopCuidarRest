@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.modulo.produto.entidade.Produto;
 
 @Entity
-@Table(name = "tb_produto_cliente", schema = "venda")
-public class ProdutoCliente implements Serializable {
+@Table(name = "tb_produto_cliente_orcamento", schema = "venda")
+public class ProdutoClienteOrcamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

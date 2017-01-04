@@ -39,7 +39,7 @@ public class Orcamento implements Serializable {
 	private Usuario usuario;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orcamento", cascade = { CascadeType.ALL })
-	private List<ProdutoCliente> produto;
+	private List<ProdutoClienteOrcamento> produtos;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_orcamento")
@@ -57,8 +57,8 @@ public class Orcamento implements Serializable {
 		return pessoa;
 	}
 
-	public List<ProdutoCliente> getProduto() {
-		return produto;
+	public List<ProdutoClienteOrcamento> getProdutos() {
+		return produtos;
 	}
 
 	public Usuario getUsuario() {
@@ -77,8 +77,8 @@ public class Orcamento implements Serializable {
 		this.pessoa = pessoa;
 	}
 
-	public void setProduto(List<ProdutoCliente> produto) {
-		this.produto = produto;
+	public void setProduto(List<ProdutoClienteOrcamento> produtos) {
+		this.produtos = produtos;
 	}
 
 	public void setUsuario(Usuario usuario) {

@@ -19,10 +19,11 @@ import br.com.modulo.produto.service.LoteService;
 import br.com.modulo.venda.controller.wrapper.ItemVenda;
 import br.com.modulo.venda.controller.wrapper.OrcamentoWrapper;
 import br.com.modulo.venda.entidade.Orcamento;
-import br.com.modulo.venda.entidade.ProdutoCliente;
+import br.com.modulo.venda.entidade.ProdutoClienteOrcamento;
 import br.com.modulo.venda.repository.OrcamentoRepository;
+import br.com.modulo.venda.service.CalculoVendaService;
 import br.com.modulo.venda.service.OrcamentoService;
-import br.com.modulo.venda.service.ProdutoClienteService;
+import br.com.modulo.venda.service.ProdutoClienteOrcamentoService;
 import br.com.util.UtilsEmpty;
 
 @Service
@@ -40,10 +41,13 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 	private PessoaService pessoaService;
 
 	@Autowired
-	private ProdutoClienteService produtoClienteService;
+	private ProdutoClienteOrcamentoService produtoClienteService;
 
 	@Autowired
 	private LoteService loteService;
+
+	@Autowired
+	private CalculoVendaService calculoService;
 
 	@Override
 	public List<OrcamentoWrapper> findAll() throws PetShopBusinessException {
@@ -94,9 +98,9 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 
 	private List<ItemVenda> criarItemVenda(Orcamento orcamento) throws PetShopBusinessException {
 		List<ItemVenda> itens = new ArrayList<ItemVenda>();
-		if (!UtilsEmpty.isEmpty(orcamento.getProduto())) {
+		if (!UtilsEmpty.isEmpty(orcamento.getProdutos())) {
 			ItemVenda item = null;
-			for (ProdutoCliente pc : orcamento.getProduto()) {
+			for (ProdutoClienteOrcamento pc : orcamento.getProdutos()) {
 				item = new ItemVenda();
 				item.setIdProdutoCliente(pc.getId());
 				item.setIdProduto(pc.getProduto().getId());
@@ -123,52 +127,16 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		return wrapper;
 	}
 
-	private Long getQuatidadeProduto(List<? extends Lote> lotes) {
-		Long qtd = new Long(0);
-		for (Lote lote : lotes) {
-			qtd += lote.getQuantidade();
-		}
-
-		return qtd;
-	}
-
-	private Double getValorProduto(List<? extends Lote> lotes) {
-		Double valor = 0.0;
-		int qtd = 0;
-		for (Lote lote : lotes) {
-			qtd++;
-			valor += lote.getValor();
-		}
-
-		return valor / qtd;
-	}
-
 	private void getValorVenda(ItemVenda item, Produto produto, Long quantidade) throws PetShopBusinessException {
 		logger.info("OrcamentoServiceImpl.getLote()");
 
 		List<? extends Lote> lotes = loteService.findByIdProduto(produto.getId(), produto.getTipoProduto());
 		if (!UtilsEmpty.isEmpty(lotes)) {
-			item.setValorVenda(getValorVenda(quantidade, lotes));
-			item.setQuantidade(getQuatidadeProduto(lotes));
-			item.setValor(getValorProduto(lotes));
-		} else {
-//			throw new PetShopBusinessException("O produto, " + produto.getNome() + "	 está esgotado no estoque.");
+			item.setValorVenda(calculoService.getValorVenda(quantidade, lotes));
+			item.setQuantidade(calculoService.getQuatidadeProdutos(lotes));
+			item.setValor(calculoService.getValorProduto(lotes));
 		}
 
-	}
-
-	private Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException {
-		Double result = 0.0;
-		for (Lote l : lotes) {
-			if (l.getQuantidade() >= quantidade) {
-				result += l.getValorVenda() * quantidade;
-				return result;
-			} else {
-				result = l.getValorVenda() * l.getQuantidade();
-				quantidade = quantidade - l.getQuantidade();
-			}
-		}
-		throw new PetShopBusinessException("O produto não tem a quantidade necessária no estoque.");
 	}
 
 	private void validar(Pessoa pessoa, List<ItemVenda> itens) throws PetShopBusinessException {
@@ -179,6 +147,11 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		if (UtilsEmpty.isEmpty(itens)) {
 			throw new PetShopBusinessException("Informe o(s) produto(s).");
 		}
+	}
+
+	@Override
+	public Orcamento findOrcamentoById(Long idOrcamento) throws PetShopBusinessException {
+		return repository.findOne(idOrcamento);
 	}
 
 }

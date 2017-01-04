@@ -7,14 +7,14 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.modulo.venda.entidade.ProdutoCliente;
+import br.com.modulo.venda.entidade.ProdutoClienteOrcamento;
 
-public interface ProdutoClienteRepository extends CrudRepository<ProdutoCliente, Long> {
+public interface ProdutoClienteOrcamentoRepository extends CrudRepository<ProdutoClienteOrcamento, Long> {
 
 	@Modifying
 	@Transactional(readOnly = false, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED, rollbackFor = {
 			Exception.class })
-	@Query("delete from ProdutoCliente pc where pc.orcamento.id = ?1")
+	@Query("delete from ProdutoClienteOrcamento pc where pc.orcamento.id = ?1")
 	void deleteByIdOrcamento(Long id);
 
 }
