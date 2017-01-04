@@ -41,7 +41,7 @@ public abstract class Lote implements Serializable {
 	private Double valorVenda;
 
 	@Column(name = "nr_quantidade")
-	private Double quantidade;
+	private Long quantidade;
 
 	public Date getDataLote() {
 		return dataLote;
@@ -59,7 +59,7 @@ public abstract class Lote implements Serializable {
 		return numero;
 	}
 
-	public Double getQuantidade() {
+	public Long getQuantidade() {
 		return quantidade;
 	}
 
@@ -87,7 +87,7 @@ public abstract class Lote implements Serializable {
 		this.numero = numero;
 	}
 
-	public void setQuantidade(Double quantidade) {
+	public void setQuantidade(Long quantidade) {
 		this.quantidade = quantidade;
 	}
 

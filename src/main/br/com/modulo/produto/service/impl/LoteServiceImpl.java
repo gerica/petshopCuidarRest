@@ -37,7 +37,6 @@ public class LoteServiceImpl implements LoteService {
 		case MEDICAMENTO:
 			result = medicamentoLoteService.findByIdMedicamento(idProduto);
 			break;
-
 		}
 		return result;
 	}

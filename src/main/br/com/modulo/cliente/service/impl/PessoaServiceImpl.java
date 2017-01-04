@@ -12,7 +12,6 @@ import br.com.modulo.cliente.entidade.Pessoa;
 import br.com.modulo.cliente.repository.PessoaRepository;
 import br.com.modulo.cliente.service.PessoaService;
 import br.com.util.UtilsEmpty;
-import ch.qos.logback.core.joran.conditional.IfAction;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {

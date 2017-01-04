@@ -19,11 +19,17 @@ public class ProdutoServiceImpl implements ProdutoService {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
-  
+
 	@Override
 	public List<Produto> findByDescricao(String descricao) throws PetShopBusinessException {
 		logger.info("ProdutoServiceImpl.findByDescricao()");
-		return produtoRepository.findByNomeContainingIgnoreCase(descricao);
+		return produtoRepository.findByNomeContainingIgnoreCaseOrMarcaContainingIgnoreCase(descricao, descricao);
+	}
+
+	@Override
+	public Produto findById(Long id) throws PetShopBusinessException {
+		logger.info("ProdutoServiceImpl.findById()");
+		return produtoRepository.findById(id);
 	}
 
 }

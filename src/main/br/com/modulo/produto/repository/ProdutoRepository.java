@@ -8,6 +8,10 @@ import br.com.modulo.produto.entidade.Produto;
 
 public interface ProdutoRepository extends CrudRepository<Produto, Long> {
 
-	List<Produto> findByNomeContainingIgnoreCase(String valor);
+	Produto findById(Long id);
+
+	List<Produto> findByNomeContainingIgnoreCaseOrMarcaContainingIgnoreCase(String valor1, String valor2);
+
+	// List<Produto> findByMarca(String valor);
 
 }

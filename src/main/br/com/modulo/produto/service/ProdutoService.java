@@ -8,5 +8,7 @@ import br.com.modulo.produto.entidade.Produto;
 public interface ProdutoService {
 
 	List<Produto> findByDescricao(String descricao) throws PetShopBusinessException;
+	
+	Produto findById(Long id) throws PetShopBusinessException;
 
 }

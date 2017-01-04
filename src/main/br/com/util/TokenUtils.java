@@ -30,23 +30,6 @@ public class TokenUtils {
 				&& (!(this.isTokenExpired(token)) || this.ignoreTokenExpiration(token)));
 	}
 
-	private Date generateCurrentDate() {
-		return new Date(System.currentTimeMillis());
-	}
-
-	private Date generateExpirationDate() {
-		// System.out.println(new Date(System.currentTimeMillis() +
-		// this.expiration));
-		// System.out.println(new Date(System.currentTimeMillis() +
-		// this.expiration * 5));
-		return new Date(System.currentTimeMillis() + this.expiration * 5);
-	}
-
-	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate())
-				.signWith(SignatureAlgorithm.HS512, this.secret).compact();
-	}
-
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put("sub", userDetails.getUsername());
@@ -64,16 +47,6 @@ public class TokenUtils {
 			audience = null;
 		}
 		return audience;
-	}
-
-	private Claims getClaimsFromToken(String token) {
-		Claims claims;
-		try {
-			claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
-		} catch (Exception e) {
-			claims = null;
-		}
-		return claims;
 	}
 
 	public Date getCreatedDateFromToken(String token) {
@@ -109,20 +82,6 @@ public class TokenUtils {
 		return username;
 	}
 
-	private Boolean ignoreTokenExpiration(String token) {
-		String audience = this.getAudienceFromToken(token);
-		return (this.AUDIENCE_TABLET.equals(audience) || this.AUDIENCE_MOBILE.equals(audience));
-	}
-
-	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-		return (lastPasswordReset != null && created.before(lastPasswordReset));
-	}
-
-	private Boolean isTokenExpired(String token) {
-		final Date expiration = this.getExpirationDateFromToken(token);
-		return expiration.before(this.generateCurrentDate());
-	}
-
 	public String refreshToken(String token) {
 		String refreshedToken;
 		try {
@@ -141,6 +100,47 @@ public class TokenUtils {
 		final Date created = this.getCreatedDateFromToken(token);
 		return (username.equals(user.getUsername()) && !(this.isTokenExpired(token))
 				&& !(this.isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset())));
+	}
+
+	private Date generateCurrentDate() {
+		return new Date(System.currentTimeMillis());
+	}
+
+	private Date generateExpirationDate() {
+		// System.out.println(new Date(System.currentTimeMillis() +
+		// this.expiration));
+		// System.out.println(new Date(System.currentTimeMillis() +
+		// this.expiration * 5));
+		return new Date(System.currentTimeMillis() + this.expiration * 5);
+	}
+
+	private String generateToken(Map<String, Object> claims) {
+		return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate())
+				.signWith(SignatureAlgorithm.HS512, this.secret).compact();
+	}
+
+	private Claims getClaimsFromToken(String token) {
+		Claims claims;
+		try {
+			claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+		} catch (Exception e) {
+			claims = null;
+		}
+		return claims;
+	}
+
+	private Boolean ignoreTokenExpiration(String token) {
+		String audience = this.getAudienceFromToken(token);
+		return (this.AUDIENCE_TABLET.equals(audience) || this.AUDIENCE_MOBILE.equals(audience));
+	}
+
+	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
+		return (lastPasswordReset != null && created.before(lastPasswordReset));
+	}
+
+	private Boolean isTokenExpired(String token) {
+		final Date expiration = this.getExpirationDateFromToken(token);
+		return expiration.before(this.generateCurrentDate());
 	}
 
 }

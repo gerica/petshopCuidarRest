@@ -36,7 +36,7 @@ public class Medicamento extends Produto {
 	@Enumerated(EnumType.STRING)
 	private MedicamentoCategoriaEnum categoria;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "medicamento", cascade = { CascadeType.ALL })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicamento", cascade = { CascadeType.ALL })
 	private Collection<MedicamentoTipoPet> medicamentoTipoPet;
 
 	@Transient
