@@ -27,10 +27,14 @@ public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamen
 	@Autowired
 	private ProdutoService produtoService;
 
+	public void excluir(Long idOrcamento) throws PetShopBusinessException {
+		repository.deleteByIdOrcamento(idOrcamento);
+	}
+
 	@Override
 	public void gravar(Orcamento orcamento, List<ItemVenda> itens) throws PetShopBusinessException {
 		logger.info("ProdutoClienteServiceImpl.gravar()");
-		apagar(orcamento);
+		excluir(orcamento.getId());
 
 		for (ItemVenda itemVenda : itens) {
 			ProdutoClienteOrcamento produtoCliente = new ProdutoClienteOrcamento();
@@ -42,10 +46,6 @@ public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamen
 			repository.save(produtoCliente);
 		}
 
-	}
-
-	private void apagar(Orcamento orcamento) throws PetShopBusinessException {
-		repository.deleteByIdOrcamento(orcamento.getId());
 	}
 
 }

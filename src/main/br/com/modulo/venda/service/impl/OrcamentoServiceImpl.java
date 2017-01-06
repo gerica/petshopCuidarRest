@@ -20,6 +20,7 @@ import br.com.modulo.venda.controller.wrapper.ItemVenda;
 import br.com.modulo.venda.controller.wrapper.OrcamentoWrapper;
 import br.com.modulo.venda.entidade.Orcamento;
 import br.com.modulo.venda.entidade.ProdutoClienteOrcamento;
+import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 import br.com.modulo.venda.repository.OrcamentoRepository;
 import br.com.modulo.venda.service.CalculoVendaService;
 import br.com.modulo.venda.service.OrcamentoService;
@@ -50,9 +51,16 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 	private CalculoVendaService calculoService;
 
 	@Override
+	public void fechar(Long idOrcamento) throws PetShopBusinessException {
+		Orcamento objDB = repository.findOne(idOrcamento);
+		objDB.setStatus(StatusOrcamentoEnum.FECHADO);
+		repository.save(objDB);
+	}
+
+	@Override
 	public List<OrcamentoWrapper> findAll() throws PetShopBusinessException {
 		logger.info("OrcamentoServiceImpl.findAll()");
-		List<Orcamento> orcamentos = (List<Orcamento>) repository.findAll();
+		List<Orcamento> orcamentos = (List<Orcamento>) repository.findByStatus(StatusOrcamentoEnum.ABERTO);
 		List<OrcamentoWrapper> result = new ArrayList<OrcamentoWrapper>();
 
 		for (Orcamento orcamento : orcamentos) {
@@ -68,8 +76,13 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 	}
 
 	@Override
-	public Long findCount() throws PetShopBusinessException {
-		return repository.count();
+	public Long findCountAberto() throws PetShopBusinessException {
+		return repository.countByStatus(StatusOrcamentoEnum.ABERTO);
+	}
+
+	@Override
+	public Orcamento findOrcamentoById(Long idOrcamento) throws PetShopBusinessException {
+		return repository.findOne(idOrcamento);
 	}
 
 	@Override
@@ -94,6 +107,13 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		produtoClienteService.gravar(orcamento, itens);
 		return orcamento;
 
+	}
+
+	@Override
+	public void realizar(Long idOrcamento) throws PetShopBusinessException {
+		Orcamento objDB = repository.findOne(idOrcamento);
+		objDB.setStatus(StatusOrcamentoEnum.REALIZADO);
+		repository.save(objDB);
 	}
 
 	private List<ItemVenda> criarItemVenda(Orcamento orcamento) throws PetShopBusinessException {
@@ -147,11 +167,6 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		if (UtilsEmpty.isEmpty(itens)) {
 			throw new PetShopBusinessException("Informe o(s) produto(s).");
 		}
-	}
-
-	@Override
-	public Orcamento findOrcamentoById(Long idOrcamento) throws PetShopBusinessException {
-		return repository.findOne(idOrcamento);
 	}
 
 }

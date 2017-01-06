@@ -8,6 +8,8 @@ import br.com.modulo.venda.entidade.Orcamento;
 
 public interface ProdutoClienteOrcamentoService {
 
+	void excluir(Long idOrcamento) throws PetShopBusinessException;
+
 	void gravar(Orcamento orcamento, List<ItemVenda> itens) throws PetShopBusinessException;
 
 }

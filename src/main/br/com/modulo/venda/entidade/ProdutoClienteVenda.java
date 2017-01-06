@@ -29,38 +29,6 @@ public class ProdutoClienteVenda implements Serializable {
 	@JsonIgnore
 	private Venda venda;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Venda getVenda() {
-		return venda;
-	}
-
-	public void setVenda(Venda venda) {
-		this.venda = venda;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	@ManyToOne
 	@JoinColumn(name = "id_produto")
 	@JsonIgnore
@@ -68,5 +36,37 @@ public class ProdutoClienteVenda implements Serializable {
 
 	@Column(name = "nr_quantidade")
 	private Long quantidade;
+
+	public Long getId() {
+		return id;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public Long getQuantidade() {
+		return quantidade;
+	}
+
+	public Venda getVenda() {
+		return venda;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public void setQuantidade(Long quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public void setVenda(Venda venda) {
+		this.venda = venda;
+	}
 
 }

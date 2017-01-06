@@ -7,10 +7,10 @@ import br.com.modulo.produto.entidade.Lote;
 
 public interface CalculoVendaService {
 
-	Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException;
-
 	Long getQuatidadeProdutos(List<? extends Lote> lotes) throws PetShopBusinessException;
 
-	Double getValorProduto(List<? extends Lote> lotes) throws PetShopBusinessException;	
+	Double getValorProduto(List<? extends Lote> lotes) throws PetShopBusinessException;
+
+	Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException;	
 
 }

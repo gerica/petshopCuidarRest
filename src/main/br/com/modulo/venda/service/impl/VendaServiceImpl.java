@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.produto.entidade.Lote;
@@ -17,6 +18,7 @@ import br.com.modulo.venda.entidade.Venda;
 import br.com.modulo.venda.repository.VendaRepository;
 import br.com.modulo.venda.service.CalculoVendaService;
 import br.com.modulo.venda.service.OrcamentoService;
+import br.com.modulo.venda.service.ProdutoClienteVendaService;
 import br.com.modulo.venda.service.VendaService;
 import br.com.util.UtilsEmpty;
 
@@ -37,6 +39,9 @@ public class VendaServiceImpl implements VendaService {
 	@Autowired
 	private LoteService loteService;
 
+	@Autowired
+	private ProdutoClienteVendaService produtoClienteService;
+
 	@Override
 	public List<Venda> findAll() throws PetShopBusinessException {
 		logger.info("VendaServiceImpl.findAll()");
@@ -50,18 +55,24 @@ public class VendaServiceImpl implements VendaService {
 	}
 
 	@Override
-	public void gravar(Long idOrcamento) throws PetShopBusinessException {
+	@Transactional
+	public Venda gravar(Long idOrcamento) throws PetShopBusinessException {
 		logger.info("VendaServiceImpl.gravar()");
 		validarVenda(idOrcamento);
 
 		Orcamento orcamento = orcamentoService.findOrcamentoById(idOrcamento);
 		Venda venda = new Venda();
+		venda.setQuantidade(new Long(0));
+		venda.setValorTotal(new Double(0));
 		venda.setPessoa(orcamento.getPessoa());
 		venda.setUsuario(orcamento.getUsuario());
 		venda.setDtVenda(new Date());
 		getValoresProduto(venda, orcamento);
-
 		repository.save(venda);
+		produtoClienteService.gravar(venda, orcamento.getProdutos());
+		orcamentoService.realizar(idOrcamento);
+
+		return venda;
 
 	}
 
@@ -72,24 +83,13 @@ public class VendaServiceImpl implements VendaService {
 				List<? extends Lote> lotes = loteService.findByIdProduto(pc.getProduto().getId(),
 						pc.getProduto().getTipoProduto());
 
-				getQuantidadeVenda(venda, lotes);
-
-				venda.setValorTotal(calculoService.getValorVenda(venda.getQuantidade(), lotes));
-				
+				venda.setQuantidade(venda.getQuantidade() + pc.getQuantidade());
+				venda.setValorTotal(venda.getValorTotal() + calculoService.getValorVenda(pc.getQuantidade(), lotes));
 				venda.setDesconto(pc.getDesconto());
 
 			}
 		}
 
-	}
-
-	private void getQuantidadeVenda(Venda venda, List<? extends Lote> lotes) throws PetShopBusinessException {
-		Long qtd = calculoService.getQuatidadeProdutos(lotes);
-		Long tempQtd = venda.getQuantidade();
-		if (tempQtd == null) {
-			tempQtd = new Long(0);
-		}
-		venda.setQuantidade(tempQtd + qtd);
 	}
 
 	private void validarVenda(Long idOrcamento) throws PetShopBusinessException {

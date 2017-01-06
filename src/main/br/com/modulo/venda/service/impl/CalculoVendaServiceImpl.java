@@ -2,29 +2,19 @@ package br.com.modulo.venda.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.produto.entidade.Lote;
+import br.com.modulo.produto.service.LoteService;
 import br.com.modulo.venda.service.CalculoVendaService;
 
 @Service
 public class CalculoVendaServiceImpl implements CalculoVendaService {
 
-	@Override
-	public Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException {
-		Double result = 0.0;
-		for (Lote l : lotes) {
-			if (l.getQuantidade() >= quantidade) {
-				result += l.getValorVenda() * quantidade;
-				return result;
-			} else {
-				result = l.getValorVenda() * l.getQuantidade();
-				quantidade = quantidade - l.getQuantidade();
-			}
-		}
-		throw new PetShopBusinessException("O produto não tem a quantidade necessária no estoque.");
-	}
+	@Autowired
+	private LoteService loteSerivce;
 
 	@Override
 	public Long getQuatidadeProdutos(List<? extends Lote> lotes) throws PetShopBusinessException {
@@ -47,7 +37,22 @@ public class CalculoVendaServiceImpl implements CalculoVendaService {
 
 		return valor / qtd;
 	}
-	
-	
+
+	@Override
+	public Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException {
+		Double result = 0.0;
+		for (Lote l : lotes) {
+			if (l.getQuantidade() >= quantidade) {
+				result += l.getValorVenda() * quantidade;
+				loteSerivce.alterarQuantidadeLote(l, quantidade);
+				return result;
+			} else {
+				result = l.getValorVenda() * l.getQuantidade();
+				loteSerivce.alterarQuantidadeLote(l, l.getQuantidade());
+				quantidade = quantidade - l.getQuantidade();
+			}
+		}
+		throw new PetShopBusinessException("O produto não tem a quantidade necessária no estoque.");
+	}
 
 }

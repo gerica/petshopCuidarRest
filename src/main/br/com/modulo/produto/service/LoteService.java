@@ -8,6 +8,9 @@ import br.com.modulo.produto.entidade.enums.TipoProdutoEnum;
 
 public interface LoteService {
 
-	List<? extends Lote> findByIdProduto(Long idProduto, TipoProdutoEnum tipoProdutoEnum) throws PetShopBusinessException;
+	void alterarQuantidadeLote(Lote lote, Long quantidade) throws PetShopBusinessException;
+
+	List<? extends Lote> findByIdProduto(Long idProduto, TipoProdutoEnum tipoProdutoEnum)
+			throws PetShopBusinessException;
 
 }

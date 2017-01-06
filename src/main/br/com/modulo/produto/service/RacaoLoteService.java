@@ -21,6 +21,8 @@ public interface RacaoLoteService {
 			+ RoleEnum.Constants.ROLE_ESTOQUE + //
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	List<RacaoLote> findAll() throws PetShopBusinessException;
 
@@ -28,6 +30,8 @@ public interface RacaoLoteService {
 			+ RoleEnum.Constants.ROLE_ESTOQUE + //
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	List<RacaoLote> findByIdRacao(Long idRacao) throws PetShopBusinessException;
 

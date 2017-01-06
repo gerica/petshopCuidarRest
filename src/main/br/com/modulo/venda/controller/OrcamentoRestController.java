@@ -30,7 +30,7 @@ public class OrcamentoRestController {
 
 	public static final String URI_ORCAMENTO = "orcamento/";
 	private static final String URI_GRAVAR = "gravar";
-	private static final String URI_EXCLUIR = "excluir";
+	private static final String URI_FECHAR = "fechar";
 	private static final String URI_RECUPERAR_TODAS = "recuperarTodas";
 	private static final String URI_RECUPERAR_POR_ORCAMENTO_ID = "recuperarPorOrcamentoId/{idOrcamento}";
 	private static final String URI_RECUPERAR_QTD_ORCAMENTOS = "recuperarQuantidadeOrcamentos";
@@ -38,18 +38,17 @@ public class OrcamentoRestController {
 	@Autowired
 	private OrcamentoService service;
 
-	@RequestMapping(method = RequestMethod.POST, value = URI_EXCLUIR)
+	@RequestMapping(method = RequestMethod.POST, value = URI_FECHAR)
 	@ResponseBody
-	public ResponseEntity<?> excluir(@RequestBody Long idRacao) {
-		logger.info("OrcamentoRestController.excluir()");
+	public ResponseEntity<?> fechar(@RequestBody Long idOrcamento) {
+		logger.info("OrcamentoRestController.fechar()");
 
-		// try {
-		// racaoService.excluir(idRacao);
-		// } catch (PetShopBusinessException e) {
-		// ErrorResponse error = new ErrorResponse(e.getMessage());
-		// return new ResponseEntity<ErrorResponse>(error,
-		// HttpStatus.BAD_REQUEST);
-		// }
+		try {
+			service.fechar(idOrcamento);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
 
 		return new ResponseEntity<SuccessResponse>(new SuccessResponse(), HttpStatus.OK);
 	}
@@ -100,7 +99,7 @@ public class OrcamentoRestController {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_QTD_ORCAMENTOS)
 	@ResponseBody
 	public ResponseEntity<?> recuperarQuantidade() {
@@ -108,7 +107,7 @@ public class OrcamentoRestController {
 
 		Long result = null;
 		try {
-			result = service.findCount();
+			result = service.findCountAberto();
 		} catch (PetShopBusinessException e) {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
@@ -123,7 +122,7 @@ public class OrcamentoRestController {
 	@ResponseBody
 	public ResponseEntity<?> recuperarTodas() {
 		logger.info("OrcamentoRestController.recuperarTodas()");
-		
+
 		List<OrcamentoWrapper> result = null;
 		try {
 			result = service.findAll();
@@ -131,9 +130,9 @@ public class OrcamentoRestController {
 			ErrorResponse error = new ErrorResponse(e.getMessage());
 			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
-		
+
 	}
 }

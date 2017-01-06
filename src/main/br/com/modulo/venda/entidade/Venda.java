@@ -54,68 +54,68 @@ public class Venda implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "venda", cascade = { CascadeType.ALL })
 	private List<ProdutoClienteVenda> produtos;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Pessoa getPessoa() {
-		return pessoa;
-	}
-
-	public void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public Double getDesconto() {
+		return desconto;
 	}
 
 	public Date getDtVenda() {
 		return dtVenda;
 	}
 
-	public void setDtVenda(Date dtVenda) {
-		this.dtVenda = dtVenda;
+	public Long getId() {
+		return id;
 	}
 
-	public Double getValorTotal() {
-		return valorTotal;
-	}
-
-	public void setValorTotal(Double valorTotal) {
-		this.valorTotal = valorTotal;
-	}
-
-	public Long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Double getDesconto() {
-		return desconto;
-	}
-
-	public void setDesconto(Double desconto) {
-		this.desconto = desconto;
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
 	public List<ProdutoClienteVenda> getProdutos() {
 		return produtos;
 	}
 
+	public Long getQuantidade() {
+		return quantidade;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setDesconto(Double desconto) {
+		this.desconto = desconto;
+	}
+
+	public void setDtVenda(Date dtVenda) {
+		this.dtVenda = dtVenda;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+
 	public void setProdutos(List<ProdutoClienteVenda> produtos) {
 		this.produtos = produtos;
+	}
+
+	public void setQuantidade(Long quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 
 }

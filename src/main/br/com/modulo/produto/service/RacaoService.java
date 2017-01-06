@@ -21,6 +21,8 @@ public interface RacaoService {
 			+ RoleEnum.Constants.ROLE_ESTOQUE + //
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	List<Racao> findAll() throws PetShopBusinessException;
 

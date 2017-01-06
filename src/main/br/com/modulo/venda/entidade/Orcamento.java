@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,7 @@ import javax.persistence.TemporalType;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.modulo.cliente.entidade.Pessoa;
+import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 
 @Entity
 @Table(name = "tb_orcamento", schema = "venda")
@@ -45,6 +48,10 @@ public class Orcamento implements Serializable {
 	@Column(name = "dt_orcamento")
 	private Date dtOrcamento;
 
+	@Column(name = "ds_status")
+	@Enumerated(EnumType.STRING)
+	private StatusOrcamentoEnum status = StatusOrcamentoEnum.ABERTO;
+
 	public Date getDtOrcamento() {
 		return dtOrcamento;
 	}
@@ -59,6 +66,10 @@ public class Orcamento implements Serializable {
 
 	public List<ProdutoClienteOrcamento> getProdutos() {
 		return produtos;
+	}
+
+	public StatusOrcamentoEnum getStatus() {
+		return status;
 	}
 
 	public Usuario getUsuario() {
@@ -79,6 +90,10 @@ public class Orcamento implements Serializable {
 
 	public void setProduto(List<ProdutoClienteOrcamento> produtos) {
 		this.produtos = produtos;
+	}
+
+	public void setStatus(StatusOrcamentoEnum status) {
+		this.status = status;
 	}
 
 	public void setUsuario(Usuario usuario) {
