@@ -20,7 +20,7 @@ public interface PetService {
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_VENDA + "','"
 			+ RoleEnum.Constants.ROLE_RELACIONAMENTO + "','" + RoleEnum.Constants.ROLE_ADMIN + "'})")
-	List<Pet> findPetByDsNome(String valor) throws PetShopBusinessException;
+	List<Pet> findByName(String nomePet) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" + RoleEnum.Constants.ROLE_VENDA + "','"
 			+ RoleEnum.Constants.ROLE_RELACIONAMENTO + "','" + RoleEnum.Constants.ROLE_ADMIN + "'})")

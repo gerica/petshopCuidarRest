@@ -5,16 +5,6 @@ public class ValidadorUtil {
 	private static final int[] pesoCPF = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 	private static final int[] pesoCNPJ = { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
 
-	private static int calcularDigito(String str, int[] peso) {
-		int soma = 0;
-		for (int indice = str.length() - 1, digito; indice >= 0; indice--) {
-			digito = Integer.parseInt(str.substring(indice, indice + 1));
-			soma += digito * peso[peso.length - str.length() + indice];
-		}
-		soma = 11 - soma % 11;
-		return soma > 9 ? 0 : soma;
-	}
-
 	public static boolean isValidCNPJ(String cnpj) {
 		if (cnpj == null) {
 			return false;
@@ -55,5 +45,15 @@ public class ValidadorUtil {
 	public static void main(String[] args) {
 		System.out.printf("CPF Valido:%s \n", ValidadorUtil.isValidCPF("998.526.161-53"));
 		System.out.printf("CNPJ Valido:%s \n", ValidadorUtil.isValidCNPJ("70.185.247/0001-05"));
+	}
+
+	private static int calcularDigito(String str, int[] peso) {
+		int soma = 0;
+		for (int indice = str.length() - 1, digito; indice >= 0; indice--) {
+			digito = Integer.parseInt(str.substring(indice, indice + 1));
+			soma += digito * peso[peso.length - str.length() + indice];
+		}
+		soma = 11 - soma % 11;
+		return soma > 9 ? 0 : soma;
 	}
 }

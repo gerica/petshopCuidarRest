@@ -61,7 +61,8 @@ public class DatabaseConfig {
 				"br.com.compartilhado.entidade", //
 				"br.com.modulo.cliente.entidade", //
 				"br.com.modulo.pet.entidade", //
-				"br.com.modulo.produto.entidade"//
+				"br.com.modulo.produto.entidade",//
+				"br.com.modulo.venda.entidade"//
 		});
 		factory.setDataSource(getDataSource());
 		factory.setJpaProperties(hibProperties());
@@ -116,6 +117,13 @@ public class DatabaseConfig {
 		return localSessionFactoryBean;
 	}
 
+	@Bean
+	public JpaTransactionManager transactionManager() {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+		return transactionManager;
+	}
+
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
@@ -123,13 +131,6 @@ public class DatabaseConfig {
 				this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 		properties.put(PROPERTY_NAME_HIBERNATE_AUTO, this.env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_AUTO));
 		return properties;
-	}
-
-	@Bean
-	public JpaTransactionManager transactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-		return transactionManager;
 	}
 
 }

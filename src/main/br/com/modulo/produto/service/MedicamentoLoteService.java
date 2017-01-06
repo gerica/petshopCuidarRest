@@ -21,6 +21,8 @@ public interface MedicamentoLoteService {
 			+ RoleEnum.Constants.ROLE_ESTOQUE + //
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	List<MedicamentoLote> findAll() throws PetShopBusinessException;
 
@@ -28,6 +30,8 @@ public interface MedicamentoLoteService {
 			+ RoleEnum.Constants.ROLE_ESTOQUE + //
 			"','" //
 			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	List<MedicamentoLote> findByIdMedicamento(Long idMedicamento) throws PetShopBusinessException;
 
@@ -37,4 +41,5 @@ public interface MedicamentoLoteService {
 			+ RoleEnum.Constants.ROLE_ADMIN + //
 			"'})")
 	void gravar(MedicamentoLote lote, Long idMedicamento) throws PetShopBusinessException;
+
 }

@@ -11,10 +11,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.modulo.pet.entidade.FaixaIdadeEnum;
 import br.com.modulo.pet.entidade.PorteRacaEnum;
 import br.com.modulo.produto.entidade.enums.MedicamentoCategoriaEnum;
+import br.com.modulo.produto.entidade.enums.TipoProdutoEnum;
 
 @Entity
 @Table(name = "tb_medicamento", schema = "produto")
@@ -34,8 +36,11 @@ public class Medicamento extends Produto {
 	@Enumerated(EnumType.STRING)
 	private MedicamentoCategoriaEnum categoria;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "medicamento", cascade = { CascadeType.ALL })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicamento", cascade = { CascadeType.ALL })
 	private Collection<MedicamentoTipoPet> medicamentoTipoPet;
+
+	@Transient
+	private TipoProdutoEnum tipoProduto = TipoProdutoEnum.MEDICAMENTO;
 
 	public void addMedicamentoTipoPet(MedicamentoTipoPet tipo) {
 		if (this.medicamentoTipoPet == null) {
@@ -58,6 +63,10 @@ public class Medicamento extends Produto {
 
 	public PorteRacaEnum getPorte() {
 		return porte;
+	}
+
+	public TipoProdutoEnum getTipoProduto() {
+		return tipoProduto;
 	}
 
 	public void setCategoria(MedicamentoCategoriaEnum categoria) {

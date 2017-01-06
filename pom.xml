@@ -18,7 +18,6 @@
 		<java-version>1.8</java-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-
 		<!-- jackson -->
 		<jackson.version>2.7.5</jackson.version>
 
@@ -32,7 +31,7 @@
 		<joda-time.version>2.7</joda-time.version>
 
 		<!-- Logging -->
-		<logback.version>1.0.13</logback.version>
+		<logback.version>1.1.7</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
 
 		<!-- HikariCP -->
@@ -52,6 +51,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-test-autoconfigure</artifactId>
 		</dependency>
 
 		<dependency>

@@ -267,3 +267,10 @@ ALTER TABLE pet.tb_pet
 CREATE SCHEMA produto
   AUTHORIZATION postgres;
 	
+  
+-- Schema: venda
+
+-- DROP SCHEMA venda;
+
+CREATE SCHEMA venda
+  AUTHORIZATION postgres;

@@ -12,7 +12,7 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 	// @Query(value = "SELECT p FROM Pet p WHERE UPPER(p.dsNome) like
 	// UPPER('%'||?1||'%')")
 	// List<Pet> findPetByDsNome(String valor);
-	List<Pet> findByDsNomeContainingIgnoreCase(String valor);
+	List<Pet> findByNomeContainingIgnoreCase(String valor);
 
 	@Query(value = "SELECT p FROM Pet p WHERE p.pessoa.id= ?1")
 	List<Pet> findPetByIdPessoa(Long idCliente);

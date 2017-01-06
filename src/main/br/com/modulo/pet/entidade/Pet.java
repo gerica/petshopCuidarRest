@@ -31,7 +31,7 @@ public class Pet implements Serializable {
 	private Long id;
 
 	@Column(name = "ds_nome")
-	private String dsNome;
+	private String nome;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_nacimento")
@@ -54,16 +54,16 @@ public class Pet implements Serializable {
 	public Pet() {
 	}
 
-	public String getDsNome() {
-		return this.dsNome;
-	}
-
 	public Date getDtNacimento() {
 		return this.dtNacimento;
 	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getNome() {
+		return nome;
 	}
 
 	public Pessoa getPessoa() {
@@ -78,16 +78,16 @@ public class Pet implements Serializable {
 		return usuario;
 	}
 
-	public void setDsNome(String dsNome) {
-		this.dsNome = dsNome;
-	}
-
 	public void setDtNacimento(Date dtNacimento) {
 		this.dtNacimento = dtNacimento;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public void setPessoa(Pessoa pessoa) {
