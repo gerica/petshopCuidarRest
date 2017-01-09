@@ -18,9 +18,7 @@ import javax.persistence.TemporalType;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.modulo.cliente.entidade.Pessoa;
-import br.com.modulo.produto.entidade.Produto;
 import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
-import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 
 @Entity
 @Table(name = "tb_lembrete", schema = "relacionamento")

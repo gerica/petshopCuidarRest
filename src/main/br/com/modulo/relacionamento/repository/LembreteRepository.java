@@ -9,6 +9,6 @@ import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
 
 public interface LembreteRepository extends CrudRepository<Lembrete, Long> {
 
-	List<Lembrete> finByStatus(StatusLembreteEnum aberto);
+	List<Lembrete> findByStatus(StatusLembreteEnum aberto);
 
 }

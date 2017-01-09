@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.AuthenticationService;
 import br.com.modulo.cliente.service.PessoaService;
-import br.com.modulo.produto.service.ProdutoService;
 import br.com.modulo.relacionamento.entidade.Lembrete;
 import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
 import br.com.modulo.relacionamento.repository.LembreteRepository;
@@ -30,7 +29,6 @@ public class LembreteServiceImpl implements LembreteService {
 
 	@Autowired
 	private AuthenticationService authenticationService;
-
 
 	@Override
 	public void excluir(Long idLembrete) throws PetShopBusinessException {
@@ -52,7 +50,7 @@ public class LembreteServiceImpl implements LembreteService {
 	@Override
 	public List<Lembrete> findAtivo() throws PetShopBusinessException {
 		logger.info("LembreteServiceImpl.findAtivo()");
-		return repository.finByStatus(StatusLembreteEnum.ABERTO);
+		return repository.findByStatus(StatusLembreteEnum.ABERTO);
 	}
 
 	@Override
