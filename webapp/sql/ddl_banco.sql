@@ -274,3 +274,12 @@ CREATE SCHEMA produto
 
 CREATE SCHEMA venda
   AUTHORIZATION postgres;
+
+  
+  -- Schema: relacionamento
+
+-- DROP SCHEMA relacionamento;
+
+CREATE SCHEMA relacionamento
+  AUTHORIZATION postgres;
+
