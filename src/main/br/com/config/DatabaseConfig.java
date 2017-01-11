@@ -62,7 +62,8 @@ public class DatabaseConfig {
 				"br.com.modulo.cliente.entidade", //
 				"br.com.modulo.pet.entidade", //
 				"br.com.modulo.produto.entidade",//
-				"br.com.modulo.venda.entidade"//
+				"br.com.modulo.venda.entidade",//
+				"br.com.modulo.relacionamento.entidade"//
 		});
 		factory.setDataSource(getDataSource());
 		factory.setJpaProperties(hibProperties());

@@ -1,7 +1,6 @@
 package br.com.modulo.produto.controller;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class RacaoRestController {
 
 	@RequestMapping(method = RequestMethod.POST, value = URI_EXCLUIR)
 	@ResponseBody
-	public ResponseEntity<?> excluir(@RequestBody Long idRacao) {
+	public ResponseEntity<?> excluir(@RequestBody Long idRacao) {	
 		logger.info("RacaoRestController.excluir()");
 
 		try {
