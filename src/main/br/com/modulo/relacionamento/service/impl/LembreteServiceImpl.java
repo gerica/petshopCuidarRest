@@ -15,6 +15,7 @@ import br.com.modulo.relacionamento.entidade.Lembrete;
 import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
 import br.com.modulo.relacionamento.repository.LembreteRepository;
 import br.com.modulo.relacionamento.service.LembreteService;
+import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 
 @Service
 public class LembreteServiceImpl implements LembreteService {
@@ -38,13 +39,12 @@ public class LembreteServiceImpl implements LembreteService {
 	}
 
 	@Override
-	public Lembrete gravar(Lembrete lembrete, Long idPessoa) throws PetShopBusinessException {
-		logger.info("LembreteServiceImpl.gravar()");
-		lembrete.setDtCadastro(new Date());
-		lembrete.setPessoa(pessoaService.findById(idPessoa));
-		lembrete.setUsuario(authenticationService.get());
-		repository.save(lembrete);
-		return lembrete;
+	public void fechar(Long idLembrete) throws PetShopBusinessException {
+		logger.info("LembreteServiceImpl.fechar()");
+		Lembrete obj = repository.findOne(idLembrete);
+		obj.setStatus(StatusLembreteEnum.FECHADO);
+		repository.save(obj);
+
 	}
 
 	@Override
@@ -54,13 +54,20 @@ public class LembreteServiceImpl implements LembreteService {
 	}
 
 	@Override
-	public void fechar(Long idLembrete) throws PetShopBusinessException {
-		logger.info("LembreteServiceImpl.fechar()");
-		Lembrete obj = repository.findOne(idLembrete);
-		obj.setStatus(StatusLembreteEnum.FECHADO);
-		repository.save(obj);
-
+	public Long findCountAberto() throws PetShopBusinessException {
+		return repository.countByStatus(StatusOrcamentoEnum.ABERTO);
 	}
+
+	@Override
+	public Lembrete gravar(Lembrete lembrete, Long idPessoa) throws PetShopBusinessException {
+		logger.info("LembreteServiceImpl.gravar()");
+		lembrete.setDtCadastro(new Date());
+		lembrete.setPessoa(pessoaService.findById(idPessoa));
+		lembrete.setUsuario(authenticationService.get());
+		repository.save(lembrete);
+		return lembrete;
+	}
+
 
 	@Override
 	public void realizar(Long idLembrete) throws PetShopBusinessException {

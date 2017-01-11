@@ -31,6 +31,7 @@ public class LembreteRestController {
 	private static final String URI_GRAVAR = "gravar";
 	private static final String URI_EXCLUIR = "excluir";
 	private static final String URI_RECUPERAR_ABERTO = "recuperarAberto";
+	private static final String URI_RECUPERAR_QTD_LEMBRETE = "ecuperarQuantidadeLembrete";
 
 	@Autowired
 	private LembreteService service;
@@ -95,5 +96,24 @@ public class LembreteRestController {
 		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
 
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = URI_RECUPERAR_QTD_LEMBRETE)
+	@ResponseBody
+	public ResponseEntity<?> recuperarQuantidade() {
+		logger.info("LembreteRestController.recuperarQuantidade()");
+
+		Long result = null;
+		try {
+			result = service.findCountAberto();
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		SuccessResponse success = new SuccessResponse("Operação realizada com sucesso", result);
+		return new ResponseEntity<SuccessResponse>(success, HttpStatus.OK);
+
+	}
+
 
 }

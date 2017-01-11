@@ -17,6 +17,15 @@ public interface LembreteService {
 			"','"//
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
+	void excluir(Long idLembrete) throws PetShopBusinessException;
+
+	@PreAuthorize("@securityService.hasAnyRole({'" //
+			+ RoleEnum.Constants.ROLE_RELACIONAMENTO + //
+			"','" //
+			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','"//
+			+ RoleEnum.Constants.ROLE_VENDA + //
+			"'})")
 	void fechar(Long idLembrete) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" //
@@ -26,7 +35,7 @@ public interface LembreteService {
 			"','"//
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
-	void realizar(Long idLembrete) throws PetShopBusinessException;
+	List<Lembrete> findAtivo() throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" //
 			+ RoleEnum.Constants.ROLE_RELACIONAMENTO + //
@@ -35,7 +44,7 @@ public interface LembreteService {
 			"','"//
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
-	void excluir(Long idLembrete) throws PetShopBusinessException;
+	Long findCountAberto() throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" //
 			+ RoleEnum.Constants.ROLE_RELACIONAMENTO + //
@@ -53,6 +62,6 @@ public interface LembreteService {
 			"','"//
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
-	List<Lembrete> findAtivo() throws PetShopBusinessException;
+	void realizar(Long idLembrete) throws PetShopBusinessException;
 
 }
