@@ -67,6 +67,7 @@ public class VendaServiceImpl implements VendaService {
 		venda.setPessoa(orcamento.getPessoa());
 		venda.setUsuario(orcamento.getUsuario());
 		venda.setDtVenda(new Date());
+		venda.setOrcamento(orcamento);
 		getValoresProduto(venda, orcamento);
 		repository.save(venda);
 		produtoClienteService.gravar(venda, orcamento.getProdutos());

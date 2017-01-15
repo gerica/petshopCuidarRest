@@ -37,10 +37,22 @@ public class Venda implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_orcamento")
+	private Orcamento orcamento;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_venda")
 	private Date dtVenda;
+
+	public Orcamento getOrcamento() {
+		return orcamento;
+	}
+
+	public void setOrcamento(Orcamento orcamento) {
+		this.orcamento = orcamento;
+	}
 
 	@Column(name = "nr_valor_total")
 	private Double valorTotal;
