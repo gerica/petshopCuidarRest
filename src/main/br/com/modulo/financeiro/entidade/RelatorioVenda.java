@@ -1,13 +1,16 @@
-package br.com.modulo.financeiro.controller.wrapper;
+package br.com.modulo.financeiro.entidade;
 
 import java.util.Date;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.SqlResultSetMapping;
 
-@SqlResultSetMapping(name = "RelatorioVendaWrapperOutMapping", //
-		classes = @ConstructorResult(targetClass = RelatorioVendaWrapperOut.class, //
+@Entity
+@SqlResultSetMapping(name = "RelatorioVendaMapping", //
+		classes = @ConstructorResult(targetClass = RelatorioVenda.class, //
 				columns = { @ColumnResult(name = "idVenda", type = Long.class), //
 						@ColumnResult(name = "desconto", type = Double.class), //
 						@ColumnResult(name = "dtVenda", type = Date.class), //
@@ -16,8 +19,9 @@ import javax.persistence.SqlResultSetMapping;
 						@ColumnResult(name = "nomePessoa", type = String.class),
 						@ColumnResult(name = "nomeUsuario", type = String.class),
 						@ColumnResult(name = "dtOrcamento", type = Date.class) }))
-public class RelatorioVendaWrapperOut {
+public class RelatorioVenda {
 
+	@Id
 	private Long idVenda;
 	private Double desconto;
 	private Date dtVenda;
@@ -26,6 +30,19 @@ public class RelatorioVendaWrapperOut {
 	private String nomePessoa;
 	private String nomeUsuario;
 	private Date dtOrcamento;
+
+	public RelatorioVenda(Long idVenda, Double desconto, Date dtVenda, Long quantidade, Double valorTotal,
+			String nomePessoa, String nomeUsuario, Date dtOrcamento) {
+		super();
+		this.idVenda = idVenda;
+		this.desconto = desconto;
+		this.dtVenda = dtVenda;
+		this.quantidade = quantidade;
+		this.valorTotal = valorTotal;
+		this.nomePessoa = nomePessoa;
+		this.nomeUsuario = nomeUsuario;
+		this.dtOrcamento = dtOrcamento;
+	}
 
 	public Long getIdVenda() {
 		return idVenda;
