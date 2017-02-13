@@ -25,7 +25,8 @@
 		<apache.commons.lang.version>3.3.2</apache.commons.lang.version>
 
 		<!-- Postgresql -->
-		<postgres.version>9.1-901.jdbc4</postgres.version>
+		<postgres.version>9.4.1212</postgres.version>
+		
 
 		<!-- JODA TIME -->
 		<joda-time.version>2.7</joda-time.version>
@@ -103,7 +104,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4.1212</version>
+			<version>${postgres.version}</version>
 		</dependency>
 
 		<dependency>

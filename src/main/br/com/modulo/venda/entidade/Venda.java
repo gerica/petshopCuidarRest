@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.NamedNativeQuery;
+
 import br.com.compartilhado.entidade.Usuario;
 import br.com.modulo.cliente.entidade.Pessoa;
 
@@ -37,7 +39,7 @@ public class Venda implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_orcamento")
 	private Orcamento orcamento;
@@ -45,14 +47,6 @@ public class Venda implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_venda")
 	private Date dtVenda;
-
-	public Orcamento getOrcamento() {
-		return orcamento;
-	}
-
-	public void setOrcamento(Orcamento orcamento) {
-		this.orcamento = orcamento;
-	}
 
 	@Column(name = "nr_valor_total")
 	private Double valorTotal;
@@ -76,6 +70,10 @@ public class Venda implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Orcamento getOrcamento() {
+		return orcamento;
 	}
 
 	public Pessoa getPessoa() {
@@ -108,6 +106,10 @@ public class Venda implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setOrcamento(Orcamento orcamento) {
+		this.orcamento = orcamento;
 	}
 
 	public void setPessoa(Pessoa pessoa) {
