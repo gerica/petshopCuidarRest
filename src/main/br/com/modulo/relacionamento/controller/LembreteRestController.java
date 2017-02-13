@@ -31,7 +31,7 @@ public class LembreteRestController {
 	private static final String URI_GRAVAR = "gravar";
 	private static final String URI_EXCLUIR = "excluir";
 	private static final String URI_RECUPERAR_ABERTO = "recuperarAberto";
-	private static final String URI_RECUPERAR_QTD_LEMBRETE = "ecuperarQuantidadeLembrete";
+	private static final String URI_RECUPERAR_QTD_LEMBRETE = "recuperarQuantidadeLembrete";
 
 	@Autowired
 	private LembreteService service;

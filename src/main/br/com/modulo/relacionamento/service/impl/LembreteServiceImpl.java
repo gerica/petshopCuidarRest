@@ -15,7 +15,6 @@ import br.com.modulo.relacionamento.entidade.Lembrete;
 import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
 import br.com.modulo.relacionamento.repository.LembreteRepository;
 import br.com.modulo.relacionamento.service.LembreteService;
-import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 
 @Service
 public class LembreteServiceImpl implements LembreteService {
@@ -55,7 +54,7 @@ public class LembreteServiceImpl implements LembreteService {
 
 	@Override
 	public Long findCountAberto() throws PetShopBusinessException {
-		return repository.countByStatus(StatusOrcamentoEnum.ABERTO);
+		return repository.countByStatus(StatusLembreteEnum.ABERTO);
 	}
 
 	@Override

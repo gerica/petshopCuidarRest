@@ -6,11 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.modulo.relacionamento.entidade.Lembrete;
 import br.com.modulo.relacionamento.entidade.enums.StatusLembreteEnum;
-import br.com.modulo.venda.entidade.enums.StatusOrcamentoEnum;
 
 public interface LembreteRepository extends CrudRepository<Lembrete, Long> {
 
-	Long countByStatus(StatusOrcamentoEnum aberto);
+	Long countByStatus(StatusLembreteEnum aberto);
 
 	List<Lembrete> findByStatus(StatusLembreteEnum aberto);
 
