@@ -118,9 +118,10 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 
 	private List<ItemVenda> criarItemVenda(Orcamento orcamento) throws PetShopBusinessException {
 		List<ItemVenda> itens = new ArrayList<ItemVenda>();
-		if (!UtilsEmpty.isEmpty(orcamento.getProdutos())) {
+		List<ProdutoClienteOrcamento> prodClienteList = produtoClienteService.findByOrcamento(orcamento);
+		if (!UtilsEmpty.isEmpty(prodClienteList)) {
 			ItemVenda item = null;
-			for (ProdutoClienteOrcamento pc : orcamento.getProdutos()) {
+			for (ProdutoClienteOrcamento pc : prodClienteList) {
 				item = new ItemVenda();
 				item.setIdProdutoCliente(pc.getId());
 				item.setIdProduto(pc.getProduto().getId());

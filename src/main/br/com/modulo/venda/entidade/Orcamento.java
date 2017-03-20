@@ -2,7 +2,7 @@ package br.com.modulo.venda.entidade;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.modulo.cliente.entidade.Pessoa;
@@ -41,8 +43,8 @@ public class Orcamento implements Serializable {
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orcamento", cascade = { CascadeType.ALL })
-	private List<ProdutoClienteOrcamento> produtos;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "orcamento", cascade = { CascadeType.ALL })	
+	private Set<ProdutoClienteOrcamento> produtos;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dt_orcamento")
@@ -64,7 +66,7 @@ public class Orcamento implements Serializable {
 		return pessoa;
 	}
 
-	public List<ProdutoClienteOrcamento> getProdutos() {
+	public Set<ProdutoClienteOrcamento> getProdutos() {
 		return produtos;
 	}
 
@@ -88,7 +90,7 @@ public class Orcamento implements Serializable {
 		this.pessoa = pessoa;
 	}
 
-	public void setProduto(List<ProdutoClienteOrcamento> produtos) {
+	public void setProduto(Set<ProdutoClienteOrcamento> produtos) {
 		this.produtos = produtos;
 	}
 

@@ -2,9 +2,10 @@ package br.com;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import br.com.compartilhado.entidade.Usuario;
 import br.com.modulo.cliente.entidade.Pessoa;
@@ -29,7 +30,7 @@ public class Utils {
 		m.setNome("Vermifugo teste 1");
 		m.setPorte(PorteRacaEnum.MEDIO);
 		m.setMedicamentoTipoPet(criarMedicamentoTipoPet(m));
-		
+
 		return m;
 	}
 
@@ -57,12 +58,12 @@ public class Utils {
 		lote.setQuantidade(new Long(10));
 		lote.setValor(100.0);
 		lote.setValorVenda(15.0);
-		
+
 		result.add(lote);
-		
+
 		return result;
 	}
-	
+
 	public static List<Lote> criarMedicamentoLote2(Medicamento medicamento) {
 		List<Lote> result = new ArrayList<>();
 		MedicamentoLote lote = new MedicamentoLote();
@@ -98,9 +99,9 @@ public class Utils {
 		usuario.setUsername("Usuario de Teste");
 		return usuario;
 	}
-	
-	private static Collection<MedicamentoTipoPet> criarMedicamentoTipoPet(Medicamento medicamento) {
-		Collection<MedicamentoTipoPet> result = new ArrayList<>();
+
+	private static Set<MedicamentoTipoPet> criarMedicamentoTipoPet(Medicamento medicamento) {
+		Set<MedicamentoTipoPet> result = new HashSet<>();
 		MedicamentoTipoPet tipoPet = new MedicamentoTipoPet();
 		tipoPet.setId(new Long(1));
 		tipoPet.setMedicamento(medicamento);

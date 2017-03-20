@@ -1,6 +1,6 @@
 package br.com.modulo.venda.service.impl;
 
-import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class ProdutoClienteVendaServiceImpl implements ProdutoClienteVendaServic
 	private ProdutoClienteVendaRepository repository;
 
 	@Override
-	public void gravar(Venda venda, List<ProdutoClienteOrcamento> itens) throws PetShopBusinessException {
+	public void gravar(Venda venda, Set<ProdutoClienteOrcamento> itens) throws PetShopBusinessException {
 		logger.info("ProdutoClienteVendaServiceImpl.gravar()");
 
 		for (ProdutoClienteOrcamento item : itens) {

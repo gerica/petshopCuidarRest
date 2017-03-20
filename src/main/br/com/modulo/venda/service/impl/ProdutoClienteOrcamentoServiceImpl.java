@@ -48,4 +48,11 @@ public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamen
 
 	}
 
+	@Override
+	public List<ProdutoClienteOrcamento> findByOrcamento(Orcamento orcamento) throws PetShopBusinessException {
+		return repository.findByOrcamento(orcamento);
+	}
+	
+	
+
 }

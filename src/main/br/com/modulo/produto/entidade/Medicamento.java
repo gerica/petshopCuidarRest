@@ -1,7 +1,7 @@
 package br.com.modulo.produto.entidade;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,15 +36,15 @@ public class Medicamento extends Produto {
 	@Enumerated(EnumType.STRING)
 	private MedicamentoCategoriaEnum categoria;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicamento", cascade = { CascadeType.ALL })
-	private Collection<MedicamentoTipoPet> medicamentoTipoPet;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "medicamento", cascade = { CascadeType.ALL })
+	private Set<MedicamentoTipoPet> medicamentoTipoPet;
 
 	@Transient
 	private TipoProdutoEnum tipoProduto = TipoProdutoEnum.MEDICAMENTO;
 
 	public void addMedicamentoTipoPet(MedicamentoTipoPet tipo) {
 		if (this.medicamentoTipoPet == null) {
-			this.medicamentoTipoPet = new ArrayList<MedicamentoTipoPet>();
+			this.medicamentoTipoPet = new HashSet<>();
 		}
 		this.medicamentoTipoPet.add(tipo);
 	}
@@ -57,7 +57,7 @@ public class Medicamento extends Produto {
 		return faixaIdade;
 	}
 
-	public Collection<MedicamentoTipoPet> getMedicamentoTipoPet() {
+	public Set<MedicamentoTipoPet> getMedicamentoTipoPet() {
 		return medicamentoTipoPet;
 	}
 
@@ -77,7 +77,7 @@ public class Medicamento extends Produto {
 		this.faixaIdade = faixaIdade;
 	}
 
-	public void setMedicamentoTipoPet(Collection<MedicamentoTipoPet> medicamentoTipoPet) {
+	public void setMedicamentoTipoPet(Set<MedicamentoTipoPet> medicamentoTipoPet) {
 		this.medicamentoTipoPet = medicamentoTipoPet;
 	}
 

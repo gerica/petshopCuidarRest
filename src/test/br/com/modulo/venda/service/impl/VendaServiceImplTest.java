@@ -4,9 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -73,8 +74,8 @@ public class VendaServiceImplTest {
 
 	}
 
-	private List<ProdutoClienteOrcamento> criarListaProdutos(Orcamento orcamento) {
-		List<ProdutoClienteOrcamento> produtos = new ArrayList<>();
+	private Set<ProdutoClienteOrcamento> criarListaProdutos(Orcamento orcamento) {
+		Set<ProdutoClienteOrcamento> produtos = new HashSet<>();
 
 		ProdutoClienteOrcamento p1 = new ProdutoClienteOrcamento();
 		p1.setId(new Long(1));
