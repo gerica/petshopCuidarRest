@@ -31,12 +31,28 @@ public class OrcamentoRestController {
 	public static final String URI_ORCAMENTO = "orcamento/";
 	private static final String URI_GRAVAR = "gravar";
 	private static final String URI_FECHAR = "fechar";
+	private static final String URI_EXCLUIR = "excluir";
 	private static final String URI_RECUPERAR_TODAS = "recuperarTodas";
 	private static final String URI_RECUPERAR_POR_ORCAMENTO_ID = "recuperarPorOrcamentoId/{idOrcamento}";
 	private static final String URI_RECUPERAR_QTD_ORCAMENTOS = "recuperarQuantidadeOrcamentos";
 
 	@Autowired
 	private OrcamentoService service;
+
+	@RequestMapping(method = RequestMethod.POST, value = URI_EXCLUIR)
+	@ResponseBody
+	public ResponseEntity<?> excluir(@RequestBody Long idOrcamento) {
+		logger.info("OrcamentoRestController.fechar()");
+
+		try {
+			service.excluir(idOrcamento);
+		} catch (PetShopBusinessException e) {
+			ErrorResponse error = new ErrorResponse(e.getMessage());
+			return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<SuccessResponse>(new SuccessResponse(), HttpStatus.OK);
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = URI_FECHAR)
 	@ResponseBody

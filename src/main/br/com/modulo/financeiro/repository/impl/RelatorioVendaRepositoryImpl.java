@@ -18,7 +18,7 @@ public class RelatorioVendaRepositoryImpl implements RelatorioVendaRepository {
 	private EntityManager entityManager;
 
 	@Override
-	public List<RelatorioVenda> consultarMensal(Integer ano, String periodoValor) {
+	public List<RelatorioVenda> consultarAnual(Integer ano) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" select venda.id as idVenda, nr_desconto as desconto, dt_venda as dtVenda,");
 		sb.append(" nr_quantidade as quantidade, nr_valor_total as valorTotal, ");
@@ -28,14 +28,13 @@ public class RelatorioVendaRepositoryImpl implements RelatorioVendaRepository {
 		sb.append(" join cliente.tb_pessoa pessoa on venda.id_pessoa = pessoa.id_pessoa ");
 		sb.append(" join tb_usuario usuario on usuario.id_usuario = venda.id_usuario ");
 		sb.append(" join venda.tb_orcamento orcamento on venda.id_orcamento = orcamento.id ");
-		sb.append(" where to_char(dt_venda, 'YYYY-MM') = ?");
+		sb.append(" where to_char(dt_venda, 'YYYY') = ?");
 
 		Query query = entityManager.createNativeQuery(sb.toString(), "RelatorioVendaMapping");
-		query.setParameter(1, ano + "-" + periodoValor);
+		query.setParameter(1, ano.toString());
 		List<RelatorioVenda> result = query.getResultList();
 
 		return result;
-
 	}
 
 	@Override
@@ -85,7 +84,7 @@ public class RelatorioVendaRepositoryImpl implements RelatorioVendaRepository {
 	}
 
 	@Override
-	public List<RelatorioVenda> consultarAnual(Integer ano) {
+	public List<RelatorioVenda> consultarMensal(Integer ano, String periodoValor) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(" select venda.id as idVenda, nr_desconto as desconto, dt_venda as dtVenda,");
 		sb.append(" nr_quantidade as quantidade, nr_valor_total as valorTotal, ");
@@ -95,13 +94,14 @@ public class RelatorioVendaRepositoryImpl implements RelatorioVendaRepository {
 		sb.append(" join cliente.tb_pessoa pessoa on venda.id_pessoa = pessoa.id_pessoa ");
 		sb.append(" join tb_usuario usuario on usuario.id_usuario = venda.id_usuario ");
 		sb.append(" join venda.tb_orcamento orcamento on venda.id_orcamento = orcamento.id ");
-		sb.append(" where to_char(dt_venda, 'YYYY') = ?");
+		sb.append(" where to_char(dt_venda, 'YYYY-MM') = ?");
 
 		Query query = entityManager.createNativeQuery(sb.toString(), "RelatorioVendaMapping");
-		query.setParameter(1, ano.toString());
+		query.setParameter(1, ano + "-" + periodoValor);
 		List<RelatorioVenda> result = query.getResultList();
 
 		return result;
+
 	}
 
 	@Override

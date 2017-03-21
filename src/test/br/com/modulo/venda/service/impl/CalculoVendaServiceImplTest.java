@@ -33,22 +33,22 @@ public class CalculoVendaServiceImplTest {
 		Long qtd = service.getQuatidadeProdutos(lotes);
 		assertEquals(qtd, new Long(15));
 	}
-	
+
 	@Test
 	public void getValorProduto() throws PetShopBusinessException {
 		Double valor = service.getValorProduto(lotes);
 		assertEquals(valor, new Double(75.0));
 	}
-	
+
 	@Test
 	public void getValorVenda() throws PetShopBusinessException {
-		Double valor = service.getValorVenda(new Long(5), lotes);
+		Double valor = service.getValorVenda(new Long(5), lotes, false);
 		assertEquals(valor, new Double(75.0));
 	}
 
 	@Test
 	public void getValorVendaQtdMaiorLote() throws PetShopBusinessException {
-		Double valor = service.getValorVenda(new Long(11), lotes);
+		Double valor = service.getValorVenda(new Long(11), lotes, false);
 		assertEquals(valor, new Double(170));
 	}
 

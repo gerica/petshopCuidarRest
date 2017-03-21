@@ -36,10 +36,6 @@ public class RelatorioVendaWrapper {
 		return periodoValor;
 	}
 
-	public void setPeriodoValor(String periodoValor) {
-		this.periodoValor = periodoValor;
-	}
-
 	public void setAno(Integer ano) {
 		this.ano = ano;
 	}
@@ -54,6 +50,10 @@ public class RelatorioVendaWrapper {
 
 	public void setPeriodo(RelatorioPeriodoTipoEnum periodo) {
 		this.periodo = periodo;
+	}
+
+	public void setPeriodoValor(String periodoValor) {
+		this.periodoValor = periodoValor;
 	}
 
 }

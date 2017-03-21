@@ -44,68 +44,68 @@ public class RelatorioVenda {
 		this.dtOrcamento = dtOrcamento;
 	}
 
-	public Long getIdVenda() {
-		return idVenda;
-	}
-
-	public void setIdVenda(Long idVenda) {
-		this.idVenda = idVenda;
-	}
-
 	public Double getDesconto() {
 		return desconto;
-	}
-
-	public void setDesconto(Double desconto) {
-		this.desconto = desconto;
-	}
-
-	public Date getDtVenda() {
-		return dtVenda;
-	}
-
-	public void setDtVenda(Date dtVenda) {
-		this.dtVenda = dtVenda;
-	}
-
-	public Long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Double getValorTotal() {
-		return valorTotal;
-	}
-
-	public void setValorTotal(Double valorTotal) {
-		this.valorTotal = valorTotal;
-	}
-
-	public String getNomePessoa() {
-		return nomePessoa;
-	}
-
-	public void setNomePessoa(String nomePessoa) {
-		this.nomePessoa = nomePessoa;
-	}
-
-	public String getNomeUsuario() {
-		return nomeUsuario;
-	}
-
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
 	}
 
 	public Date getDtOrcamento() {
 		return dtOrcamento;
 	}
 
+	public Date getDtVenda() {
+		return dtVenda;
+	}
+
+	public Long getIdVenda() {
+		return idVenda;
+	}
+
+	public String getNomePessoa() {
+		return nomePessoa;
+	}
+
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+
+	public Long getQuantidade() {
+		return quantidade;
+	}
+
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setDesconto(Double desconto) {
+		this.desconto = desconto;
+	}
+
 	public void setDtOrcamento(Date dtOrcamento) {
 		this.dtOrcamento = dtOrcamento;
+	}
+
+	public void setDtVenda(Date dtVenda) {
+		this.dtVenda = dtVenda;
+	}
+
+	public void setIdVenda(Long idVenda) {
+		this.idVenda = idVenda;
+	}
+
+	public void setNomePessoa(String nomePessoa) {
+		this.nomePessoa = nomePessoa;
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
+
+	public void setQuantidade(Long quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 
 	@Override

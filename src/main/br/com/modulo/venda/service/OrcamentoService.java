@@ -18,6 +18,13 @@ public interface OrcamentoService {
 			"','" //
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
+	void excluir(Long idOrcamento) throws PetShopBusinessException;
+
+	@PreAuthorize("@securityService.hasAnyRole({'" //
+			+ RoleEnum.Constants.ROLE_ADMIN + //
+			"','" //
+			+ RoleEnum.Constants.ROLE_VENDA + //
+			"'})")
 	void fechar(Long idOrcamento) throws PetShopBusinessException;
 
 	@PreAuthorize("@securityService.hasAnyRole({'" //
@@ -61,5 +68,7 @@ public interface OrcamentoService {
 			+ RoleEnum.Constants.ROLE_VENDA + //
 			"'})")
 	void realizar(Long idOrcamento) throws PetShopBusinessException;
+
+	public void validarOrcamento(Orcamento orcamento) throws PetShopBusinessException;
 
 }

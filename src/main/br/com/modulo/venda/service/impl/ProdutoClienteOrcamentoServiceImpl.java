@@ -32,6 +32,11 @@ public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamen
 	}
 
 	@Override
+	public List<ProdutoClienteOrcamento> findByOrcamento(Orcamento orcamento) throws PetShopBusinessException {
+		return repository.findByOrcamento(orcamento);
+	}
+
+	@Override
 	public void gravar(Orcamento orcamento, List<ItemVenda> itens) throws PetShopBusinessException {
 		logger.info("ProdutoClienteServiceImpl.gravar()");
 		excluir(orcamento.getId());
@@ -46,11 +51,6 @@ public class ProdutoClienteOrcamentoServiceImpl implements ProdutoClienteOrcamen
 			repository.save(produtoCliente);
 		}
 
-	}
-
-	@Override
-	public List<ProdutoClienteOrcamento> findByOrcamento(Orcamento orcamento) throws PetShopBusinessException {
-		return repository.findByOrcamento(orcamento);
 	}
 	
 	

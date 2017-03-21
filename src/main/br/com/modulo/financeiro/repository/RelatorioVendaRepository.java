@@ -6,11 +6,11 @@ import br.com.modulo.financeiro.entidade.RelatorioVenda;
 
 public interface RelatorioVendaRepository {
 
-	List<RelatorioVenda> consultarMensal(Integer ano, String periodoValor);
+	List<RelatorioVenda> consultarAnual(Integer ano);
 
 	List<RelatorioVenda> consultarBimenstral(Integer ano, String periodoValor);
 
-	List<RelatorioVenda> consultarAnual(Integer ano);
+	List<RelatorioVenda> consultarMensal(Integer ano, String periodoValor);
 
 	List<RelatorioVenda> consultarSimenstral(Integer ano, String periodoValor);
 

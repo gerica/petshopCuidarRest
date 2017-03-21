@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.RollbackException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.compartilhado.service.AuthenticationService;
@@ -86,6 +89,7 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Orcamento gravar(Long idOrcamento, Pessoa pessoa, List<ItemVenda> itens) throws PetShopBusinessException {
 		logger.info("OrcamentoServiceImpl.gravar()");
 
@@ -102,9 +106,9 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 			orcamento.setDtOrcamento(new Date());
 			orcamento.setUsuario(authenticationService.get());
 		}
-
 		repository.save(orcamento);
 		produtoClienteService.gravar(orcamento, itens);
+		validarOrcamento(orcamento);
 		return orcamento;
 
 	}
@@ -114,6 +118,39 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		Orcamento objDB = repository.findOne(idOrcamento);
 		objDB.setStatus(StatusOrcamentoEnum.REALIZADO);
 		repository.save(objDB);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void validarOrcamento(Orcamento orcamento) throws PetShopBusinessException {
+
+		List<ProdutoClienteOrcamento> prodClienteList = produtoClienteService.findByOrcamento(orcamento);
+
+		if (UtilsEmpty.isEmpty(prodClienteList)) {
+			throw new PetShopBusinessException("Para realizar a venda é necessário ter produtos..");
+		}
+
+		for (ProdutoClienteOrcamento pc : prodClienteList) {
+
+			List<? extends Lote> lotes = loteService.findByIdProduto(pc.getProduto().getId(),
+					pc.getProduto().getTipoProduto());
+
+			if (UtilsEmpty.isEmpty(lotes)) {
+				throw new PetShopBusinessException("Para realizar a venda é necessário estoque do produto.");
+			}
+
+			try {
+				loteService.validarQuantidade(pc.getQuantidade(), lotes);
+
+			} catch (RollbackException e) {
+				throw new PetShopBusinessException(e.getMessage());
+			} catch (PetShopBusinessException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new PetShopBusinessException(e);
+			}
+
+		}
+
 	}
 
 	private List<ItemVenda> criarItemVenda(Orcamento orcamento) throws PetShopBusinessException {
@@ -153,7 +190,11 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 
 		List<? extends Lote> lotes = loteService.findByIdProduto(produto.getId(), produto.getTipoProduto());
 		if (!UtilsEmpty.isEmpty(lotes)) {
-			item.setValorVenda(calculoService.getValorVenda(quantidade, lotes));
+			try {
+				item.setValorVenda(calculoService.getValorVenda(quantidade, lotes, false));
+			} catch (PetShopBusinessException e) {
+				e.printStackTrace();
+			}
 			item.setQuantidade(calculoService.getQuatidadeProdutos(lotes));
 			item.setValor(calculoService.getValorProduto(lotes));
 		}
@@ -168,6 +209,14 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		if (UtilsEmpty.isEmpty(itens)) {
 			throw new PetShopBusinessException("Informe o(s) produto(s).");
 		}
+	}
+
+	@Override
+	public void excluir(Long idOrcamento) throws PetShopBusinessException {
+		logger.info("OrcamentoServiceImpl.excluir()");
+		produtoClienteService.excluir(idOrcamento);
+		repository.delete(idOrcamento);
+
 	}
 
 }

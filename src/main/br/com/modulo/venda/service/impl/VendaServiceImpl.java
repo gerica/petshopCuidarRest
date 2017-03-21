@@ -55,12 +55,13 @@ public class VendaServiceImpl implements VendaService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public Venda gravar(Long idOrcamento) throws PetShopBusinessException {
 		logger.info("VendaServiceImpl.gravar()");
 		validarVenda(idOrcamento);
-
 		Orcamento orcamento = orcamentoService.findOrcamentoById(idOrcamento);
+
+		orcamentoService.validarOrcamento(orcamento);
 		Venda venda = new Venda();
 		venda.setQuantidade(new Long(0));
 		venda.setValorTotal(new Double(0));
@@ -85,7 +86,8 @@ public class VendaServiceImpl implements VendaService {
 						pc.getProduto().getTipoProduto());
 
 				venda.setQuantidade(venda.getQuantidade() + pc.getQuantidade());
-				venda.setValorTotal(venda.getValorTotal() + calculoService.getValorVenda(pc.getQuantidade(), lotes));
+				venda.setValorTotal(
+						venda.getValorTotal() + calculoService.getValorVenda(pc.getQuantidade(), lotes, true));
 				venda.setDesconto(pc.getDesconto());
 
 			}

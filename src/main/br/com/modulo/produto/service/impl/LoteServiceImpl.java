@@ -2,10 +2,13 @@ package br.com.modulo.produto.service.impl;
 
 import java.util.List;
 
+import javax.persistence.RollbackException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.produto.entidade.Lote;
@@ -50,7 +53,26 @@ public class LoteServiceImpl implements LoteService {
 			result = medicamentoLoteService.findByIdMedicamento(idProduto);
 			break;
 		}
+		// validarQuantidade(1l, result);
 		return result;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void validarQuantidade(Long quantidade, List<? extends Lote> lotes)
+			throws PetShopBusinessException, RollbackException {
+		boolean naoTemQuantidadeNecessaria = true;
+		for (Lote l : lotes) {
+			if (l.getQuantidade() >= quantidade) {
+				naoTemQuantidadeNecessaria = false;
+				break;
+			} else {
+				quantidade = quantidade - l.getQuantidade();
+			}
+		}
+		if (naoTemQuantidadeNecessaria) {
+			throw new PetShopBusinessException("O produto não tem a quantidade necessária no estoque.");
+		}
 	}
 
 }

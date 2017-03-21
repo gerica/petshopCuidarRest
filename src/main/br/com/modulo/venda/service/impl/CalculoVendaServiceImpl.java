@@ -2,8 +2,11 @@ package br.com.modulo.venda.service.impl;
 
 import java.util.List;
 
+import javax.persistence.RollbackException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compartilhado.execao.PetShopBusinessException;
 import br.com.modulo.produto.entidade.Lote;
@@ -38,17 +41,23 @@ public class CalculoVendaServiceImpl implements CalculoVendaService {
 		return valor / qtd;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Double getValorVenda(Long quantidade, List<? extends Lote> lotes) throws PetShopBusinessException {
+	public Double getValorVenda(Long quantidade, List<? extends Lote> lotes, boolean altarEstoque)
+			throws PetShopBusinessException, RollbackException {
 		Double result = 0.0;
 		for (Lote l : lotes) {
 			if (l.getQuantidade() >= quantidade) {
 				result += l.getValorVenda() * quantidade;
-				loteSerivce.alterarQuantidadeLote(l, quantidade);
+				if (altarEstoque) {
+					loteSerivce.alterarQuantidadeLote(l, quantidade);
+				}
 				return result;
 			} else {
 				result = l.getValorVenda() * l.getQuantidade();
-				loteSerivce.alterarQuantidadeLote(l, l.getQuantidade());
+				if (altarEstoque) {
+					loteSerivce.alterarQuantidadeLote(l, l.getQuantidade());
+				}
 				quantidade = quantidade - l.getQuantidade();
 			}
 		}
