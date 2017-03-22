@@ -54,6 +54,14 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 	private CalculoVendaService calculoService;
 
 	@Override
+	public void excluir(Long idOrcamento) throws PetShopBusinessException {
+		logger.info("OrcamentoServiceImpl.excluir()");
+		produtoClienteService.excluir(idOrcamento);
+		repository.delete(idOrcamento);
+
+	}
+
+	@Override
 	public void fechar(Long idOrcamento) throws PetShopBusinessException {
 		Orcamento objDB = repository.findOne(idOrcamento);
 		objDB.setStatus(StatusOrcamentoEnum.FECHADO);
@@ -153,9 +161,11 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 
 	}
 
-	private List<ItemVenda> criarItemVenda(Orcamento orcamento) throws PetShopBusinessException {
+	private List<ItemVenda> criarItemVenda(OrcamentoWrapper wrapper, Orcamento orcamento)
+			throws PetShopBusinessException {
 		List<ItemVenda> itens = new ArrayList<ItemVenda>();
 		List<ProdutoClienteOrcamento> prodClienteList = produtoClienteService.findByOrcamento(orcamento);
+		Double valorOrcamento = 0.0;
 		if (!UtilsEmpty.isEmpty(prodClienteList)) {
 			ItemVenda item = null;
 			for (ProdutoClienteOrcamento pc : prodClienteList) {
@@ -164,13 +174,15 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 				item.setIdProduto(pc.getProduto().getId());
 				item.setDesconto(pc.getDesconto());
 				item.setQuantidadeVenda(pc.getQuantidade());
-				getValorVenda(item, pc.getProduto(), pc.getQuantidade());
+				valorOrcamento += getValorVenda(item, pc.getProduto(), pc.getQuantidade());
+
 				item.setMarca(pc.getProduto().getMarca());
 				item.setNome(pc.getProduto().getNome());
 
 				itens.add(item);
 			}
 		}
+		wrapper.setValorOrcamento(valorOrcamento);
 		return itens;
 
 	}
@@ -181,23 +193,27 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		wrapper.setId(orcamento.getId());
 		wrapper.setPessoa(orcamento.getPessoa());
 		wrapper.setDtOrcamento(orcamento.getDtOrcamento());
-		wrapper.setItens(criarItemVenda(orcamento));
+		wrapper.setItens(criarItemVenda(wrapper, orcamento));
 		return wrapper;
 	}
 
-	private void getValorVenda(ItemVenda item, Produto produto, Long quantidade) throws PetShopBusinessException {
+	private Double getValorVenda(ItemVenda item, Produto produto, Long quantidade) throws PetShopBusinessException {
 		logger.info("OrcamentoServiceImpl.getLote()");
+
+		Double valorOrcamentoItem = 0.0;
 
 		List<? extends Lote> lotes = loteService.findByIdProduto(produto.getId(), produto.getTipoProduto());
 		if (!UtilsEmpty.isEmpty(lotes)) {
 			try {
-				item.setValorVenda(calculoService.getValorVenda(quantidade, lotes, false));
+				item.setValorVenda(getValorVenda(quantidade, lotes));
+				valorOrcamentoItem = calculoService.getValorVenda(quantidade, lotes, false);
 			} catch (PetShopBusinessException e) {
 				e.printStackTrace();
 			}
 			item.setQuantidade(calculoService.getQuatidadeProdutos(lotes));
 			item.setValor(calculoService.getValorProduto(lotes));
 		}
+		return valorOrcamentoItem;
 
 	}
 
@@ -211,12 +227,18 @@ public class OrcamentoServiceImpl implements OrcamentoService {
 		}
 	}
 
-	@Override
-	public void excluir(Long idOrcamento) throws PetShopBusinessException {
-		logger.info("OrcamentoServiceImpl.excluir()");
-		produtoClienteService.excluir(idOrcamento);
-		repository.delete(idOrcamento);
+	@Transactional(rollbackFor = Exception.class)
+	private Double getValorVenda(Long quantidade, List<? extends Lote> lotes)
+			throws PetShopBusinessException, RollbackException {
 
+		for (Lote l : lotes) {
+			if (l.getQuantidade() >= quantidade) {
+				return l.getValorVenda();
+			} else {
+				return l.getValorVenda();
+			}
+		}
+		throw new PetShopBusinessException("O produto não tem a quantidade necessária no estoque.");
 	}
 
 }

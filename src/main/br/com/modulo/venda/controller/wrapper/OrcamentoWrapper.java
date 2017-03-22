@@ -15,6 +15,8 @@ public class OrcamentoWrapper {
 
 	private List<ItemVenda> itens;
 
+	private Double valorOrcamento;
+
 	public Date getDtOrcamento() {
 		return dtOrcamento;
 	}
@@ -31,6 +33,10 @@ public class OrcamentoWrapper {
 		return pessoa;
 	}
 
+	public Double getValorOrcamento() {
+		return valorOrcamento;
+	}
+
 	public void setDtOrcamento(Date dtOrcamento) {
 		this.dtOrcamento = dtOrcamento;
 	}
@@ -45,6 +51,10 @@ public class OrcamentoWrapper {
 
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+
+	public void setValorOrcamento(Double valorOrcamento) {
+		this.valorOrcamento = valorOrcamento;
 	}
 
 }
